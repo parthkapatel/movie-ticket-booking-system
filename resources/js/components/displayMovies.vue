@@ -7,7 +7,7 @@
                 <p class="card-text">Release Year: {{ movie.release_year }}</p>
             </div>
             <div class="card-footer">
-                <router-link :to="'/user/movie/'+movie.id" class="card-link">Read More</router-link>
+<!--                <router-link :to="'/user/movie/'+movie.id" class="card-link">Read More</router-link>-->
                 <router-link :to="'/user/movie/'+movie.id" class="card-link btn btn-primary m-0 p-2">Book Tickets</router-link>
             </div>
         </div>

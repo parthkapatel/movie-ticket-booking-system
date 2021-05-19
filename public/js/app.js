@@ -42679,15 +42679,6 @@ var render = function() {
           _c(
             "router-link",
             {
-              staticClass: "card-link",
-              attrs: { to: "/user/movie/" + _vm.movie.id }
-            },
-            [_vm._v("Read More")]
-          ),
-          _vm._v(" "),
-          _c(
-            "router-link",
-            {
               staticClass: "card-link btn btn-primary m-0 p-2",
               attrs: { to: "/user/movie/" + _vm.movie.id }
             },

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookTicketsController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
@@ -31,10 +32,14 @@ Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware(
 Route::get('admin/home', [AdminController::class,'index'])->name('admin.route')->middleware("auth")->middleware('isAdmin');
 
 Route::get('user/{vue?}', [HomeController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth");
-//Route::get("/{any}",[Controller::class,'index'])->where('vue', '[\/\w\@\.-]*');
+
+Route::get("/{any}",[Controller::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
 Route::get('city/{vue?}', [CityController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 Route::get('theater/{vue?}', [TheaterController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 Route::get('movie/{vue?}', [MovieDetailsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 Route::get('cast/{vue?}', [CastController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
+
+Route::get('/bookTicket/{vue?}', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
+Route::get('/bookTicket/confirm', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 

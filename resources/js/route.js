@@ -13,6 +13,9 @@ import movieForm from "./components/admin/movieForm";
 import movieDetails from "./components/movieDetails";
 import assignCastMovieForm from "./components/admin/assignCastMovieForm";
 import castDetails from "./components/castDetails";
+import displaySeat from "./components/displaySeat";
+import convert from "lodash/fp/convert";
+import confirmBookSeats from "./components/confirmBookSeats";
 
 const routes = [
     {
@@ -80,6 +83,14 @@ const routes = [
         path: '/user/cast/:id',
         name: 'castDetails',
         component: castDetails,
+    }, {
+        path: '/bookTicket',
+        name: 'displaySeat',
+        component: displaySeat,
+    }, {
+        path: '/bookTicket/confirm',
+        name: 'confirmBookSeats',
+        component: confirmBookSeats,
     }
 ];
 

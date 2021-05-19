@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookTicketsController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\CastsMoviesController;
 use App\Http\Controllers\CityController;
@@ -98,3 +99,14 @@ Route::prefix("/castMovie")->group(function (){
 });
 
 Route::get("/search/{str}",[MovieDetailsController::class,"getSearchMovie"]);
+
+/*Route::get("/getCastsMovie",[CastsMoviesController::class,"index"]);*/
+Route::get("/bookTickets",[BookTicketsController::class,"create"]);
+Route::prefix("/bookTicket")->group(function (){
+    Route::get("/get",[BookTicketsController::class,'getBookedTickets']);
+    Route::post("/store",[BookTicketsController::class,'store']);
+    Route::get("/{id}",[BookTicketsController::class,'getAllCastMoviesByMovieIds']);
+    Route::get("/movie/{id}",[BookTicketsController::class,'getAllCastMoviesByCastIds']);
+    Route::put("/{id}",[BookTicketsController::class,'update']);
+    Route::delete("/{id}",[BookTicketsController::class,'destroy']);
+});

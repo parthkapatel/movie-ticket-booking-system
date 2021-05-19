@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\BookTickets;
+
 return [
 
     /*
@@ -46,6 +48,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'bookTicket' => [
+            'driver' => 'session',
+            'provider' => 'bookTickets',
+        ],
     ],
 
     /*
@@ -70,7 +76,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'bookTickets' => [
+            'driver' => 'eloquent',
+            'model' => BookTickets::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
     <div class="container">
         <div class="card">
             <div class="card-header">
@@ -25,23 +25,36 @@
             </div>
             <div class="container">
                 <h5>Book Tickets</h5>
-                <form class="mt-3 form-inline" id="addCastMovie" >
+                <form class="mt-3 form-inline" id="addCastMovie">
                     <div class="form-group mb-2">
                         <label class="mx-2">Select City : </label>
                         <select v-model="city_id" class="form-control" @change="getTheaters">
-                            <option  v-for="(city,index) in cities" :key="index" :value="city.id">{{ city.city_name }}</option>
+                            <option v-for="(city,index) in cities" :key="index" :value="city.id">{{
+                                    city.city_name
+                                }}
+                            </option>
                         </select>
                     </div>
                     <div class="form-group mx-sm-3 mb-2" v-if="cityBool">
                         <label class="mx-2">Select Theater : </label>
                         <select v-model="theater_id" class="form-control" @change="getShows">
-                            <option v-for="(theater,index) in theaters" :key="index" :value="theater.id">{{ theater.theater_name }}
+                            <option v-for="(theater,index) in theaters" :key="index" :value="theater.id">
+                                {{ theater.theater_name }}
                             </option>
                         </select>
                     </div>
                     <span class="alert alert-danger mx-2 mb-2" v-if="error">{{ error }}</span>
                 </form>
-                <h5>{{ shows }}</h5>
+                <div class="container">
+                    <div class="d-flex bd-highlight justify-content-center flex-wrap">
+                        <router-link  v-for="(show,index) in shows" :key="index" to="/bookTicket"
+                                     class="links flex-fill">
+                            <div @click="setStateValue(show)" class=" border p-2 m-2 text-center" style="border-radius: 5px;">
+                                {{ show }}
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -60,13 +73,13 @@ export default {
             },
             casts: [],
             city: [],
-            cities:[],
-            theaters:[],
-            shows:[],
-            city_id:"",
-            theater_id:"",
-            cityBool:false,
-            error:"",
+            cities: [],
+            theaters: [],
+            shows: [],
+            city_id: "",
+            theater_id: "",
+            cityBool: false,
+            error: "",
         }
     },
     methods: {
@@ -93,15 +106,16 @@ export default {
                     console.log(error);
                 })
         },
-        getTheaters:function (){
-            axios.get('/api/theater/getTheater/'+this.city_id)
+        getTheaters: function () {
+            axios.get('/api/theater/getTheater/' + this.city_id)
                 .then(response => {
                     this.theaters = response.data
-                    if(this.theaters.length > 0){
+                    if (this.theaters.length > 0) {
                         this.cityBool = true;
                         this.error = "";
-                    }else if(this.city_id){
+                    } else if (this.city_id) {
                         this.cityBool = false;
+                        this.shows = [];
                         this.error = "No Theater Found"
                     }
                 })
@@ -109,7 +123,7 @@ export default {
                     console.log(error);
                 })
         },
-        getCities:function (){
+        getCities: function () {
             axios.get('/api/city/get')
                 .then(response => {
                     this.cities = response.data
@@ -118,14 +132,35 @@ export default {
                     console.log(error);
                 })
         },
-        getShows:function (){
-            axios.get('/api/assign/movieShow/'+this.city_id+'/'+this.theater_id)
+        getShows: function () {
+            axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id)
                 .then(response => {
-                    this.shows = response.data;
+                    this.shows = response.data[0].runtime.split("|");
                 })
                 .catch(error => {
                     console.log(error);
                 })
+        },
+        setStateValue:function (show) {
+            const thisValue = this;
+            const cities = this.cities.filter(function (elem) {
+                if (elem.id === thisValue.city_id) return elem;
+            });
+            const theaters = this.theaters.filter(function (elem) {
+                if (elem.id === thisValue.theater_id) return elem;
+            });
+            const city = cities[0];
+            const theater = theaters[0];
+            sessionStorage.setItem("city_id",city.id);
+            sessionStorage.setItem("city_name",city.city_name);
+            sessionStorage.setItem("theater_id",theater.id);
+            sessionStorage.setItem("theater_name",theater.theater_name);
+            sessionStorage.setItem("movie_id",this.movie.id);
+            sessionStorage.setItem("movie_name",this.movie.title);
+            sessionStorage.setItem("show",show);/*
+            this.$store.commit("changeCity",this.city_id);
+            this.$store.commit("changeTheater",this.theater_id);
+            this.$store.commit("changeShow",show);*/
         }
     },
     created() {
@@ -137,5 +172,8 @@ export default {
 </script>
 
 <style scoped>
-
+.links {
+    color: black;
+    text-decoration: none;
+}
 </style>

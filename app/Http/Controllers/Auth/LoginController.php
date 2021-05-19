@@ -54,6 +54,7 @@ class LoginController extends Controller
                 return redirect()->route('admin.route');
 
             }else{
+                session(['user_id'=>auth()->user()->id]);
                 session(['roles'=>'user']);
                 return redirect()->route('home');
 

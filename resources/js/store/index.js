@@ -1,18 +1,13 @@
-require('./bootstrap');
-
 import Vue from "vue";
-import VueRouter from 'vue-router'
-import store from './store/index'
-
-/*
 import Vuex from "vuex";
+
 Vue.use(Vuex);
 
-
-const store = new Vuex.Store({
+export default new Vuex.Store({
     state: {
         city: "",
         theater: "",
+        show:"",
     },
     getters: {
         getCity: state => {
@@ -20,6 +15,9 @@ const store = new Vuex.Store({
         },
         getTheater: state => {
             return state.theater;
+        },
+        getShow: state => {
+            return state.show;
         }
     },
     mutations: {
@@ -29,23 +27,9 @@ const store = new Vuex.Store({
         changeTheater (state, payload) {
             state.theater = payload
         },
+        changeShow (state, payload) {
+            state.show = payload
+        },
     },
     actions: {}
-});
-*/
-
-Vue.use(VueRouter);
-
-
-import routes from './route'
-const router = new VueRouter({
-    history: true,
-    mode: 'history',
-    routes
-})
-
-new Vue({
-    el: '#app',
-    router,
-    store,
 });

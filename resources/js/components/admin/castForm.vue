@@ -5,16 +5,16 @@
             {{ error }}
         </div>
         <form class="mt-3" id="addCast" @submit="addCast" v-if="show">
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Enter Cast Name</label>
                 <input v-model="cast_id" type="hidden">
                 <input v-model="name" type="text" class="form-control" placeholder="Enter Cast Name">
             </div>
-            <div class="form-group w-50">
+            <div class="form-group ">
                 <label>Enter Cast DOB</label>
                 <input v-model="date_of_birth" type="date" class="form-control" placeholder="Enter Cast DOB">
             </div>
-            <div class="form-group w-50">
+            <div class="form-group ">
                 <label>Enter Cast Bio</label>
                 <textarea v-model="bio" rows="5" cols="10" class="form-control" placeholder="Enter Cast Bio"></textarea>
             </div>

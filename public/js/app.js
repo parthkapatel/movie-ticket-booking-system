@@ -3691,8 +3691,7 @@ __webpack_require__.r(__webpack_exports__);
         show: this.show,
         seats: this.seats
       };
-      axios.post('/api/bookTicket/store', bookTickets).then(function (response) {
-        console.log(response); //this.seats = response.data
+      axios.post('/api/bookTicket/store', bookTickets).then(function (response) {//this.seats = response.data
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3716,8 +3715,6 @@ __webpack_require__.r(__webpack_exports__);
           this.seats.push(seat);
         }
       }
-
-      console.log(this.seats);
     }
   },
   mounted: function mounted() {
@@ -3807,10 +3804,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getAllMovies: function getAllMovies() {
+    getReleaseMovies: function getReleaseMovies() {
       var _this = this;
 
-      axios.get('/api/movie/get').then(function (response) {
+      axios.get('/api/assign/getMoviesForHome').then(function (response) {
+        console.log(response);
         _this.movies = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -3820,7 +3818,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.str === "") {
-        this.getAllMovies();
+        this.getReleaseMovies();
       } else {
         axios.get('/api/search/' + this.str).then(function (response) {
           _this2.movies = response.data;
@@ -3831,7 +3829,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getAllMovies();
+    this.getReleaseMovies();
   }
 });
 
@@ -3959,6 +3957,7 @@ __webpack_require__.r(__webpack_exports__);
     getTheaters: function getTheaters() {
       var _this3 = this;
 
+      this.theater_id = false;
       axios.get('/api/theater/getTheater/' + this.city_id).then(function (response) {
         _this3.theaters = response.data;
 
@@ -50379,7 +50378,7 @@ var render = function() {
               on: { submit: _vm.addCastMovie }
             },
             [
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group " }, [
                 _c("label", [_vm._v("Select Cast")]),
                 _vm._v(" "),
                 _c(
@@ -50421,7 +50420,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select Movie")]),
                 _vm._v(" "),
                 _c(
@@ -50531,7 +50530,7 @@ var render = function() {
               on: { submit: _vm.addMovie }
             },
             [
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select City")]),
                 _vm._v(" "),
                 _c(
@@ -50573,7 +50572,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select Theater")]),
                 _vm._v(" "),
                 _c(
@@ -50619,7 +50618,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select Movie")]),
                 _vm._v(" "),
                 _c(
@@ -50661,7 +50660,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select Time Slots")]),
                 _vm._v(" "),
                 _c(
@@ -50772,7 +50771,7 @@ var render = function() {
               on: { submit: _vm.addCast }
             },
             [
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Enter Cast Name")]),
                 _vm._v(" "),
                 _c("input", {
@@ -50819,7 +50818,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group " }, [
                 _c("label", [_vm._v("Enter Cast DOB")]),
                 _vm._v(" "),
                 _c("input", {
@@ -50845,7 +50844,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group " }, [
                 _c("label", [_vm._v("Enter Cast Bio")]),
                 _vm._v(" "),
                 _c("textarea", {
@@ -50928,7 +50927,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("form", { attrs: { id: "addcity" }, on: { submit: _vm.addCity } }, [
-        _c("div", { staticClass: "form-group w-50" }, [
+        _c("div", { staticClass: "form-group" }, [
           _c("label", [_vm._v("Enter City Name")]),
           _vm._v(" "),
           _c("input", {
@@ -51747,7 +51746,7 @@ var render = function() {
               on: { submit: _vm.addMovie }
             },
             [
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Enter Movie Title ")]),
                 _vm._v(" "),
                 _c("input", {
@@ -51794,7 +51793,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Enter Movie Overview")]),
                 _vm._v(" "),
                 _c("textarea", {
@@ -51824,7 +51823,7 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "form-group w-50" }, [
+              _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Select Release Year")]),
                 _vm._v(" "),
                 _c("input", {
@@ -51909,7 +51908,7 @@ var render = function() {
         "form",
         { attrs: { id: "addTheater" }, on: { submit: _vm.addTheater } },
         [
-          _c("div", { staticClass: "form-group w-50" }, [
+          _c("div", { staticClass: "form-group" }, [
             _c("label", [_vm._v("Enter Theater Name")]),
             _vm._v(" "),
             _c("input", {
@@ -52128,8 +52127,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "flex-fill m-2" }, [
-    _c("div", { staticClass: "card", staticStyle: { width: "15rem" } }, [
+  return _c("div", { staticClass: "m-2" }, [
+    _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("h5", { staticClass: "card-title" }, [
           _vm._v("Title : "),
@@ -52188,7 +52187,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "card p-3" }, [
-      _c("div", { staticClass: "d-flex m-2" }, [
+      _c("div", { staticClass: "d-md-flex m-2" }, [
         _c("h4", [_vm._v("Movie : " + _vm._s(_vm.movie.name))]),
         _vm._v(" "),
         _vm.seats.length >= 1
@@ -52295,7 +52294,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "d-flex flex-wrap" },
     _vm._l(_vm.movies, function(movie, index) {
       return _c(
         "div",
@@ -52349,7 +52347,7 @@ var render = function() {
               expression: "str"
             }
           ],
-          staticClass: "form-control w-50",
+          staticClass: "form-control",
           attrs: {
             type: "text",
             placeholder: "Search here..(city,theater,title)"
@@ -52398,7 +52396,7 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _c("b", [_vm._v(_vm._s(_vm.movie.title))])
+        _c("h3", [_c("b", [_vm._v(_vm._s(_vm.movie.title))])])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -52509,7 +52507,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _vm.cityBool
-              ? _c("div", { staticClass: "form-group mx-sm-3 mb-2" }, [
+              ? _c("div", { staticClass: "form-group mx-2 mb-2" }, [
                   _c("label", { staticClass: "mx-2" }, [
                     _vm._v("Select Theater : ")
                   ]),
@@ -52571,47 +52569,49 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "container" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "d-flex bd-highlight justify-content-center flex-wrap"
-            },
-            _vm._l(_vm.shows, function(show, index) {
-              return _c(
-                "router-link",
+        _vm.theater_id
+          ? _c("div", { staticClass: "container" }, [
+              _c(
+                "div",
                 {
-                  key: index,
-                  staticClass: "links flex-fill",
-                  attrs: { to: "/bookTicket" }
+                  staticClass:
+                    "d-flex bd-highlight justify-content-center flex-wrap"
                 },
-                [
-                  _c(
-                    "div",
+                _vm._l(_vm.shows, function(show, index) {
+                  return _c(
+                    "router-link",
                     {
-                      staticClass: " border p-2 m-2 text-center",
-                      staticStyle: { "border-radius": "5px" },
-                      on: {
-                        click: function($event) {
-                          return _vm.setStateValue(show)
-                        }
-                      }
+                      key: index,
+                      staticClass: "links flex-fill",
+                      attrs: { to: "/bookTicket" }
                     },
                     [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(show) +
-                          "\n                        "
+                      _c(
+                        "div",
+                        {
+                          staticClass: " border p-2 m-2 text-center",
+                          staticStyle: { "border-radius": "5px" },
+                          on: {
+                            click: function($event) {
+                              return _vm.setStateValue(show)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(show) +
+                              "\n                        "
+                          )
+                        ]
                       )
                     ]
                   )
-                ]
+                }),
+                1
               )
-            }),
-            1
-          )
-        ])
+            ])
+          : _vm._e()
       ])
     ])
   ])

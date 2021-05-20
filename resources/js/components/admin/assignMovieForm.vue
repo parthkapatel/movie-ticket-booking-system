@@ -5,13 +5,13 @@
             {{ error }}
         </div>
         <form class="mt-3" id="addMovie" @submit="addMovie" v-if="show">
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Select City</label>
                 <select v-model="city_id" class="form-control">
                     <option v-for="(city,index) in cities" :key="index" :value="city.id">{{ city.city_name }}</option>
                 </select>
             </div>
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Select Theater</label>
                 <select v-model="theater_id" class="form-control">
                     <option v-for="(theater,index) in theaters" :key="index" :value="theater.id">{{
@@ -20,13 +20,13 @@
                     </option>
                 </select>
             </div>
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Select Movie</label>
                 <select v-model="movie_id" class="form-control">
                     <option v-for="(movie,index) in movies" :key="index" :value="movie.id">{{ movie.title }}</option>
                 </select>
             </div>
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Select Time Slots</label>
                 <select v-model="runtime"  multiple class="form-control" >
                     <option v-for="(slot,index) in slots" :key="index" :value="slot">{{ slot }}</option>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BookTickets;
 use App\Models\Cast;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -36,11 +37,11 @@ class BookTicketsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request,User $user)
     {
-        dd(Auth::user());
+        //dd(Auth::user()->id);
         $bookTicket = new BookTickets();
-        $bookTicket->user_id = session("user_id");
+        $bookTicket->user_id = "";
         $bookTicket->city_id = $request->city_id;
         $bookTicket->theater_id = $request->theater_id;
         $bookTicket->movie_id = $request->movie_id;

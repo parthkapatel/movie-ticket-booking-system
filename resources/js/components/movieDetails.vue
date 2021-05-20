@@ -2,7 +2,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <b>{{ movie.title }}</b>
+                <h3><b>{{ movie.title }}</b></h3>
             </div>
             <div class="card-body">
                 <p class="card-text">Movie Overview : {{ movie.overview }}</p>
@@ -35,7 +35,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="form-group mx-sm-3 mb-2" v-if="cityBool">
+                    <div class="form-group mx-2 mb-2" v-if="cityBool">
                         <label class="mx-2">Select Theater : </label>
                         <select v-model="theater_id" class="form-control" @change="getShows">
                             <option v-for="(theater,index) in theaters" :key="index" :value="theater.id">
@@ -45,7 +45,7 @@
                     </div>
                     <span class="alert alert-danger mx-2 mb-2" v-if="error">{{ error }}</span>
                 </form>
-                <div class="container">
+                <div class="container" v-if="theater_id">
                     <div class="d-flex bd-highlight justify-content-center flex-wrap">
                         <router-link  v-for="(show,index) in shows" :key="index" to="/bookTicket"
                                      class="links flex-fill">
@@ -107,6 +107,7 @@ export default {
                 })
         },
         getTheaters: function () {
+            this.theater_id = false;
             axios.get('/api/theater/getTheater/' + this.city_id)
                 .then(response => {
                     this.theaters = response.data

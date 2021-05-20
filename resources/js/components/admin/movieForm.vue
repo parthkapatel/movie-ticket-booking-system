@@ -5,16 +5,16 @@
             {{ error }}
         </div>
         <form class="mt-3" id="addMovie" @submit="addMovie" v-if="show">
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Enter Movie Title </label>
                 <input v-model="movie_id" type="hidden">
                 <input v-model="title" type="text" class="form-control" placeholder="Enter Movie Title">
             </div>
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Enter Movie Overview</label>
                 <textarea v-model="overview" rows="5" cols="10" class="form-control" placeholder="Enter Movie Overview"></textarea>
             </div>
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Select Release Year</label>
                 <input v-model="release_year" type="date" class="form-control" placeholder="Select Release Year">
             </div>

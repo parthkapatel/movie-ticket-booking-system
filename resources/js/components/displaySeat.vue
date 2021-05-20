@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="card p-3">
-            <div class="d-flex m-2">
+            <div class="d-md-flex m-2">
                 <h4>Movie : {{ movie.name }}</h4>
                 <div @click="addBookTickets" class="btn btn-primary ml-auto mx-2" v-if="seats.length >= 1">
                     Book
@@ -60,7 +60,6 @@ export default {
             };
             axios.post('/api/bookTicket/store', bookTickets)
                 .then(response => {
-                    console.log(response);
                     //this.seats = response.data
                 })
                 .catch(error => {
@@ -89,7 +88,6 @@ export default {
                     this.seats.push(seat);
                 }
             }
-            console.log(this.seats);
         }
 
     },

@@ -6,6 +6,7 @@ use App\Models\ReleaseMovies;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReleaseMoviesController extends Controller
 {
@@ -111,13 +112,25 @@ class ReleaseMoviesController extends Controller
     }
 
     public function getAllAssignMovies(){
-        return ReleaseMovies::select('cities.city_name','theaters.theater_name','movie_details.*','release_movies.runtime','release_movies.id')
+        return ReleaseMovies::select('cities.city_name','theaters.theater_name','movie_details.*','movie_details.id as movie_id','release_movies.runtime','release_movies.id')
             ->join('cities', 'release_movies.city_id', '=', 'cities.id')
             ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
             ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
             ->where("movie_details.release_year","<=",Carbon::now())
             ->orderBy('movie_details.release_year')
             ->orderBy('cities.city_name')
+            ->get();
+    }
+
+    public function getMoviesForHome(){
+        return ReleaseMovies::select('movie_details.*','release_movies.movie_id')
+            ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
+            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
+            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
+            ->where("movie_details.release_year","<=",Carbon::now())
+            ->orderBy('movie_details.release_year')
+            ->orderBy('cities.city_name')
+            ->distinct()
             ->get();
     }
 

@@ -1,6 +1,6 @@
 <template>
-    <div class="flex-fill m-2">
-        <div class="card" style="width: 15rem;">
+    <div class="m-2">
+        <div class="card" >
             <div class="card-body">
                 <h5 class="card-title">Title : <b>{{ movie.title }}</b></h5>
                 <p class="card-text">Overview: {{ movie.overview }}</p>

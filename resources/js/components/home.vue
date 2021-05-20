@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="text-right m-2">
-            <input type="text" v-model="str" @keyup="searchMovie" class="form-control w-50" placeholder="Search here..(city,theater,title)">
+            <input type="text" v-model="str" @keyup="searchMovie" class="form-control" placeholder="Search here..(city,theater,title)">
         </div>
         <display-view :movies="movies" />
     </div>
@@ -21,9 +21,10 @@ export default {
         }
     },
     methods:{
-        getAllMovies:function (){
-            axios.get('/api/movie/get')
+        getReleaseMovies:function (){
+            axios.get('/api/assign/getMoviesForHome')
                 .then(response=>{
+                    console.log(response);
                     this.movies = response.data
                 })
                 .catch(error=>{
@@ -32,7 +33,7 @@ export default {
         },
         searchMovie:function (){
             if(this.str === ""){
-                this.getAllMovies();
+                this.getReleaseMovies();
             }else{
                 axios.get('/api/search/'+this.str)
                     .then(response=>{
@@ -45,7 +46,7 @@ export default {
         }
     },
     created() {
-        this.getAllMovies();
+        this.getReleaseMovies();
     }
 }
 </script>

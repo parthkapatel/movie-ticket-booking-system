@@ -4,7 +4,7 @@
             {{ error }}
         </div>
         <form id="addTheater" @submit="addTheater">
-            <div class="form-group w-50">
+            <div class="form-group">
                 <label>Enter Theater Name</label>
                 <input v-model="theater_id" type="hidden">
                 <input v-model="theater_name" class="form-control" placeholder="Enter Theater Name">

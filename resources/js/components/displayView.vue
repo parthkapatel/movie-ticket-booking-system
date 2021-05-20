@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-wrap">
+    <div>
         <div v-for="(movie,index) in movies" :key="index">
             <display-movies
                 :movie="movie"

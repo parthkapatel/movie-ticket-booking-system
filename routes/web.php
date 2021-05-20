@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieDetailsController;
 use App\Http\Controllers\TheaterController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,13 +28,13 @@ Route::get('/', [Controller::class,'index'])->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware("auth");
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('admin/home', [AdminController::class,'index'])->name('admin.route')->middleware("auth")->middleware('isAdmin');
 
 Route::get('user/{vue?}', [HomeController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth");
 
-Route::get("/{any}",[Controller::class,'index'])->where('vue', '[\/\w\@\.-]*');
+//Route::get("/{any}",[Controller::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
 Route::get('city/{vue?}', [CityController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 Route::get('theater/{vue?}', [TheaterController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');

@@ -27,8 +27,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::get("/releaseMovie",[ReleaseMoviesController::class,"index"]);
 Route::get('/total/dashboard/',[Controller::class,'getTotalsForDashboard']);
+
 
 Route::get("/getCities",[CityController::class,"index"]);
 Route::get("/city",[CityController::class,"create"]);
@@ -39,6 +41,7 @@ Route::prefix("/city")->group(function (){
     Route::put("/{id}",[CityController::class,'update']);
     Route::delete("/{id}",[CityController::class,'destroy']);
 });
+
 
 Route::get("/getTheater",[TheaterController::class,"index"]);
 Route::get("/theater",[TheaterController::class,"create"]);
@@ -63,10 +66,12 @@ Route::prefix("/movie")->group(function (){
     Route::delete("/{id}",[MovieDetailsController::class,'destroy']);
 });
 
+
 Route::get("/getAssignMovies",[ReleaseMoviesController::class,"index"]);
 Route::get("/assign/movies",[ReleaseMoviesController::class,"create"]);
 Route::prefix("/assign")->group(function (){
     Route::get("/get",[ReleaseMoviesController::class,'getAllAssignMovies']);
+    Route::get("/getMoviesForHome",[ReleaseMoviesController::class,'getMoviesForHome']);
     Route::post("/store",[ReleaseMoviesController::class,'store']);
     Route::get("/{id}",[ReleaseMoviesController::class,'edit']);
     Route::get("/{id}/show",[ReleaseMoviesController::class,'show']);
@@ -74,6 +79,7 @@ Route::prefix("/assign")->group(function (){
     Route::put("/{id}",[ReleaseMoviesController::class,'update']);
     Route::delete("/{id}",[ReleaseMoviesController::class,'destroy']);
 });
+
 
 Route::get("/getCasts",[CastController::class,"index"]);
 Route::get("/casts",[CastController::class,"create"]);
@@ -100,13 +106,14 @@ Route::prefix("/castMovie")->group(function (){
 
 Route::get("/search/{str}",[MovieDetailsController::class,"getSearchMovie"]);
 
-/*Route::get("/getCastsMovie",[CastsMoviesController::class,"index"]);*/
+
 Route::get("/bookTickets",[BookTicketsController::class,"create"]);
 Route::prefix("/bookTicket")->group(function (){
     Route::get("/get",[BookTicketsController::class,'getBookedTickets']);
-    Route::post("/store",[BookTicketsController::class,'store']);
+    Route::post("/store",[BookTicketsController::class,'store'])->middleware("auth");
     Route::get("/{id}",[BookTicketsController::class,'getAllCastMoviesByMovieIds']);
     Route::get("/movie/{id}",[BookTicketsController::class,'getAllCastMoviesByCastIds']);
     Route::put("/{id}",[BookTicketsController::class,'update']);
     Route::delete("/{id}",[BookTicketsController::class,'destroy']);
 });
+

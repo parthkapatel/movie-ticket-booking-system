@@ -48,13 +48,15 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+
         if(auth()->attempt(array('email' => $inputVal['email'], 'password' => $inputVal['password']))){
             if (auth()->user()->is_admin == 1) {
                 session(['roles'=>'admin']);
                 return redirect()->route('admin.route');
 
             }else{
-                session(['user_id'=>auth()->user()->id]);
+                $user_id = $this->guard()->user()->id;
+                session(['user_id'=> "1"]);
                 session(['roles'=>'user']);
                 return redirect()->route('home');
 

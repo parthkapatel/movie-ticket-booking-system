@@ -4159,8 +4159,14 @@ __webpack_require__.r(__webpack_exports__);
       city_id: "",
       theater_id: "",
       cityBool: false,
-      error: ""
+      error: "",
+      showToggle: false
     };
+  },
+  updated: function updated() {
+    if (this.shows.length === 0) {
+      this.showToggle = false;
+    }
   },
   methods: {
     getMovie: function getMovie() {
@@ -4218,8 +4224,15 @@ __webpack_require__.r(__webpack_exports__);
     getShows: function getShows() {
       var _this5 = this;
 
-      axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id).then(function (response) {
-        _this5.shows = response.data[0].runtime.split("|");
+      axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id + '/' + this.movie.id).then(function (response) {
+        if (response.data === 0) {
+          _this5.error = "No Movie Release";
+          _this5.showToggle = false;
+        } else {
+          _this5.shows = response.data[0].runtime.split("|");
+          _this5.error = "";
+          _this5.showToggle = true;
+        }
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4241,10 +4254,6 @@ __webpack_require__.r(__webpack_exports__);
       sessionStorage.setItem("movie_id", this.movie.id);
       sessionStorage.setItem("movie_name", this.movie.title);
       sessionStorage.setItem("show", show);
-      /*
-      this.$store.commit("changeCity",this.city_id);
-      this.$store.commit("changeTheater",this.theater_id);
-      this.$store.commit("changeShow",show);*/
     }
   },
   created: function created() {
@@ -53188,49 +53197,61 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm.theater_id
-          ? _c("div", { staticClass: "container" }, [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "d-flex bd-highlight justify-content-center flex-wrap"
-                },
-                _vm._l(_vm.shows, function(show, index) {
-                  return _c(
-                    "router-link",
-                    {
-                      key: index,
-                      staticClass: "links flex-fill",
-                      attrs: { to: "/bookTicket" }
-                    },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: " border p-2 m-2 text-center",
-                          staticStyle: { "border-radius": "5px" },
-                          on: {
-                            click: function($event) {
-                              return _vm.setStateValue(show)
-                            }
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.showToggle,
+                expression: "showToggle"
+              }
+            ],
+            staticClass: "container"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "d-flex bd-highlight justify-content-center flex-wrap"
+              },
+              _vm._l(_vm.shows, function(show, index) {
+                return _c(
+                  "router-link",
+                  {
+                    key: index,
+                    staticClass: "links flex-fill",
+                    attrs: { to: "/bookTicket" }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: " border p-2 m-2 text-center",
+                        staticStyle: { "border-radius": "5px" },
+                        on: {
+                          click: function($event) {
+                            return _vm.setStateValue(show)
                           }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(show) +
-                              "\n                        "
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                }),
-                1
-              )
-            ])
-          : _vm._e()
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(show) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              }),
+              1
+            )
+          ]
+        )
       ])
     ])
   ])

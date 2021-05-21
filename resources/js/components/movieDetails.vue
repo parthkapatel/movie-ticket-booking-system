@@ -45,7 +45,7 @@
                     </div>
                     <span class="alert alert-danger mx-2 mb-2" v-if="error">{{ error }}</span>
                 </form>
-                <div class="container" v-if="theater_id">
+                <div class="container" v-show="showToggle">
                     <div class="d-flex bd-highlight justify-content-center flex-wrap">
                         <router-link  v-for="(show,index) in shows" :key="index" to="/bookTicket"
                                      class="links flex-fill">
@@ -80,6 +80,12 @@ export default {
             theater_id: "",
             cityBool: false,
             error: "",
+            showToggle:false,
+        }
+    },
+    updated() {
+        if(this.shows.length === 0){
+            this.showToggle = false;
         }
     },
     methods: {
@@ -134,9 +140,17 @@ export default {
                 })
         },
         getShows: function () {
-            axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id)
+            axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
                 .then(response => {
-                    this.shows = response.data[0].runtime.split("|");
+                    if (response.data === 0) {
+                        this.error = "No Movie Release";
+                        this.showToggle = false;
+                    }
+                    else{
+                        this.shows = response.data[0].runtime.split("|");
+                        this.error = "";
+                        this.showToggle = true;
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -158,10 +172,7 @@ export default {
             sessionStorage.setItem("theater_name",theater.theater_name);
             sessionStorage.setItem("movie_id",this.movie.id);
             sessionStorage.setItem("movie_name",this.movie.title);
-            sessionStorage.setItem("show",show);/*
-            this.$store.commit("changeCity",this.city_id);
-            this.$store.commit("changeTheater",this.theater_id);
-            this.$store.commit("changeShow",show);*/
+            sessionStorage.setItem("show",show);
         }
     },
     created() {

@@ -79,7 +79,7 @@ Route::prefix("/assign")->group(function (){
     Route::post("/store",[ReleaseMoviesController::class,'store']);
     Route::get("/{id}",[ReleaseMoviesController::class,'edit']);
     Route::get("/{id}/show",[ReleaseMoviesController::class,'show']);
-    Route::get("/movieShow/{cid}/{tid}",[ReleaseMoviesController::class,'getAllShowByCityAndTheaterIds']);
+    Route::get("/movieShow/{cid}/{tid}/{mid}",[ReleaseMoviesController::class,'getAllShowByCityAndTheaterIds']);
     Route::put("/{id}",[ReleaseMoviesController::class,'update']);
     Route::delete("/{id}",[ReleaseMoviesController::class,'destroy']);
 });

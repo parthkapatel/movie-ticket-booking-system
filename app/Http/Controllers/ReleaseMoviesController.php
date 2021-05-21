@@ -134,10 +134,14 @@ class ReleaseMoviesController extends Controller
             ->get();
     }
 
-    public function getAllShowByCityAndTheaterIds($cid,$tid){
-        return ReleaseMovies::select("runtime")
+    public function getAllShowByCityAndTheaterIds($cid,$tid,$mid){
+        $res =  ReleaseMovies::select("runtime")
             ->where("city_id",$cid)
             ->where("theater_id",$tid)
+            ->where("movie_id",$mid)
             ->get();
+        if (count($res) == 0)
+            return 0;
+        return $res;
     }
 }

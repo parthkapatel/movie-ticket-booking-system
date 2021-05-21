@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthKey;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -42,6 +44,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            //\App\Http\Middleware\AuthKey::class,
         ],
     ];
 

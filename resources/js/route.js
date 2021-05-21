@@ -16,6 +16,8 @@ import castDetails from "./components/castDetails";
 import displaySeat from "./components/displaySeat";
 import convert from "lodash/fp/convert";
 import confirmBookSeats from "./components/confirmBookSeats";
+import displayBookedTickets from "./components/displayBookedTickets";
+import displayAllUserBookTickets from "./components/admin/displayAllUserBookTickets";
 
 const routes = [
     {
@@ -91,6 +93,15 @@ const routes = [
         path: '/bookTicket/confirm',
         name: 'confirmBookSeats',
         component: confirmBookSeats,
+    }
+    , {
+        path: '/user/booked',
+        name: 'displayBookedTickets',
+        component: displayBookedTickets,
+    } ,{
+        path: '/bookTicket/booked',
+        name: 'displayAllUserBookTickets',
+        component: displayAllUserBookTickets,
     }
 ];
 

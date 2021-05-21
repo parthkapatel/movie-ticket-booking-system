@@ -21,6 +21,7 @@ class CreateBookTicketsTable extends Migration
             $table->unsignedBigInteger("movie_id");
             $table->string("show","5");
             $table->text("seats");
+            $table->date("show_time_date");
             $table->timestamps();
             $table->foreign("user_id")->references("id")->on("users");
             $table->foreign("city_id")->references("id")->on("cities");

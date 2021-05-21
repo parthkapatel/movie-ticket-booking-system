@@ -44,3 +44,5 @@ Route::get('cast/{vue?}', [CastController::class,'index'])->where('vue', '[\/\w\
 Route::get('/bookTicket/{vue?}', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 Route::get('/bookTicket/confirm', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
 
+
+

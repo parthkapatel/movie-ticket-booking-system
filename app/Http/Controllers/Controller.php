@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookTickets;
 use App\Models\Cast;
 use App\Models\City;
 use App\Models\MovieDetails;
@@ -28,9 +29,10 @@ class Controller extends BaseController
         $releaseMovies = MovieDetails::where("release_year","<=",Carbon::now())->get()->count();
         $upcomingMovies = MovieDetails::where("release_year",">",Carbon::now())->get()->count();
         $casts = Cast::all()->count();
+        $booked = BookTickets::all()->count();
         return json_encode(["cities"=>$cities,"theaters"=>$theaters,
             "movies"=>$movies,"casts"=>$casts,"releaseMovie"=>$releaseMovies,
-            "upcomingMovie"=>$upcomingMovies
+            "upcomingMovie"=>$upcomingMovies,"totalBookedTickets"=>$booked
         ]);
     }
 }

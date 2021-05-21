@@ -1,32 +1,34 @@
 <template>
     <div>
-        <display-view :movies="movies" />
+        <display-view :movies="movies"/>
     </div>
 </template>
 
 <script>
-import displayView  from "./displayView";
+import displayView from "./displayView";
+
 export default {
-    name:"app",
+    name: "app",
     components: {
         displayView
     },
-    data:function (){
-        return{
-            movies:[],
+    data: function () {
+        return {
+            movies: [],
         }
     },
-    methods:{
-        getMovies(){
+    methods: {
+        getMovies() {
             axios.get('/api/getMovies')
-            .then(response=>{
-                this.movies = response.data
-            })
-            .catch(error=>{
-                console.log(error);
-            })
+                .then(response => {
+                    this.movies = response.data
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
     },
+
     created() {
         this.getMovies();
     }

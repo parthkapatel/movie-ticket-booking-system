@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApiTokenController;
 use App\Http\Controllers\BookTicketsController;
 use App\Http\Controllers\CastController;
 use App\Http\Controllers\CastsMoviesController;
@@ -27,6 +28,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post("/login",[\App\Http\Controllers\Auth\LoginController::class,'login']);
+//get token
+Route::get("/token",[ApiTokenController::class,"update"]);
 
 Route::get("/releaseMovie",[ReleaseMoviesController::class,"index"]);
 Route::get('/total/dashboard/',[Controller::class,'getTotalsForDashboard']);
@@ -109,8 +113,10 @@ Route::get("/search/{str}",[MovieDetailsController::class,"getSearchMovie"]);
 
 Route::get("/bookTickets",[BookTicketsController::class,"create"]);
 Route::prefix("/bookTicket")->group(function (){
-    Route::get("/get",[BookTicketsController::class,'getBookedTickets']);
-    Route::post("/store",[BookTicketsController::class,'store'])->middleware("auth");
+    Route::get("/get",[BookTicketsController::class,'getAllBookedTicketsByUserId']);
+    Route::get("/getAll",[BookTicketsController::class,'getAllUserBookedTickets']);
+    Route::post("/getSeats",[BookTicketsController::class,'getAllBookedSeats']);
+    Route::post("/store",[BookTicketsController::class,'store']);
     Route::get("/{id}",[BookTicketsController::class,'getAllCastMoviesByMovieIds']);
     Route::get("/movie/{id}",[BookTicketsController::class,'getAllCastMoviesByCastIds']);
     Route::put("/{id}",[BookTicketsController::class,'update']);

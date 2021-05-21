@@ -39,7 +39,7 @@ class BookTicketsController extends Controller
      */
     public function store(Request $request,User $user)
     {
-        //dd(Auth::user()->id);
+        dd(Auth::user());
         $bookTicket = new BookTickets();
         $bookTicket->user_id = "";
         $bookTicket->city_id = $request->city_id;
@@ -91,14 +91,46 @@ class BookTicketsController extends Controller
      * @param  \App\Models\BookTickets  $bookTickets
      * @return Response
      */
-    public function destroy(BookTickets $bookTickets)
+    public function destroy(BookTickets $bookTickets,$id)
     {
-        //
+        $existingTicket =  BookTickets::find($id);
+        if($existingTicket)
+        {
+            $existingTicket->delete();
+            return $existingTicket;
+        }
+        return "Book Ticket Not Found";
+
+    }
+    public function getAllBookedTicketsByUserId(){
+        //dd(Auth::user());
+        return BookTickets::select('users.name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
+            ->join("users","users.id","book_tickets.user_id")
+            ->join("cities","cities.id","book_tickets.city_id")
+            ->join("theaters","theaters.id","book_tickets.theater_id")
+            ->join("movie_details","movie_details.id","book_tickets.movie_id")
+            ->where("book_tickets.user_id",2)
+            ->orderBy("book_tickets.show_time_date","desc")
+            ->get();
     }
 
-    //$city_id,$theater_id,$movie_id
-    public function getBookedTickets(){
-        return Cast::all();
+    public function getAllUserBookedTickets(){
+        return BookTickets::select('users.name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
+            ->join("users","users.id","book_tickets.user_id")
+            ->join("cities","cities.id","book_tickets.city_id")
+            ->join("theaters","theaters.id","book_tickets.theater_id")
+            ->join("movie_details","movie_details.id","book_tickets.movie_id")
+            ->orderBy("book_tickets.created_at","desc")
+            ->get();
+    }
+
+    public function getAllBookedSeats(Request $request){
+        return BookTickets::select('book_tickets.seats','book_tickets.city_id','book_tickets.theater_id','book_tickets.movie_id')
+            ->where("book_tickets.city_id",$request->city_id)
+            ->where("book_tickets.theater_id",$request->theater_id)
+            ->where("book_tickets.movie_id",$request->movie_id)
+            ->where("book_tickets.show",'LIKE',"%{$request->show}%")
+            ->get();
     }
 
 

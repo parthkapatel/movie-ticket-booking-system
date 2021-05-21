@@ -19,6 +19,12 @@
                     <h4>{{ totalTheaters }}</h4>
                 </div>
             </router-link>
+            <router-link to="/bookTicket/booked/" class="links flex-fill border border-primary boxes p-2 m-2">
+                <div>
+                    <h3>Total Booked Tickets</h3>
+                    <h4>{{ totalBookedTickets }}</h4>
+                </div>
+            </router-link>
         </div>
         <div class="d-flex bd-highlight mb-3 justify-content-center flex-wrap">
             <router-link to="/city/create/" class="links flex-fill border border-primary boxes p-2 m-2">
@@ -54,6 +60,7 @@ export default {
             totalCities: 0,
             totalRelease: 0,
             totalUpComing: 0,
+            totalBookedTickets:0,
         }
     },
     methods: {
@@ -66,6 +73,7 @@ export default {
                     this.totalMovies = response["data"]["movies"];
                     this.totalRelease = response["data"]["releaseMovie"];
                     this.totalUpComing = response["data"]["upcomingMovie"];
+                    this.totalBookedTickets = response["data"]["totalBookedTickets"];
                 })
                 .catch(error => {
                     console.log(error);

@@ -89,12 +89,20 @@
                                     <a class="dropdown-item" href="/cast/assign/create/">
                                         Assign Casts
                                     </a>
+                                    <a class="dropdown-item" href="/bookTicket/booked/">
+                                        Booked Tickets
+                                    </a>
                                 </div>
                             </li>
                         @elseif(session('roles') == "user")
                             <li class="nav-item">
                                 <a class="nav-link" href="/home">
                                     Movie List
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/booked">
+                                    Book Tickets
                                 </a>
                             </li>
                         @endif

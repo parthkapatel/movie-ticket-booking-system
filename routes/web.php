@@ -24,25 +24,34 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', [Controller::class,'index'])->middleware('auth');
+//Route::get('/', [Controller::class,'index'])->middleware('auth');
 
-Auth::routes();
+Route::get('/', function (){
+    return view("welcome");
+});
+
+Route::get('/{any}',function (){
+    return view("welcome");
+})->where('vue', '[\/\w\@\.-]*');
+
+
+/*Auth::routes();*/
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('admin/home', [AdminController::class,'index'])->name('admin.route')->middleware("auth")->middleware('isAdmin');
+Route::get('admin/home', [AdminController::class,'index'])->name('admin.route');
 
-Route::get('user/{vue?}', [HomeController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth");
+Route::get('user/{vue?}', [HomeController::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
 //Route::get("/{any}",[Controller::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
-Route::get('city/{vue?}', [CityController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
-Route::get('theater/{vue?}', [TheaterController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
-Route::get('movie/{vue?}', [MovieDetailsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
-Route::get('cast/{vue?}', [CastController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
+Route::get('city/{vue?}', [CityController::class,'index'])->where('vue', '[\/\w\@\.-]*');
+Route::get('theater/{vue?}', [TheaterController::class,'index'])->where('vue', '[\/\w\@\.-]*');
+Route::get('movie/{vue?}', [MovieDetailsController::class,'index'])->where('vue', '[\/\w\@\.-]*');
+Route::get('cast/{vue?}', [CastController::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
-Route::get('/bookTicket/{vue?}', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
-Route::get('/bookTicket/confirm', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*')->middleware("auth")->middleware('isAdmin');
+Route::get('/bookTicket/{vue?}', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*');
+Route::get('/bookTicket/confirm', [BookTicketsController::class,'index'])->where('vue', '[\/\w\@\.-]*');
 
 
 

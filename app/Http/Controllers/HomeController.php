@@ -14,10 +14,6 @@ class HomeController extends Controller
      *
      * @return RedirectResponse
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -26,7 +22,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        return view('welcome');
     }
 
 

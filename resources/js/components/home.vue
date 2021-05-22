@@ -22,9 +22,8 @@ export default {
     },
     methods:{
         getReleaseMovies:function (){
-            axios.get('/api/assign/getMoviesForHome')
+            axios.get('/assign/getMoviesForHome')
                 .then(response=>{
-                    console.log(response);
                     this.movies = response.data
                 })
                 .catch(error=>{
@@ -35,7 +34,7 @@ export default {
             if(this.str === ""){
                 this.getReleaseMovies();
             }else{
-                axios.get('/api/search/'+this.str)
+                axios.get('/search/'+this.str)
                     .then(response=>{
                         this.movies = response.data
                     })

@@ -36,7 +36,7 @@ export default {
             if (this.city_name) {
                 if(this.city_id === ""){
                     const city = {city_name: this.city_name};
-                    axios.post('/api/city/store', city)
+                    axios.post('/city/store', city)
                         .then(response => {
                             this.city_name = "";
                             this.error = "City Added Successfully";
@@ -49,7 +49,7 @@ export default {
                     });
                 }else{
                     const city = {city_name: this.city_name,id:this.city_id};
-                    axios.put('/api/city/'+this.city_id, city)
+                    axios.put('/city/'+this.city_id, city)
                         .then(response => {
                             this.city_name = "";
                             this.error = "City Update Successfully";
@@ -69,7 +69,7 @@ export default {
 
         },
         getCities: function () {
-            axios.get('/api/city/get')
+            axios.get('/city/get')
                 .then(response => {
                     this.cities = response.data
                 })
@@ -83,7 +83,7 @@ export default {
         },
         onDeleteCity:function (city){
             const cityid = {id:city.id};
-            axios.delete('/api/city/'+city.id, cityid)
+            axios.delete('/city/'+city.id, cityid)
                 .then(response => {
                     this.city_name = "";
                     this.error = "City Deleted Successfully";

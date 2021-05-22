@@ -3,12 +3,18 @@
         <div class="card p-3">
             <div class="d-md-flex m-2">
                 <h4>Movie : {{ movie.name }}</h4>
-                <div @click="addBookTickets" class="btn btn-primary ml-auto mx-2" v-if="selectedSeats.length >= 1">
+                <div class="alert alert-success" v-if="successMessage">{{ successMessage }}</div>
+                <div id="btnBook" @click="addBookTickets" class="btn btn-primary ml-auto mx-2"
+                     v-if="selectedSeats.length >= 1">
                     Book
                 </div>
             </div>
             <div class="container text-danger">
                 you can select maximum 5 seats and minimum 1 seat
+            </div>
+            <div class="container w-50 my-2">
+                <label>Select Show Date :</label>
+                <input class="form-control" id="date" type="date" v-model="show_time_date" name="show_time_date">
             </div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -35,7 +41,7 @@ export default {
     data: function () {
         return {
             seats: [],
-            selectedSeats:[],
+            selectedSeats: [],
             onlySeats: [],
             city: {
                 id: "",
@@ -50,26 +56,40 @@ export default {
                 name: "",
             },
             show: "",
-            disabled: "bg-danger text-secondary"
+            disabled: "bg-danger text-secondary",
+            show_time_date: '',
+            successMessage: '',
         }
     },
     methods: {
-
         addBookTickets: function () {
-            const bookTickets = {
-                city_id: this.city.id,
-                theater_id: this.theater.id,
-                movie_id: this.movie.id,
-                show: this.show,
-                seats: this.seats
-            };
-            axios.post('/api/bookTicket/store', bookTickets)
-                .then(response => {
-                    //this.seats = response.data
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+            if (this.show_time_date === "") {
+                alert("Please select show date");
+            } else {
+                const bookTickets = {
+                    city_id: this.city.id,
+                    theater_id: this.theater.id,
+                    movie_id: this.movie.id,
+                    show: this.show,
+                    seats: this.selectedSeats,
+                    show_time_date: this.show_time_date,
+                };
+                axios.post('/bookTicket/store', bookTickets)
+                    .then(response => {
+                        if (response.data) {
+                            this.successMessage = "Your seat is booked successfully";
+                        }
+                        this.selectedSeats = [];
+                        this.getBookedSeat();
+                        setTimeout(function () {
+                            this.successMessage = "";
+                           location.href = "/user/booked";
+                        },1500);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            }
         },
         getBookedSeat: function () {
             const data = {
@@ -78,11 +98,22 @@ export default {
                 movie_id: this.movie.id,
                 show: this.show,
             }
-            axios.post('/api/bookTicket/getSeats', data)
+            axios.post('/bookTicket/getSeats', data)
                 .then(response => {
                     this.seats = response.data;
-                    for (const i in this.seats) {
-                        this.onlySeats = this.seats[i].seats.split("|");
+                    let str = "";
+                    for (let i = 0; i < this.seats.length; i++) {
+                        for (let j = 0; j < this.seats[i].seats.length; j++) {
+                            if (this.seats[i].seats[j] === "|") {
+                                this.onlySeats.push(str);
+                                str = "";
+                                continue;
+                            } else {
+                                str += this.seats[i].seats[j];
+                            }
+                        }
+                        this.onlySeats.push(str);
+                        str = "";
                     }
                     this.closeBookedSeat();
                 })
@@ -91,9 +122,9 @@ export default {
                 })
         },
         getSeats: function (seat) {
-            if($("#" + seat).hasClass("bg-danger text-light")){
+            if ($("#" + seat).hasClass("bg-danger text-light")) {
                 alert("This seat is already booked! Please Choose another seat!");
-            }else{
+            } else {
                 if ($("#" + seat).hasClass("bg-light text-dark")) {
                     if (this.selectedSeats.length === 5) {
                         alert("you can select maximum 5 tickets");
@@ -110,12 +141,15 @@ export default {
                 }
             }
         },
-        closeBookedSeat:function () {
-            for(let i=1;i<=50;i++){
+        closeBookedSeat: function () {
+            for(let i=0;i<=50;i++){
                 if(this.onlySeats.includes(i.toString())){
-                    $("#" + i).addClass("bg-danger text-light")
+                    if($("#" + i).hasClass("bg-dark text-light")){
+                        $("#" + i).removeClass("bg-dark text-light");
+                    }
+                    $("#" + i).addClass("bg-danger text-light");
                 }else{
-                    $("#" + i).addClass("bg-light text-dark")
+                    $("#" + i).addClass("bg-light text-dark");
                 }
             }
         }
@@ -132,7 +166,20 @@ export default {
         this.movie["name"] = sessionStorage.getItem("movie_name");
         this.show = sessionStorage.getItem("show");
         this.getBookedSeat();
-
+    },
+    mounted() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+        var yyyy = today.getFullYear();
+        if(dd<10){
+            dd='0'+dd
+        }
+        if(mm<10){
+            mm='0'+mm
+        }
+        today = yyyy+'-'+mm+'-'+dd;
+        $("#date").attr("min", today);
     }
 }
 </script>

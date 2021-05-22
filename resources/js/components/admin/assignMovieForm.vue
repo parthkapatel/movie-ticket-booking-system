@@ -99,7 +99,7 @@ export default {
                         movie_id: this.movie_id,
                         runtime:this.runtime,
                     };
-                    axios.post('/api/assign/store', movies)
+                    axios.post('/assign/store', movies)
                         .then(response => {
                             this.alert = "alert alert-success";
                             this.error = "Movie Added Successfully";
@@ -124,7 +124,7 @@ export default {
                         movie_id: this.movie_id,
                         runtime:this.runtime,
                     };
-                    axios.put('/api/assign/' + this.release_id, movies)
+                    axios.put('/assign/' + this.release_id, movies)
                         .then(response => {
                             this.alert = "alert alert-success";
                             this.error = "Movie Update Successfully";
@@ -173,7 +173,7 @@ export default {
         },
         onDeleteMovie: function (movie) {
             const movieid = {id: movie.id};
-            axios.delete('/api/movie/' + movie.id, movieid)
+            axios.delete('/movie/' + movie.id, movieid)
                 .then(response => {
                     this.alert = "alert alert-success";
                     this.error = "Movie Deleted Successfully";
@@ -188,7 +188,7 @@ export default {
                 setTimeout(() => this.error = "", 1000)
             });
         },getReleaseMovies: function () {
-            axios.get('/api/assign/get')
+            axios.get('/assign/get')
                 .then(response => {
                     this.releaseMovies = response.data
                 })
@@ -197,7 +197,7 @@ export default {
                 })
         },
         getMovies: function () {
-            axios.get('/api/movie/get')
+            axios.get('/movie/get')
                 .then(response => {
                     this.movies = response.data
                 })
@@ -205,7 +205,7 @@ export default {
                     console.log(error);
                 })
         }, getCities: function () {
-            axios.get('/api/city/get')
+            axios.get('/city/get')
                 .then(response => {
                     this.cities = response.data
                 })
@@ -213,7 +213,7 @@ export default {
                     console.log(error);
                 })
         }, getTheaters: function () {
-            axios.get('/api/theater/get')
+            axios.get('/theater/get')
                 .then(response => {
                     this.theaters = response.data
                 })

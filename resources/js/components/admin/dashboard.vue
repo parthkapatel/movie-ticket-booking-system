@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         getTotalsForDashboard: function () {
-            axios.get('/api/total/dashboard/')
+            axios.get('/total/dashboard/')
                 .then(response => {
                     this.totalCities = response["data"]["cities"];
                     this.totalTheaters = response["data"]["theaters"];

@@ -18,7 +18,7 @@ class CastController extends Controller
      */
     public function index()
     {
-        return view("index");
+        return view("welcome");
     }
 
     /**

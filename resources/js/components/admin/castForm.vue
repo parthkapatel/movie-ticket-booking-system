@@ -77,7 +77,7 @@ export default {
                         bio: this.bio,
                         date_of_birth: this.date_of_birth
                     };
-                    axios.post('/api/cast/store', cast)
+                    axios.post('/cast/store', cast)
                         .then(response => {
                             this.cast_id = "";
                             this.name = "";
@@ -99,7 +99,7 @@ export default {
                         bio: this.bio,
                         date_of_birth: this.date_of_birth
                     };
-                    axios.put('/api/cast/' + this.cast_id, cast)
+                    axios.put('/cast/' + this.cast_id, cast)
                         .then(response => {
                             this.cast_id = "";
                             this.name = "";
@@ -141,7 +141,7 @@ export default {
         },
         onDeleteCast: function (cast) {
             const castid = {id: cast.id};
-            axios.delete('/api/cast/' + cast.id, castid)
+            axios.delete('/cast/' + cast.id, castid)
                 .then(response => {
                     this.alert = "alert alert-success";
                     this.error = "Cast Deleted Successfully";
@@ -153,7 +153,7 @@ export default {
                 setTimeout(() => this.error = "", 1000)
             });
         }, getCasts: function () {
-            axios.get('/api/cast/get')
+            axios.get('/cast/get')
                 .then(response => {
                     this.casts = response.data
                 })

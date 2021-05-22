@@ -78,7 +78,7 @@ export default {
                         overview:this.overview,
                         release_year:this.release_year,
                     };
-                    axios.post('/api/movie/store', movies)
+                    axios.post('/movie/store', movies)
                         .then(response => {
                             console.log(response);
                             this.movie_id = "";
@@ -101,7 +101,7 @@ export default {
                         overview:this.overview,
                         release_year:this.release_year,
                     };
-                    axios.put('/api/movie/' + this.movie_id, Movie)
+                    axios.put('/movie/' + this.movie_id, Movie)
                         .then(response => {
                             this.movie_id = "";
                             this.title = "";
@@ -143,7 +143,7 @@ export default {
         },
         onDeleteMovie: function (Movie) {
             const Movieid = {id: Movie.id};
-            axios.delete('/api/movie/' + Movie.id, Movieid)
+            axios.delete('/movie/' + Movie.id, Movieid)
                 .then(response => {
                     this.alert = "alert alert-success";
                     this.error = "Movie Deleted Successfully";
@@ -155,7 +155,7 @@ export default {
                 setTimeout(() => this.error = "", 1000)
             });
         }, getMovies: function () {
-            axios.get('/api/movie/get')
+            axios.get('/movie/get')
                 .then(response => {
                     this.movies = response.data
                 })
@@ -163,7 +163,7 @@ export default {
                     console.log(error);
                 })
         },getCasts: function () {
-            axios.get('/api/cast/get')
+            axios.get('/cast/get')
                 .then(response => {
                     this.casts = response.data
                 })

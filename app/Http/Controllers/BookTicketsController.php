@@ -18,7 +18,7 @@ class BookTicketsController extends Controller
      */
     public function index()
     {
-        return view("index");
+        return view("welcome");
     }
 
     /**
@@ -39,13 +39,13 @@ class BookTicketsController extends Controller
      */
     public function store(Request $request,User $user)
     {
-        dd(Auth::user());
         $bookTicket = new BookTickets();
-        $bookTicket->user_id = "";
+        $bookTicket->user_id = Auth::user()->id;
         $bookTicket->city_id = $request->city_id;
         $bookTicket->theater_id = $request->theater_id;
         $bookTicket->movie_id = $request->movie_id;
         $bookTicket->show = $request->show;
+        $bookTicket->show_time_date = $request->show_time_date;
         $bookTicket->seats = implode('|', $request->seats);
         $bookTicket->save();
         return $bookTicket;
@@ -103,13 +103,12 @@ class BookTicketsController extends Controller
 
     }
     public function getAllBookedTicketsByUserId(){
-        //dd(Auth::user());
         return BookTickets::select('users.name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
             ->join("users","users.id","book_tickets.user_id")
             ->join("cities","cities.id","book_tickets.city_id")
             ->join("theaters","theaters.id","book_tickets.theater_id")
             ->join("movie_details","movie_details.id","book_tickets.movie_id")
-            ->where("book_tickets.user_id",2)
+            ->where("book_tickets.user_id",Auth::user()->id)
             ->orderBy("book_tickets.show_time_date","desc")
             ->get();
     }

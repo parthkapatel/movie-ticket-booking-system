@@ -90,7 +90,7 @@ export default {
     },
     methods: {
         getMovie: function () {
-            axios.get('/api/movie/' + this.$route.params.id)
+            axios.get('/movie/' + this.$route.params.id)
                 .then(response => {
                     console.log(response);
                     this.movie.id = response.data.id;
@@ -104,7 +104,7 @@ export default {
                 })
         },
         getCasts: function (id) {
-            axios.get('/api/castMovie/' + id)
+            axios.get('/castMovie/' + id)
                 .then(response => {
                     this.casts = response.data
                 })
@@ -114,7 +114,7 @@ export default {
         },
         getTheaters: function () {
             this.theater_id = false;
-            axios.get('/api/theater/getTheater/' + this.city_id)
+            axios.get('/theater/getTheater/' + this.city_id)
                 .then(response => {
                     this.theaters = response.data
                     if (this.theaters.length > 0) {
@@ -131,7 +131,7 @@ export default {
                 })
         },
         getCities: function () {
-            axios.get('/api/city/get')
+            axios.get('/city/get')
                 .then(response => {
                     this.cities = response.data
                 })
@@ -140,7 +140,7 @@ export default {
                 })
         },
         getShows: function () {
-            axios.get('/api/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
+            axios.get('/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
                 .then(response => {
                     if (response.data === 0) {
                         this.error = "No Movie Release";

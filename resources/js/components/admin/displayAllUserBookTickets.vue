@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         cancelBookedTicket: function (booked) {
-            axios.delete('/api/bookTicket/'+booked)
+            axios.delete('/bookTicket/'+booked)
                 .then(response => {
                     this.bookedTickets = response.data;
                     this.getBookedTickets();
@@ -59,7 +59,7 @@ export default {
                 });
         },
         getBookedTickets: function () {
-            axios.get('/api/bookTicket/getAll/')
+            axios.get('/bookTicket/getAll/')
                 .then(response => {
                     this.bookedTickets = response.data;
                 })

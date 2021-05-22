@@ -17,7 +17,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        return view("index")->with("cities",City::all());
+        return view("welcome");
     }
     /**
      * Show the form for creating a new resource.

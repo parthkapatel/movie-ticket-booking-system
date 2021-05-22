@@ -79,7 +79,7 @@ export default {
                         cast_id: this.cast_id,
                         movie_id: this.movie_id,
                     };
-                    axios.post('/api/castMovie/store', movies)
+                    axios.post('/castMovie/store', movies)
                         .then(response => {
                             this.alert = "alert alert-success";
                             this.error = "Cast Movie Added Successfully";
@@ -101,7 +101,7 @@ export default {
                         movie_id: this.movie_id,
                     };
                     console.log(this.release_id);
-                    axios.put('/api/castMovie/' + this.release_id, movies)
+                    axios.put('/castMovie/' + this.release_id, movies)
                         .then(response => {
                             this.alert = "alert alert-success";
                             this.error = "Movie Update Successfully";
@@ -141,7 +141,7 @@ export default {
         },
         onDeleteMovie: function (movie) {
             const movieid = {id: movie.id};
-            axios.delete('/api/castMovie/' + movie.id, movieid)
+            axios.delete('/castMovie/' + movie.id, movieid)
                 .then(response => {
                     this.alert = "alert alert-success";
                     this.error = "Movie Deleted Successfully";
@@ -157,7 +157,7 @@ export default {
             });
         },
         getMovies: function () {
-            axios.get('/api/movie/get')
+            axios.get('/movie/get')
                 .then(response => {
                     this.movies = response.data
                 })
@@ -165,7 +165,7 @@ export default {
                     console.log(error);
                 })
         }, getCasts: function () {
-            axios.get('/api/cast/get')
+            axios.get('/cast/get')
                 .then(response => {
                     this.casts = response.data
                 })
@@ -174,7 +174,7 @@ export default {
                 })
         },
         getCastMovies: function () {
-            axios.get('/api/castMovie/get')
+            axios.get('/castMovie/get')
                 .then(response => {
                     this.castMovies = response.data
                 })

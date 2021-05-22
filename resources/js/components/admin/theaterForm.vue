@@ -36,7 +36,7 @@ export default {
             if (this.theater_name) {
                 if(this.theater_id === ""){
                     const theater = {theater_name: this.theater_name};
-                    axios.post('/api/theater/store', theater)
+                    axios.post('/theater/store', theater)
                         .then(response => {
                             this.theater_name = "";
                             this.error = "Theater Added Successfully";
@@ -49,7 +49,7 @@ export default {
                     });
                 }else{
                     const theater = {theater_name: this.theater_name,id:this.theater_id};
-                    axios.put('/api/theater/'+this.theater_id, theater)
+                    axios.put('/theater/'+this.theater_id, theater)
                         .then(response => {
                             this.theater_name = "";
                             this.error = "Theater Update Successfully";
@@ -69,7 +69,7 @@ export default {
 
         },
         getTheaters: function () {
-            axios.get('/api/theater/get')
+            axios.get('/theater/get')
                 .then(response => {
                     this.theaters = response.data
                 })
@@ -83,7 +83,7 @@ export default {
         },
         onDeleteTheater:function (theater){
             const theaterid = {id:theater.id};
-            axios.delete('/api/theater/'+theater.id, theaterid)
+            axios.delete('/theater/'+theater.id, theaterid)
                 .then(response => {
                     this.theater_name = "";
                     this.error = "Theater Deleted Successfully";

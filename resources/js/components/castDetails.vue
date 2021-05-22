@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         getMovie: function () {
-            axios.get('/api/cast/' + this.$route.params.id)
+            axios.get('/cast/' + this.$route.params.id)
                 .then(response => {
                     this.cast.id = response.data.id;
                     this.cast.name = response.data.name;
@@ -56,7 +56,7 @@ export default {
                 })
         },
         getCastMovies:function (id){
-            axios.get('/api/castMovie/movie/'+id)
+            axios.get('/castMovie/movie/'+id)
                 .then(response=>{
                     this.movies = response.data
                 })

@@ -18,12 +18,18 @@ import convert from "lodash/fp/convert";
 import confirmBookSeats from "./components/confirmBookSeats";
 import displayBookedTickets from "./components/displayBookedTickets";
 import displayAllUserBookTickets from "./components/admin/displayAllUserBookTickets";
+import login from "./components/login";
 
 const routes = [
     {
         path: '/',
         name: 'App',
         component: App,
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: login,
     },
     {
         path: '/home',

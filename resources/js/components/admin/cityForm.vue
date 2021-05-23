@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div :class="alert" class="w-50" role="alert" v-if="error">
+        <div :class="alert"  role="alert" v-if="error">
             {{ error }}
         </div>
         <form id="addcity" @submit="addCity">
@@ -9,7 +9,7 @@
                 <input v-model="city_id" type="hidden">
                 <input v-model="city_name" class="form-control" placeholder="Enter City Name">
             </div>
-            <button class="btn btn-primary">Add New City</button>
+            <button class="btn btn-primary">{{ (city_id === "") ? 'Add New City': 'Update City' }}</button>
         </form>
         <listCities :cities="cities" @updateCity="onUpdateCity" @deleteCity="onDeleteCity"></listCities>
     </div>
@@ -38,27 +38,42 @@ export default {
                     const city = {city_name: this.city_name};
                     axios.post('/city/store', city)
                         .then(response => {
-                            this.city_name = "";
-                            this.error = "City Added Successfully";
-                            this.getCities();
+                            if(response.data.status === "error"){
+                                this.alert = "alert alert-danger";
+                                this.error = response.data.message;
+                            }else if(response.data.status === "success"){
+                                this.city_name = "";
+                                this.alert = "alert alert-success";
+                                this.error = response.data.message;
+                                this.getCities();
+                            }
                         })
                         .catch(error => {
                             console.log(error);
                         }).finally(() => {
-                        setTimeout(() => this.error = "", 1000)
+                        setTimeout(() => this.error = "", 2000)
                     });
                 }else{
                     const city = {city_name: this.city_name,id:this.city_id};
                     axios.put('/city/'+this.city_id, city)
                         .then(response => {
-                            this.city_name = "";
-                            this.error = "City Update Successfully";
-                            this.getCities();
+                            if(response.data.status === "error"){
+                                this.city_name = "";
+                                this.city_id = "";
+                                this.alert = "alert alert-danger";
+                                this.error = response.data.message;
+                            }else if(response.data.status === "success"){
+                                this.city_name = "";
+                                this.city_id = "";
+                                this.alert = "alert alert-success";
+                                this.error = response.data.message;
+                                this.getCities();
+                            }
                         })
                         .catch(error => {
                             console.log(error);
                         }).finally(() => {
-                        setTimeout(() => this.error = "", 1000)
+                        setTimeout(() => this.error = "", 2000)
                     });
                 }
             } else {
@@ -85,14 +100,21 @@ export default {
             const cityid = {id:city.id};
             axios.delete('/city/'+city.id, cityid)
                 .then(response => {
-                    this.city_name = "";
-                    this.error = "City Deleted Successfully";
-                    this.getCities();
+                    if(response.data.status === "error"){
+                        this.alert = "alert alert-danger";
+                        this.error = response.data.message;
+                    }else if(response.data.status === "success"){
+                        this.city_name = "";
+                        this.city_id = "";
+                        this.alert = "alert alert-success";
+                        this.error = response.data.message;
+                        this.getCities();
+                    }
                 })
                 .catch(error => {
                     console.log(error);
                 }).finally(() => {
-                setTimeout(() => this.error = "", 1000)
+                setTimeout(() => this.error = "", 2000)
             });
         }
     },

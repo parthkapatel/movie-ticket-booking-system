@@ -1872,6 +1872,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "assignCastMovieForm",
@@ -1889,36 +1890,10 @@ __webpack_require__.r(__webpack_exports__);
       casts: [],
       castMovies: [],
       slots: ["12:00", "3:00", "6:00", "9:00"],
-      show: false,
-      btnText: "Add Cast Movie",
-      btnTextColor: "btn btn-primary",
-      MovieButton: "Add New Movies"
+      show: false
     };
   },
   methods: {
-    changeMovieButton: function changeMovieButton() {
-      this.MovieButton = "Update Movies";
-
-      if (this.movie_id === "") {
-        this.MovieButton = "Add New Movies";
-      }
-    },
-    revert: function revert() {
-      if (this.show === false) {
-        this.btnText = "Close";
-        this.btnTextColor = "btn btn-danger";
-      } else {
-        this.movie_id = "";
-        this.title = "";
-        this.overview = "";
-        this.release_year = "";
-        this.btnText = "Add Cast Movie";
-        this.btnTextColor = "btn btn-primary";
-      }
-
-      this.changeMovieButton();
-      this.show = !this.show;
-    },
     addCastMovie: function addCastMovie(e) {
       var _this = this;
 
@@ -1929,55 +1904,59 @@ __webpack_require__.r(__webpack_exports__);
             movie_id: this.movie_id
           };
           axios.post('/castMovie/store', movies).then(function (response) {
-            _this.alert = "alert alert-success";
-            _this.error = "Cast Movie Added Successfully";
+            if (response.data.status === "error") {
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.revert();
+              _this.getCasts();
 
-            _this.getCasts();
+              _this.getMovies();
 
-            _this.getMovies();
-
-            _this.getCastMovies();
-
-            _this.cast_id = 0;
-            _this.movie_id = 0;
+              _this.getCastMovies();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
+            _this.release_id = "";
+            _this.cast_id = 0;
+            _this.movie_id = 0;
           });
         } else {
           var _movies = {
             cast_id: this.cast_id,
             movie_id: this.movie_id
           };
-          console.log(this.release_id);
           axios.put('/castMovie/' + this.release_id, _movies).then(function (response) {
-            _this.alert = "alert alert-success";
-            _this.error = "Movie Update Successfully";
+            if (response.data.status === "error") {
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.getCasts();
+              _this.getCasts();
 
-            _this.getMovies();
+              _this.getMovies();
 
-            _this.getCastMovies();
-
-            _this.changeMovieButton();
-
-            _this.revert();
-
-            _this.cast_id = 0;
-            _this.movie_id = 0;
+              _this.getCastMovies();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             _this.release_id = "";
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
+            _this.cast_id = 0;
+            _this.movie_id = 0;
+            _this.release_id = "";
+            _this.show = !_this.show;
           });
         }
       }
@@ -1993,11 +1972,10 @@ __webpack_require__.r(__webpack_exports__);
       e.preventDefault();
     },
     onUpdateMovie: function onUpdateMovie(release) {
+      this.show = !this.show;
       this.release_id = release.id;
       this.cast_id = release.cast_id;
       this.movie_id = release.movie_id;
-      this.changeMovieButton();
-      this.revert();
     },
     onDeleteMovie: function onDeleteMovie(movie) {
       var _this2 = this;
@@ -2006,6 +1984,7 @@ __webpack_require__.r(__webpack_exports__);
         id: movie.id
       };
       axios["delete"]('/castMovie/' + movie.id, movieid).then(function (response) {
+        _this2.release_id = "";
         _this2.alert = "alert alert-success";
         _this2.error = "Movie Deleted Successfully";
 
@@ -2021,7 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {
         setTimeout(function () {
           return _this2.error = "";
-        }, 1000);
+        }, 2000);
       });
     },
     getMovies: function getMovies() {
@@ -2583,16 +2562,22 @@ __webpack_require__.r(__webpack_exports__);
             city_name: this.city_name
           };
           axios.post('/city/store', city).then(function (response) {
-            _this.city_name = "";
-            _this.error = "City Added Successfully";
+            if (response.data.status === "error") {
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.city_name = "";
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.getCities();
+              _this.getCities();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
           });
         } else {
           var _city = {
@@ -2600,16 +2585,25 @@ __webpack_require__.r(__webpack_exports__);
             id: this.city_id
           };
           axios.put('/city/' + this.city_id, _city).then(function (response) {
-            _this.city_name = "";
-            _this.error = "City Update Successfully";
+            if (response.data.status === "error") {
+              _this.city_name = "";
+              _this.city_id = "";
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.city_name = "";
+              _this.city_id = "";
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.getCities();
+              _this.getCities();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
           });
         }
       } else {
@@ -2639,16 +2633,23 @@ __webpack_require__.r(__webpack_exports__);
         id: city.id
       };
       axios["delete"]('/city/' + city.id, cityid).then(function (response) {
-        _this3.city_name = "";
-        _this3.error = "City Deleted Successfully";
+        if (response.data.status === "error") {
+          _this3.alert = "alert alert-danger";
+          _this3.error = response.data.message;
+        } else if (response.data.status === "success") {
+          _this3.city_name = "";
+          _this3.city_id = "";
+          _this3.alert = "alert alert-success";
+          _this3.error = response.data.message;
 
-        _this3.getCities();
+          _this3.getCities();
+        }
       })["catch"](function (error) {
         console.log(error);
       })["finally"](function () {
         setTimeout(function () {
           return _this3.error = "";
-        }, 1000);
+        }, 2000);
       });
     }
   },
@@ -3471,16 +3472,25 @@ __webpack_require__.r(__webpack_exports__);
             theater_name: this.theater_name
           };
           axios.post('/theater/store', theater).then(function (response) {
-            _this.theater_name = "";
-            _this.error = "Theater Added Successfully";
+            if (response.data.status === "error") {
+              _this.theater_name = "";
+              _this.theater_id = "";
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.theater_name = "";
+              _this.theater_id = "";
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.getTheaters();
+              _this.getTheaters();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
           });
         } else {
           var _theater = {
@@ -3488,16 +3498,25 @@ __webpack_require__.r(__webpack_exports__);
             id: this.theater_id
           };
           axios.put('/theater/' + this.theater_id, _theater).then(function (response) {
-            _this.theater_name = "";
-            _this.error = "Theater Update Successfully";
+            if (response.data.status === "error") {
+              _this.theater_name = "";
+              _this.theater_id = "";
+              _this.alert = "alert alert-danger";
+              _this.error = response.data.message;
+            } else if (response.data.status === "success") {
+              _this.theater_name = "";
+              _this.theater_id = "";
+              _this.alert = "alert alert-success";
+              _this.error = response.data.message;
 
-            _this.getTheaters();
+              _this.getTheaters();
+            }
           })["catch"](function (error) {
             console.log(error);
           })["finally"](function () {
             setTimeout(function () {
               return _this.error = "";
-            }, 1000);
+            }, 2000);
           });
         }
       } else {
@@ -3527,16 +3546,25 @@ __webpack_require__.r(__webpack_exports__);
         id: theater.id
       };
       axios["delete"]('/theater/' + theater.id, theaterid).then(function (response) {
-        _this3.theater_name = "";
-        _this3.error = "Theater Deleted Successfully";
+        if (response.data.status === "error") {
+          _this3.theater_name = "";
+          _this3.theater_id = "";
+          _this3.alert = "alert alert-danger";
+          _this3.error = response.data.message;
+        } else if (response.data.status === "success") {
+          _this3.theater_name = "";
+          _this3.theater_id = "";
+          _this3.alert = "alert alert-success";
+          _this3.error = "Theater Deleted Successfully";
 
-        _this3.getTheaters();
+          _this3.getTheaters();
+        }
       })["catch"](function (error) {
         console.log(error);
       })["finally"](function () {
         setTimeout(function () {
           return _this3.error = "";
-        }, 1000);
+        }, 2000);
       });
     }
   },
@@ -42124,16 +42152,40 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("button", { class: _vm.btnTextColor, on: { click: _vm.revert } }, [
-        _vm._v(_vm._s(_vm.btnText))
-      ]),
+      !_vm.show
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  ;(_vm.show = !_vm.show) ? (_vm.release_id = "") : ""
+                }
+              }
+            },
+            [_vm._v("Add New Cast")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.show
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-danger",
+              on: {
+                click: function($event) {
+                  _vm.show = !_vm.show
+                }
+              }
+            },
+            [_vm._v("Close")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.error
-        ? _c(
-            "div",
-            { staticClass: "w-50", class: _vm.alert, attrs: { role: "alert" } },
-            [_vm._v("\n        " + _vm._s(_vm.error) + "\n    ")]
-          )
+        ? _c("div", { class: _vm.alert, attrs: { role: "alert" } }, [
+            _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
+          ])
         : _vm._e(),
       _vm._v(" "),
       _vm.show
@@ -42230,7 +42282,11 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("button", { staticClass: "btn btn-primary" }, [
-                _vm._v(_vm._s(_vm.MovieButton))
+                _vm._v(
+                  _vm._s(
+                    _vm.release_id === "" ? "Assign New Cast" : "Update Cast"
+                  )
+                )
               ])
             ]
           )
@@ -42686,11 +42742,9 @@ var render = function() {
     { staticClass: "container" },
     [
       _vm.error
-        ? _c(
-            "div",
-            { staticClass: "w-50", class: _vm.alert, attrs: { role: "alert" } },
-            [_vm._v("\n        " + _vm._s(_vm.error) + "\n    ")]
-          )
+        ? _c("div", { class: _vm.alert, attrs: { role: "alert" } }, [
+            _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("form", { attrs: { id: "addcity" }, on: { submit: _vm.addCity } }, [
@@ -42742,7 +42796,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("button", { staticClass: "btn btn-primary" }, [
-          _vm._v("Add New City")
+          _vm._v(_vm._s(_vm.city_id === "" ? "Add New City" : "Update City"))
         ])
       ]),
       _vm._v(" "),
@@ -43885,11 +43939,9 @@ var render = function() {
     { staticClass: "container" },
     [
       _vm.error
-        ? _c(
-            "div",
-            { staticClass: "w-50", class: _vm.alert, attrs: { role: "alert" } },
-            [_vm._v("\n        " + _vm._s(_vm.error) + "\n    ")]
-          )
+        ? _c("div", { class: _vm.alert, attrs: { role: "alert" } }, [
+            _vm._v("\n        " + _vm._s(_vm.error) + "\n    ")
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c(
@@ -43944,7 +43996,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("button", { staticClass: "btn btn-primary" }, [
-            _vm._v("Add New Theater")
+            _vm._v(
+              _vm._s(
+                _vm.theater_id === "" ? "Add New Theater" : "Update Theater"
+              )
+            )
           ])
         ]
       ),

@@ -36,11 +36,16 @@ class CastsMoviesController extends Controller
      */
     public function store(Request $request)
     {
-        $newCastMovie = new CastsMovies();
-        $newCastMovie->cast_id = $request->cast_id;
-        $newCastMovie->movie_id = $request->movie_id;
-        $newCastMovie->save();
-        return $newCastMovie;
+        $existsData = CastsMovies::where("cast_id",$request->cast_id)->where("movie_id", $request->movie_id)->get()->count();
+        if ($existsData > 0) {
+            return json_encode(["status"=>"error","message"=>"you can not reassign the same movie to cast"]);
+        } else {
+            $newCastMovie = new CastsMovies();
+            $newCastMovie->cast_id = $request->cast_id;
+            $newCastMovie->movie_id = $request->movie_id;
+            $newCastMovie->save();
+            return json_encode(["status"=>"success","message"=>"Movie Assign to Cast Successfully"]);
+        }
     }
 
     /**
@@ -74,14 +79,19 @@ class CastsMoviesController extends Controller
      */
     public function update(Request $request, CastsMovies $castsMovies, $id)
     {
-        $existingCastMovie = CastsMovies::find($id);
-        if ($existingCastMovie) {
-            $existingCastMovie->cast_id = $request->cast_id;
-            $existingCastMovie->movie_id = $request->movie_id;
-            $existingCastMovie->save();
-            return $existingCastMovie;
+        $existsData = CastsMovies::where("cast_id",$request->cast_id)->where("movie_id", $request->movie_id)->get()->count();
+        if ($existsData > 0) {
+            return json_encode(["status"=>"error","message"=>"you try to assign movie that data is already exists"]);
+        } else {
+            $existingCastMovie = CastsMovies::find($id);
+            if ($existingCastMovie) {
+                $existingCastMovie->cast_id = $request->cast_id;
+                $existingCastMovie->movie_id = $request->movie_id;
+                $existingCastMovie->save();
+                return json_encode(["status"=>"success","message"=>"Movie reassign to cast successfully Updated"]);
+            }
+            return json_encode(["status"=>"error","message"=>"Data Not Found"]);
         }
-        return "Cast Movie Not Found!";
     }
 
     /**

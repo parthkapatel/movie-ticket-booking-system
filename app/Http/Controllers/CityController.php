@@ -19,6 +19,7 @@ class CityController extends Controller
     {
         return view("welcome");
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,21 +33,26 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return City
      */
-    public function store(Request $request): City
+    public function store(Request $request)
     {
-        $newCity = new City();
-        $newCity->city_name = $request->city_name;
-        $newCity->save();
-        return $newCity;
+        $exisitingCity = City::where("city_name", $request->city_name)->first();
+        if ($exisitingCity) {
+            return json_encode(["status" => "error", "message" => "City already exists!"]);
+        } else {
+            $newCity = new City();
+            $newCity->city_name = $request->city_name;
+            $newCity->save();
+            return json_encode(["status"=>"success","message"=>"City Successfully Added"]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\City  $city
+     * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
     public function show(City $city)
@@ -57,10 +63,10 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\City  $city
+     * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function edit(City $city,$id)
+    public function edit(City $city, $id)
     {
         return City::find($id);
     }
@@ -68,39 +74,50 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\City  $city
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, City $city,$id)
+    public function update(Request $request, City $city, $id)
     {
-        $existingCity = City::find($id);
-        if($existingCity){
-            $existingCity->city_name = $request->city_name;
-            $existingCity->save();
-            return $existingCity;
+        $childData = City::join("release_movies", "release_movies.city_id", "cities.id")->where("cities.id", $id)->get()->count();
+        if ($childData > 0) {
+            return json_encode(["status"=>"error","message"=>"you can not update this data after assign movie or theater"]);
+        } else {
+            $existingCity = City::find($id);
+            if ($existingCity) {
+                $existingCity->city_name = $request->city_name;
+                $existingCity->save();
+                return json_encode(["status"=>"success","message"=>"City Successfully Updated"]);
+            }
+            return json_encode(["status"=>"error","message"=>"City Not Found"]);
         }
-        return "City not found";
 
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\City  $city
+     * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function destroy(City $city,$id)
+    public function destroy(City $city, $id)
     {
-        $existingCity = City::find($id);
-        if($existingCity){
-            $existingCity->delete();
-            return "City Successfully deleted";
+        $childData = City::join("release_movies", "release_movies.city_id", "cities.id")->where("cities.id", $id)->get()->count();
+        if ($childData > 0) {
+            return json_encode(["status"=>"error","message"=>"you can not delete this data after assign movie or theater"]);
+        } else {
+            $existingCity = City::find($id);
+            if ($existingCity) {
+                $existingCity->delete();
+                return json_encode(["status"=>"success","message"=>"City Successfully deleted"]);
+            }
+            return json_encode(["status"=>"error","message"=>"City Not Found"]);
         }
-        return "City not found";
     }
 
-    public function getAllCity(){
+    public function getAllCity()
+    {
         return City::orderBy("city_name")->get();
     }
 }

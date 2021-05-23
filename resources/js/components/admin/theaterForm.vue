@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div :class="alert" class="w-50" role="alert" v-if="error">
+        <div :class="alert"  role="alert" v-if="error">
             {{ error }}
         </div>
         <form id="addTheater" @submit="addTheater">
@@ -9,7 +9,7 @@
                 <input v-model="theater_id" type="hidden">
                 <input v-model="theater_name" class="form-control" placeholder="Enter Theater Name">
             </div>
-            <button class="btn btn-primary">Add New Theater</button>
+            <button class="btn btn-primary">{{ (theater_id === "") ? 'Add New Theater': 'Update Theater' }}</button>
         </form>
         <list-theaters :theaters="theaters" @updateTheater="onUpdateTheater" @deleteTheater="onDeleteTheater"></list-theaters>
     </div>
@@ -38,27 +38,45 @@ export default {
                     const theater = {theater_name: this.theater_name};
                     axios.post('/theater/store', theater)
                         .then(response => {
-                            this.theater_name = "";
-                            this.error = "Theater Added Successfully";
-                            this.getTheaters();
+                            if(response.data.status === "error"){
+                                this.theater_name = "";
+                                this.theater_id = "";
+                                this.alert = "alert alert-danger";
+                                this.error = response.data.message;
+                            }else if(response.data.status === "success"){
+                                this.theater_name = "";
+                                this.theater_id = "";
+                                this.alert = "alert alert-success";
+                                this.error = response.data.message;
+                                this.getTheaters();
+                            }
                         })
                         .catch(error => {
                             console.log(error);
                         }).finally(() => {
-                        setTimeout(() => this.error = "", 1000)
+                        setTimeout(() => this.error = "", 2000)
                     });
                 }else{
                     const theater = {theater_name: this.theater_name,id:this.theater_id};
                     axios.put('/theater/'+this.theater_id, theater)
                         .then(response => {
-                            this.theater_name = "";
-                            this.error = "Theater Update Successfully";
-                            this.getTheaters();
+                            if(response.data.status === "error"){
+                                this.theater_name = "";
+                                this.theater_id = "";
+                                this.alert = "alert alert-danger";
+                                this.error = response.data.message;
+                            }else if(response.data.status === "success"){
+                                this.theater_name = "";
+                                this.theater_id = "";
+                                this.alert = "alert alert-success";
+                                this.error = response.data.message;
+                                this.getTheaters();
+                            }
                         })
                         .catch(error => {
                             console.log(error);
                         }).finally(() => {
-                        setTimeout(() => this.error = "", 1000)
+                        setTimeout(() => this.error = "", 2000)
                     });
                 }
             } else {
@@ -85,14 +103,23 @@ export default {
             const theaterid = {id:theater.id};
             axios.delete('/theater/'+theater.id, theaterid)
                 .then(response => {
-                    this.theater_name = "";
-                    this.error = "Theater Deleted Successfully";
-                    this.getTheaters();
+                    if(response.data.status === "error"){
+                        this.theater_name = "";
+                        this.theater_id = "";
+                        this.alert = "alert alert-danger";
+                        this.error = response.data.message;
+                    }else if(response.data.status === "success"){
+                        this.theater_name = "";
+                        this.theater_id = "";
+                        this.alert = "alert alert-success"
+                        this.error = "Theater Deleted Successfully";
+                        this.getTheaters();
+                    }
                 })
                 .catch(error => {
                     console.log(error);
                 }).finally(() => {
-                setTimeout(() => this.error = "", 1000)
+                setTimeout(() => this.error = "", 2000)
             });
         }
     },

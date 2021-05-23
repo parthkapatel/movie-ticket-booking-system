@@ -84,17 +84,12 @@
         </nav>
         <div class="container py-5">
             <router-view/>
-
         </div>
         <footer-section />
     </div>
-    <!--    <div>
-            <display-view :movies="movies"/>
-        </div>-->
 </template>
 
 <script>
-//import displayView from "./displayView";
 import {mapGetters} from 'vuex'
 import footerSection from "./footerSection";
 export default {
@@ -107,7 +102,6 @@ export default {
         ])
     },
     components: {
-        //displayView
         footerSection,
     },
     data: function () {
@@ -119,19 +113,8 @@ export default {
         logout() {
             this.$store.dispatch('logout')
         },
-        /*getMovies() {
-            axios.get('/getMovies')
-                .then(response => {
-                    this.movies = response.data
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }*/
     },
-    created() {
-        // this.getMovies();
-    }
+
 }
 </script>
 

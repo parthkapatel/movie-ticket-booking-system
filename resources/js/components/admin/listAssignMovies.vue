@@ -22,6 +22,9 @@
                     <td><button class="btn btn-primary" @click="updateMovie(release)">Edit</button></td>
                     <td><button @click.prevent="deleteMovie(release)" class="btn btn-danger">Delete</button></td>
                 </tr>
+                <tr v-if="releaseMovies.length == 0">
+                    <td colspan="8">No Data Found</td>
+                </tr>
                 </tbody>
             </table>
         </div>

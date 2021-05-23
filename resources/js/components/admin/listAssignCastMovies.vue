@@ -10,13 +10,16 @@
                 <th scope="col" colspan="2">Action</th>
                 </thead>
                 <tbody>
-                <tr v-for="(movie,index) in castMovies" :key="index">
+                <tr v-if="castMovies.length > 0" v-for="(movie,index) in castMovies" :key="index">
                     <td>{{ ++index }}</td>
                     <td>{{ movie.name }}</td>
                     <td>{{ movie.title }}</td>
                     <td>{{ movie.created_at }}</td>
                     <td><button class="btn btn-primary" @click="updateCastMovie(movie)">Edit</button></td>
                     <td><button @click.prevent="deleteCastMovie(movie)" class="btn btn-danger">Delete</button></td>
+                </tr>
+                <tr v-if="castMovies.length == 0">
+                    <td colspan="6">No Data Found</td>
                 </tr>
                 </tbody>
             </table>

@@ -9,12 +9,15 @@
                     <th scope="col" colspan="2">Action</th>
                 </thead>
                 <tbody>
-                    <tr v-for="(city,index) in cities" :key="index">
+                    <tr v-if="cities.length > 0" v-for="(city,index) in cities" :key="index">
                         <td>{{ ++index }}</td>
                         <td>{{ city.city_name }}</td>
                         <td>{{ city.created_at }}</td>
                         <td><button class="btn btn-primary" @click="updateCity(city)">Edit</button></td>
                         <td><button @click.prevent="deleteCity(city)" class="btn btn-danger">Delete</button></td>
+                    </tr>
+                    <tr v-if="cities.length == 0">
+                        <td colspan="5">No Data Found</td>
                     </tr>
                 </tbody>
             </table>

@@ -17,7 +17,7 @@
                     <th scope="col" colspan="2">Action</th>
                     </thead>
                     <tbody>
-                    <tr v-for="(booked,index) in bookedTickets" :key="index" :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'bg-secondary' : ''">
+                    <tr v-if="bookedTickets.length > 0" v-for="(booked,index) in bookedTickets" :key="index" :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'bg-secondary' : ''">
                         <td>{{ ++index }}</td>
                         <td>{{ booked.name }}</td>
                         <td>{{ booked.city_name }}</td>
@@ -30,6 +30,9 @@
                         <td>
                             <button @click.prevent="cancelBookedTicket(booked.id)" class="btn btn-danger" :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'disabled' : ''">Cancel</button>
                         </td>
+                    </tr>
+                    <tr v-if="bookedTickets.length == 0">
+                        <td colspan="10">No Data Found</td>
                     </tr>
                     </tbody>
                 </table>

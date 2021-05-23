@@ -3,7 +3,6 @@
         <div class="card p-3">
             <div class="d-md-flex m-2">
                 <h4>Movie : {{ movie.name }}</h4>
-                <div class="alert alert-success" v-if="successMessage">{{ successMessage }}</div>
                 <div id="btnBook" @click="addBookTickets" class="btn btn-primary ml-auto mx-2"
                      v-if="selectedSeats.length >= 1">
                     Book
@@ -12,7 +11,7 @@
             <div class="container text-danger">
                 you can select maximum 5 seats and minimum 1 seat
             </div>
-            <div class="container w-50 my-2">
+            <div class="container w-50 my-2" v-if="!errorMessage">
                 <label>Select Show Date :</label>
                 <input class="form-control" id="date" type="date" v-model="show_time_date" name="show_time_date">
             </div>
@@ -23,7 +22,9 @@
                     <li class="breadcrumb-item active" aria-current="page">{{ show }}</li>
                 </ol>
             </nav>
-            <div class="container" style="min-height:500px;border-radius:5px;background-color: #e9ecef;">
+            <div class="container p-2" style="min-height:500px;border-radius:5px;background-color: #e9ecef;">
+                <div class="alert alert-success text-center" v-if="successMessage">{{ successMessage }}</div>
+                <div class="alert alert-danger text-center" v-if="errorMessage">{{ errorMessage }}</div>
                 <div class="d-flex bd-highlight justify-content-center flex-wrap" id="content">
                     <div v-for="box in 50" @click="getSeats(box)" :id="box"
                          class="border p-2 m-3 text-center"
@@ -59,6 +60,7 @@ export default {
             disabled: "bg-danger text-secondary",
             show_time_date: '',
             successMessage: '',
+            errorMessage:'',
         }
     },
     methods: {
@@ -142,6 +144,9 @@ export default {
             }
         },
         closeBookedSeat: function () {
+            if(this.onlySeats.length === 50){
+                this.errorMessage = "This Show is full";
+            }
             for(let i=0;i<=50;i++){
                 if(this.onlySeats.includes(i.toString())){
                     if($("#" + i).hasClass("bg-dark text-light")){

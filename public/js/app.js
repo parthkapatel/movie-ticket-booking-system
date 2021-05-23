@@ -2809,6 +2809,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "displayAllUserBookTickets",
   data: function data() {
@@ -2866,6 +2869,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -2953,6 +2959,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "listAssignMovies",
   props: ['releaseMovies'],
@@ -2979,6 +2988,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -3062,6 +3074,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "listCities",
   props: ['cities'],
@@ -3088,6 +3103,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -3147,6 +3165,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -3636,18 +3657,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//import displayView from "./displayView";
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "app",
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['isLogged', 'userName', 'isAdmin'])),
   components: {
-    //displayView
     footerSection: _footerSection__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
@@ -3659,18 +3674,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     logout: function logout() {
       this.$store.dispatch('logout');
     }
-    /*getMovies() {
-        axios.get('/getMovies')
-            .then(response => {
-                this.movies = response.data
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }*/
-
-  },
-  created: function created() {// this.getMovies();
   }
 });
 
@@ -3783,6 +3786,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -3951,6 +3957,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "displaySeat",
   data: function data() {
@@ -3973,7 +3980,8 @@ __webpack_require__.r(__webpack_exports__);
       show: "",
       disabled: "bg-danger text-secondary",
       show_time_date: '',
-      successMessage: ''
+      successMessage: '',
+      errorMessage: ''
     };
   },
   methods: {
@@ -4064,6 +4072,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     closeBookedSeat: function closeBookedSeat() {
+      if (this.onlySeats.length === 50) {
+        this.errorMessage = "This Show is full";
+      }
+
       for (var i = 0; i <= 50; i++) {
         if (this.onlySeats.includes(i.toString())) {
           if ($("#" + i).hasClass("bg-dark text-light")) {
@@ -4135,6 +4147,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "displayView",
@@ -4183,6 +4198,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _displayView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./displayView */ "./resources/js/components/displayView.vue");
+//
+//
+//
 //
 //
 //
@@ -42917,62 +42935,76 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.bookedTickets, function(booked, index) {
-              return _c(
-                "tr",
-                {
-                  key: index,
-                  class:
-                    _vm.formatDate(booked.show_time_date) <
-                    _vm.formatDate(new Date())
-                      ? "bg-secondary"
-                      : ""
-                },
-                [
-                  _c("td", [_vm._v(_vm._s(++index))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.city_name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.theater_name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.title))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.show))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.seats))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.show_time_date))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(new Date(booked.created_at).toDateString()))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
+            [
+              _vm._l(_vm.bookedTickets, function(booked, index) {
+                return _vm.bookedTickets.length > 0
+                  ? _c(
+                      "tr",
                       {
-                        staticClass: "btn btn-danger",
+                        key: index,
                         class:
                           _vm.formatDate(booked.show_time_date) <
                           _vm.formatDate(new Date())
-                            ? "disabled"
-                            : "",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.cancelBookedTicket(booked.id)
-                          }
-                        }
+                            ? "bg-secondary"
+                            : ""
                       },
-                      [_vm._v("Cancel")]
+                      [
+                        _c("td", [_vm._v(_vm._s(++index))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.city_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.theater_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.title))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.show))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.seats))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.show_time_date))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(new Date(booked.created_at).toDateString())
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger",
+                              class:
+                                _vm.formatDate(booked.show_time_date) <
+                                _vm.formatDate(new Date())
+                                  ? "disabled"
+                                  : "",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.cancelBookedTicket(booked.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          )
+                        ])
+                      ]
                     )
+                  : _vm._e()
+              }),
+              _vm._v(" "),
+              _vm.bookedTickets.length == 0
+                ? _c("tr", [
+                    _c("td", { attrs: { colspan: "10" } }, [
+                      _vm._v("No Data Found")
+                    ])
                   ])
-                ]
-              )
-            }),
-            0
+                : _vm._e()
+            ],
+            2
           )
         ])
       ])
@@ -43036,49 +43068,61 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.castMovies, function(movie, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.title))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateCastMovie(movie)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteCastMovie(movie)
-                      }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.castMovies, function(movie, index) {
+              return _vm.castMovies.length > 0
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(++index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.title))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.created_at))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateCastMovie(movie)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteCastMovie(movie)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _vm.castMovies.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "6" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -43131,53 +43175,63 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.releaseMovies, function(release, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(release.city_name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(release.theater_name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(release.title))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(release.runtime))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(release.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateMovie(release)
+          [
+            _vm._l(_vm.releaseMovies, function(release, index) {
+              return _c("tr", { key: index }, [
+                _c("td", [_vm._v(_vm._s(++index))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(release.city_name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(release.theater_name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(release.title))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(release.runtime))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(release.created_at))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      on: {
+                        click: function($event) {
+                          return _vm.updateMovie(release)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteMovie(release)
+                    },
+                    [_vm._v("Edit")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.deleteMovie(release)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
               ])
-            ])
-          }),
-          0
+            }),
+            _vm._v(" "),
+            _vm.releaseMovies.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "8" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -43234,51 +43288,63 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.casts, function(cast, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(cast.name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(cast.bio))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(cast.date_of_birth))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(cast.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateCast(cast)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteCast(cast)
-                      }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.casts, function(cast, index) {
+              return _vm.casts.length > 0
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(++index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(cast.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(cast.bio))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(cast.date_of_birth))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(cast.created_at))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateCast(cast)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteCast(cast)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _vm.casts.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "7" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -43333,47 +43399,59 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.cities, function(city, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(city.city_name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(city.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateCity(city)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteCity(city)
-                      }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.cities, function(city, index) {
+              return _vm.cities.length > 0
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(++index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(city.city_name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(city.created_at))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateCity(city)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteCity(city)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _vm.cities.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "5" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -43424,51 +43502,63 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.movies, function(movie, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.title))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.overview))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.release_year))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(movie.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateMovie(movie)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteMovie(movie)
-                      }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.movies, function(movie, index) {
+              return _vm.movies.length > 0
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(++index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.title))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.overview))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.release_year))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(movie.created_at))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateMovie(movie)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteMovie(movie)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _vm.movies.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "7" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -43523,47 +43613,59 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.theaters, function(theater, index) {
-            return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(++index))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(theater.theater_name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(theater.created_at))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.updateTheater(theater)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.deleteTheater(theater)
-                      }
-                    }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            ])
-          }),
-          0
+          [
+            _vm._l(_vm.theaters, function(theater, index) {
+              return _vm.theaters.length > 0
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(++index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(theater.theater_name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(theater.created_at))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.updateTheater(theater)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteTheater(theater)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _vm.theaters.length == 0
+              ? _c("tr", [
+                  _c("td", { attrs: { colspan: "5" } }, [
+                    _vm._v("No Data Found")
+                  ])
+                ])
+              : _vm._e()
+          ],
+          2
         )
       ])
     ])
@@ -44350,62 +44452,76 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.bookedTickets, function(booked, index) {
-              return _c(
-                "tr",
-                {
-                  key: index,
-                  class:
-                    _vm.formatDate(booked.show_time_date) <
-                    _vm.formatDate(new Date())
-                      ? "bg-secondary"
-                      : ""
-                },
-                [
-                  _c("td", [_vm._v(_vm._s(++index))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.city_name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.theater_name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.title))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.show))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.seats))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(booked.show_time_date))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(new Date(booked.created_at).toDateString()))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
+            [
+              _vm._l(_vm.bookedTickets, function(booked, index) {
+                return _vm.bookedTickets.length > 0
+                  ? _c(
+                      "tr",
                       {
-                        staticClass: "btn btn-danger",
+                        key: index,
                         class:
                           _vm.formatDate(booked.show_time_date) <
                           _vm.formatDate(new Date())
-                            ? "disabled"
-                            : "",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.cancelBookedTicket(booked.id)
-                          }
-                        }
+                            ? "bg-secondary"
+                            : ""
                       },
-                      [_vm._v("Cancel")]
+                      [
+                        _c("td", [_vm._v(_vm._s(++index))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.city_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.theater_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.title))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.show))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.seats))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(booked.show_time_date))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(new Date(booked.created_at).toDateString())
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger",
+                              class:
+                                _vm.formatDate(booked.show_time_date) <
+                                _vm.formatDate(new Date())
+                                  ? "disabled"
+                                  : "",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.cancelBookedTicket(booked.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Cancel")]
+                          )
+                        ])
+                      ]
                     )
+                  : _vm._e()
+              }),
+              _vm._v(" "),
+              _vm.bookedTickets.length == 0
+                ? _c("tr", [
+                    _c("td", { attrs: { colspan: "10" } }, [
+                      _vm._v("No Data Found")
+                    ])
                   ])
-                ]
-              )
-            }),
-            0
+                : _vm._e()
+            ],
+            2
           )
         ])
       ])
@@ -44525,12 +44641,6 @@ var render = function() {
       _c("div", { staticClass: "d-md-flex m-2" }, [
         _c("h4", [_vm._v("Movie : " + _vm._s(_vm.movie.name))]),
         _vm._v(" "),
-        _vm.successMessage
-          ? _c("div", { staticClass: "alert alert-success" }, [
-              _vm._v(_vm._s(_vm.successMessage))
-            ])
-          : _vm._e(),
-        _vm._v(" "),
         _vm.selectedSeats.length >= 1
           ? _c(
               "div",
@@ -44550,31 +44660,33 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "container w-50 my-2" }, [
-        _c("label", [_vm._v("Select Show Date :")]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.show_time_date,
-              expression: "show_time_date"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { id: "date", type: "date", name: "show_time_date" },
-          domProps: { value: _vm.show_time_date },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      !_vm.errorMessage
+        ? _c("div", { staticClass: "container w-50 my-2" }, [
+            _c("label", [_vm._v("Select Show Date :")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.show_time_date,
+                  expression: "show_time_date"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "date", type: "date", name: "show_time_date" },
+              domProps: { value: _vm.show_time_date },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.show_time_date = $event.target.value
+                }
               }
-              _vm.show_time_date = $event.target.value
-            }
-          }
-        })
-      ]),
+            })
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("nav", { attrs: { "aria-label": "breadcrumb" } }, [
         _c("ol", { staticClass: "breadcrumb" }, [
@@ -44600,7 +44712,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "container",
+          staticClass: "container p-2",
           staticStyle: {
             "min-height": "500px",
             "border-radius": "5px",
@@ -44608,6 +44720,18 @@ var render = function() {
           }
         },
         [
+          _vm.successMessage
+            ? _c("div", { staticClass: "alert alert-success text-center" }, [
+                _vm._v(_vm._s(_vm.successMessage))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.errorMessage
+            ? _c("div", { staticClass: "alert alert-danger text-center" }, [
+                _vm._v(_vm._s(_vm.errorMessage))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _c(
             "div",
             {
@@ -44663,20 +44787,30 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.movies, function(movie, index) {
-      return _c(
-        "div",
-        { key: index },
-        [
-          _c("display-movies", {
-            staticClass: "movie",
-            attrs: { movie: movie }
-          })
-        ],
-        1
-      )
-    }),
-    0
+    [
+      _vm._l(_vm.movies, function(movie, index) {
+        return _vm.movies.length > 0
+          ? _c(
+              "div",
+              { key: index },
+              [
+                _c("display-movies", {
+                  staticClass: "movie",
+                  attrs: { movie: movie }
+                })
+              ],
+              1
+            )
+          : _vm._e()
+      }),
+      _vm._v(" "),
+      _vm.movies.length == 0
+        ? _c("div", { staticClass: "text-center" }, [
+            _c("h5", { staticClass: "m-5" }, [_vm._v("No Data Found")])
+          ])
+        : _vm._e()
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -44740,42 +44874,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container" },
-    [
-      _c("div", { staticClass: "text-right m-2" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.str,
-              expression: "str"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "Search here..(city,theater,title)"
-          },
-          domProps: { value: _vm.str },
-          on: {
-            keyup: _vm.searchMovie,
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "div",
+      [
+        _c("div", { staticClass: "text-right m-2" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.str,
+                expression: "str"
               }
-              _vm.str = $event.target.value
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              placeholder: "Search here..(city,theater,title)"
+            },
+            domProps: { value: _vm.str },
+            on: {
+              keyup: _vm.searchMovie,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.str = $event.target.value
+              }
             }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("display-view", { attrs: { movies: _vm.movies } })
-    ],
-    1
-  )
+          })
+        ]),
+        _vm._v(" "),
+        _c("display-view", { attrs: { movies: _vm.movies } })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

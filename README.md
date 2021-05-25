@@ -28,3 +28,6 @@ php artisan db:seed
 username : admin@gmail.com
 password : 12345
 
+if api not work after clone then run this code in sequence 
+1. php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+2. php artisan migrate

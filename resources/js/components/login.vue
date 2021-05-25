@@ -30,9 +30,9 @@
                                         Login
                                     </button>
                                 </div>
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ message }}</strong>
-                                </span>
+                            </div>
+                            <div class="alert alert-danger my-3" role="alert" v-if="message">
+                                {{ message }}
                             </div>
                         </form>
                     </div>
@@ -61,7 +61,12 @@ export default {
                     password: this.password
                 })
                 .then((res) => {
-                    this.$router.push({name: 'About'})
+                    if(res.status === "error"){
+                        this.message = res.message
+                    }else{
+                        this.message = "";
+                    }
+                    //this.$router.push({name: 'About'})
                 })
                 .catch(err => {
                     console.log(err)

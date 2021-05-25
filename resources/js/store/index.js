@@ -29,11 +29,16 @@ export default new Vuex.Store({
             return axios
                 .post('/login', credentials)
                 .then(({ data }) => {
-                    commit('setUserData', data);
-                    if(this.state.user.user.is_admin == 1){
-                        location.href= "/admin/home";
-                    }else if(this.state.user.user.is_admin == 0){
-                        location.href= "/home";
+                    if(data.status === "error"){
+                        return data;
+                    }else{
+                        commit('setUserData', data);
+                        console.log(data);
+                        if(this.state.user.user.is_admin == 1){
+                            location.href= "/admin/home";
+                        }else if(this.state.user.user.is_admin == 0){
+                            location.href= "/home";
+                        }
                     }
                 })
         },

@@ -72,9 +72,12 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         password: this.password
       }).then(function (res) {
-        _this.$router.push({
-          name: 'About'
-        });
+        if (res.status === "error") {
+          _this.message = res.message;
+        } else {
+          _this.message = "";
+        } //this.$router.push({name: 'About'})
+
       })["catch"](function (err) {
         console.log(err);
       });
@@ -275,18 +278,24 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group row mb-0" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    {
-                      staticClass: "invalid-feedback",
-                      attrs: { role: "alert" }
-                    },
-                    [_c("strong", [_vm._v(_vm._s(_vm.message))])]
-                  )
-                ])
+                _vm._m(0),
+                _vm._v(" "),
+                _vm.message
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "alert alert-danger my-3",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.message) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  : _vm._e()
               ]
             )
           ])
@@ -300,16 +309,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-8 offset-md-4" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [
-          _vm._v(
-            "\n                                    Login\n                                "
-          )
-        ]
-      )
+    return _c("div", { staticClass: "form-group row mb-0" }, [
+      _c("div", { staticClass: "col-md-8 offset-md-4" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [
+            _vm._v(
+              "\n                                    Login\n                                "
+            )
+          ]
+        )
+      ])
     ])
   }
 ]

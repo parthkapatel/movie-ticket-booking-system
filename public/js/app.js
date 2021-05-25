@@ -4897,12 +4897,18 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vuex__WEBPACK_IMPORTED_MODULE_2__.d
       var commit = _ref.commit;
       return axios__WEBPACK_IMPORTED_MODULE_0___default().post('/login', credentials).then(function (_ref2) {
         var data = _ref2.data;
-        commit('setUserData', data);
 
-        if (_this.state.user.user.is_admin == 1) {
-          location.href = "/admin/home";
-        } else if (_this.state.user.user.is_admin == 0) {
-          location.href = "/home";
+        if (data.status === "error") {
+          return data;
+        } else {
+          commit('setUserData', data);
+          console.log(data);
+
+          if (_this.state.user.user.is_admin == 1) {
+            location.href = "/admin/home";
+          } else if (_this.state.user.user.is_admin == 0) {
+            location.href = "/home";
+          }
         }
       });
     },

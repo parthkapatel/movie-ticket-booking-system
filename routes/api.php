@@ -39,9 +39,10 @@ Route::post('/login', function (Request $request) {
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
-        return response([
-            'message' => ['These credentials do not match our records.']
-        ], 404);
+        return json_encode([
+            "status"=>"error",
+            'message' => 'These credentials do not match our records.'
+        ]);
     }
 
     $token = $user->createToken('my-app-token')->plainTextToken;

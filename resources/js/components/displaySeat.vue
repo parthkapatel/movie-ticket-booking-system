@@ -13,7 +13,8 @@
             </div>
             <div class="container w-50 my-2" v-if="!errorMessage">
                 <label>Select Show Date :</label>
-                <input class="form-control" id="date" type="date" v-model="show_time_date" name="show_time_date">
+                <input class="form-control" id="date" type="date" @change="getBookedSeat" v-model="show_time_date"
+                       name="show_time_date">
             </div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -60,7 +61,7 @@ export default {
             disabled: "bg-danger text-secondary",
             show_time_date: '',
             successMessage: '',
-            errorMessage:'',
+            errorMessage: '',
         }
     },
     methods: {
@@ -85,8 +86,8 @@ export default {
                         this.getBookedSeat();
                         setTimeout(function () {
                             this.successMessage = "";
-                           location.href = "/user/booked";
-                        },1500);
+                            location.href = "/user/booked";
+                        }, 1500);
                     })
                     .catch(error => {
                         console.log(error);
@@ -99,11 +100,13 @@ export default {
                 theater_id: this.theater.id,
                 movie_id: this.movie.id,
                 show: this.show,
+                time: this.show_time_date,
             }
             axios.post('/bookTicket/getSeats', data)
                 .then(response => {
                     this.seats = response.data;
                     let str = "";
+                    this.onlySeats = [];
                     for (let i = 0; i < this.seats.length; i++) {
                         for (let j = 0; j < this.seats[i].seats.length; j++) {
                             if (this.seats[i].seats[j] === "|") {
@@ -144,16 +147,22 @@ export default {
             }
         },
         closeBookedSeat: function () {
-            if(this.onlySeats.length === 50){
+            if (this.onlySeats.length === 50) {
                 this.errorMessage = "This Show is full";
             }
-            for(let i=0;i<=50;i++){
-                if(this.onlySeats.includes(i.toString())){
-                    if($("#" + i).hasClass("bg-dark text-light")){
+            for (let i = 0; i <= 50; i++) {
+                if (this.onlySeats.includes(i.toString())) {
+                    if ($("#" + i).hasClass("bg-dark text-light")) {
                         $("#" + i).removeClass("bg-dark text-light");
                     }
+                    if ($("#" + i).hasClass("bg-light text-dark")) {
+                        $("#" + i).removeClass("bg-light text-dark");
+                    }
                     $("#" + i).addClass("bg-danger text-light");
-                }else{
+                } else {
+                    if ($("#" + i).hasClass("bg-danger text-light")) {
+                        $("#" + i).removeClass("bg-danger text-light");
+                    }
                     $("#" + i).addClass("bg-light text-dark");
                 }
             }
@@ -175,17 +184,17 @@ export default {
     mounted() {
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+        var mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
         var yyyy = today.getFullYear();
-        if(dd<10){
-            dd='0'+dd
+        if (dd < 10) {
+            dd = '0' + dd
         }
-        if(mm<10){
-            mm='0'+mm
+        if (mm < 10) {
+            mm = '0' + mm
         }
-        today = yyyy+'-'+mm+'-'+dd;
+        today = yyyy + '-' + mm + '-' + dd;
         $("#date").attr("min", today);
-    }
+    },
 }
 </script>
 

@@ -3986,6 +3986,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "displaySeat",
   data: function data() {
@@ -4052,11 +4053,13 @@ __webpack_require__.r(__webpack_exports__);
         city_id: this.city.id,
         theater_id: this.theater.id,
         movie_id: this.movie.id,
-        show: this.show
+        show: this.show,
+        time: this.show_time_date
       };
       axios.post('/bookTicket/getSeats', data).then(function (response) {
         _this2.seats = response.data;
         var str = "";
+        _this2.onlySeats = [];
 
         for (var i = 0; i < _this2.seats.length; i++) {
           for (var j = 0; j < _this2.seats[i].seats.length; j++) {
@@ -4110,8 +4113,16 @@ __webpack_require__.r(__webpack_exports__);
             $("#" + i).removeClass("bg-dark text-light");
           }
 
+          if ($("#" + i).hasClass("bg-light text-dark")) {
+            $("#" + i).removeClass("bg-light text-dark");
+          }
+
           $("#" + i).addClass("bg-danger text-light");
         } else {
+          if ($("#" + i).hasClass("bg-danger text-light")) {
+            $("#" + i).removeClass("bg-danger text-light");
+          }
+
           $("#" + i).addClass("bg-light text-dark");
         }
       }
@@ -44739,6 +44750,7 @@ var render = function() {
               attrs: { id: "date", type: "date", name: "show_time_date" },
               domProps: { value: _vm.show_time_date },
               on: {
+                change: _vm.getBookedSeat,
                 input: function($event) {
                   if ($event.target.composing) {
                     return

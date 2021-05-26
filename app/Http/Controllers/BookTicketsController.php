@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BookTickets;
 use App\Models\Cast;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -124,11 +125,18 @@ class BookTicketsController extends Controller
     }
 
     public function getAllBookedSeats(Request $request){
+
+        if($request->time == ''){
+            $date = date("Y-m-d", strtotime(Carbon::now()));
+        }else{
+            $date = $request->time;
+        }
         return BookTickets::select('book_tickets.seats','book_tickets.city_id','book_tickets.theater_id','book_tickets.movie_id')
             ->where("book_tickets.city_id",$request->city_id)
             ->where("book_tickets.theater_id",$request->theater_id)
             ->where("book_tickets.movie_id",$request->movie_id)
             ->where("book_tickets.show",'LIKE',"%{$request->show}%")
+            ->where("book_tickets.show_time_date",$date)
             ->get();
     }
 

@@ -146,13 +146,13 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 
 
-    Route::get("/getCasts", [CastController::class, "index"]);
-    Route::get("/casts", [CastController::class, "create"]);
+    /*Route::get("/getCasts", [CastController::class, "index"]);*/
+    /*Route::get("/casts", [CastController::class, "create"]);*/
     Route::prefix("/cast")->group(function () {
-        Route::post("/getIds", [CastController::class, 'getCastsByIds']);
-        Route::get("/get", [CastController::class, 'getALlCasts']);
+       /* Route::post("/getIds", [CastController::class, 'getCastsByIds']);*/
+        Route::get("/get", [CastController::class, 'getAllCasts']);
         Route::post("/store", [CastController::class, 'store']);
-        Route::get("/{id}", [CastController::class, 'edit']);
+        Route::get("/{id}", [CastController::class, 'getCastDataById']);
         Route::put("/{id}", [CastController::class, 'update']);
         Route::delete("/{id}", [CastController::class, 'destroy']);
     });

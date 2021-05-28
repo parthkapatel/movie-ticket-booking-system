@@ -4,17 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Cast;
 use App\Models\MovieDetails;
+use App\Repositories\CastRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use phpDocumentor\Reflection\Types\Callable_;
 use PHPUnit\Util\Json;
 use function MongoDB\BSON\toJSON;
 
 class CastController extends Controller
 {
+
+    private $castRepo;
+    public function __construct(CastRepository $castRepository)
+    {
+        $this->castRepo = $castRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -24,7 +33,7 @@ class CastController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -34,24 +43,19 @@ class CastController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        $newCast = new Cast();
-        $newCast->name = $request->name;
-        $newCast->bio = $request->bio;
-        $newCast->date_of_birth = $request->date_of_birth;
-        $newCast->save();
-        return $newCast;
+        return $this->castRepo->insertCastData($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cast  $cast
-     * @return \Illuminate\Http\Response
+     * @param Cast $cast
+     * @return Response
      */
     public function show(Cast $cast)
     {
@@ -61,53 +65,43 @@ class CastController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cast  $cast
-     * @return \Illuminate\Http\Response
+     * @param Cast $cast
+     * @return Response
      */
     public function edit(Cast $cast,$id)
     {
-        return Cast::find($id);
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cast  $cast
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Cast $cast
+     * @param $id
+     * @return Response
      */
     public function update(Request $request, Cast $cast,$id)
     {
-        $existingCast = Cast::find($id);
-        if($existingCast){
-            $existingCast->name = $request->name;
-            $existingCast->bio = $request->bio;
-            $existingCast->date_of_birth = $request->date_of_birth;
-            $existingCast->save();
-            return $existingCast;
-        }
-        return "Cast not found";
-
+        return $this->castRepo->updateCastData($request,$id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cast  $cast
-     * @return \Illuminate\Http\Response
+     * @param Cast $cast
+     * @return Response
      */
     public function destroy(Cast $cast,$id)
     {
-        $existingCast = Cast::find($id);
-        if($existingCast){
-            $existingCast->delete();
-            return "Cast Successfully deleted";
-        }
-        return "Cast not found";
+        return $this->castRepo->deleteCastData($id);
     }
 
-    public function getALlCasts(){
-        return Cast::orderBy("name")->get();
+    public function getAllCasts(){
+        return $this->castRepo->getAllCastData();
     }
 
+    public function getCastDataById($id){
+        return $this->castRepo->getCastDataById($id);
+    }
 }

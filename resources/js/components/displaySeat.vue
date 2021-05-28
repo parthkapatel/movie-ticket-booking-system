@@ -127,22 +127,26 @@ export default {
                 })
         },
         getSeats: function (seat) {
-            if ($("#" + seat).hasClass("bg-danger text-light")) {
-                alert("This seat is already booked! Please Choose another seat!");
-            } else {
-                if ($("#" + seat).hasClass("bg-light text-dark")) {
-                    if (this.selectedSeats.length === 5) {
-                        alert("you can select maximum 5 tickets");
-                    } else {
-                        $("#" + seat).removeClass("bg-light text-dark");
-                        $("#" + seat).addClass("bg-dark text-light");
-                        this.selectedSeats.push(seat);
-                    }
+            if(this.show_time_date === ""){
+                alert("select date before selecting the seats");
+            }else{
+                if ($("#" + seat).hasClass("bg-danger text-light")) {
+                    alert("This seat is already booked! Please Choose another seat!");
                 } else {
-                    $("#" + seat).removeClass("bg-dark text-light");
-                    $("#" + seat).addClass("bg-light text-dark");
-                    this.selectedSeats.pop(seat);
+                    if ($("#" + seat).hasClass("bg-light text-dark")) {
+                        if (this.selectedSeats.length === 5) {
+                            alert("you can select maximum 5 tickets");
+                        } else {
+                            $("#" + seat).removeClass("bg-light text-dark");
+                            $("#" + seat).addClass("bg-dark text-light");
+                            this.selectedSeats.push(seat);
+                        }
+                    } else {
+                        $("#" + seat).removeClass("bg-dark text-light");
+                        $("#" + seat).addClass("bg-light text-dark");
+                        this.selectedSeats.pop(seat);
 
+                    }
                 }
             }
         },
@@ -162,6 +166,9 @@ export default {
                 } else {
                     if ($("#" + i).hasClass("bg-danger text-light")) {
                         $("#" + i).removeClass("bg-danger text-light");
+                    }
+                    if ($("#" + i).hasClass("bg-dark text-light")) {
+                        $("#" + i).removeClass("bg-dark text-light");
                     }
                     $("#" + i).addClass("bg-light text-dark");
                 }

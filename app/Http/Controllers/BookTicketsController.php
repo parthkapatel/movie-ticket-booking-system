@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookTickets;
-use App\Models\Cast;
+use App\Mail\BookTicketMail;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class BookTicketsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -35,8 +39,8 @@ class BookTicketsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @param Request $request
+     * @return BookTickets
      */
     public function store(Request $request,User $user)
     {
@@ -49,6 +53,7 @@ class BookTicketsController extends Controller
         $bookTicket->show_time_date = $request->show_time_date;
         $bookTicket->seats = implode('|', $request->seats);
         $bookTicket->save();
+        Mail::to($request->user()->email)->send(new BookTicketMail($bookTicket->id));
         return $bookTicket;
     }
 
@@ -77,7 +82,7 @@ class BookTicketsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  \App\Models\BookTickets  $bookTickets
      * @return Response
      */

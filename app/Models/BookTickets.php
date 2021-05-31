@@ -11,7 +11,7 @@ class BookTickets extends Model
 
     protected $guard = 'bookTicket';
 
-    protected $fillable = [
+    /*protected $fillable = [
         'user_id', 'city_id', 'theater_id','movie_id','show','seats'
-    ];
+    ];*/
 }

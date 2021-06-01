@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\MovieDetails;
 use App\Models\ReleaseMovies;
+use App\Repositories\MovieDetailsRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class MovieDetailsController extends Controller
 {
+    private $movieDetails;
+    public function __construct(MovieDetailsRepository $movieDetailsRepository)
+    {
+        $this->movieDetails = $movieDetailsRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -38,12 +44,8 @@ class MovieDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        $newMovie = new MovieDetails();
-        $newMovie->title = $request->title;
-        $newMovie->overview = $request->overview;
-        $newMovie->release_year = $request->release_year;
-        $newMovie->save();
-        return $newMovie;
+        return $this->movieDetails->save($request);
+
     }
 
     /**
@@ -54,7 +56,7 @@ class MovieDetailsController extends Controller
      */
     public function show(MovieDetails $movieDetails,$id)
     {
-        return MovieDetails::find($id);
+        return $this->movieDetails->getMovieById($id);
     }
 
     /**
@@ -65,7 +67,7 @@ class MovieDetailsController extends Controller
      */
     public function edit(MovieDetails $movieDetails,$id)
     {
-        return MovieDetails::find($id);
+        return $this->movieDetails->getMovieById($id);
     }
 
     /**
@@ -77,13 +79,14 @@ class MovieDetailsController extends Controller
      */
     public function update(Request $request, MovieDetails $movieDetails,$id)
     {
-        $existingMovie = MovieDetails::find($id);
-        if($existingMovie){
-            $existingMovie->title = $request->title;
-            $existingMovie->overview = $request->overview;
-            $existingMovie->release_year = $request->release_year;
-            $existingMovie->save();
-            return $existingMovie;
+
+        $this->movieDetails = $this->movieDetails::find($id);
+        if($this->movieDetails){
+            $this->movieDetails->title = $request->title;
+            $this->movieDetails->overview = $request->overview;
+            $this->movieDetails->release_year = $request->release_year;
+            $this->movieDetails->save();
+            return $this->movieDetails;
         }
         return "Movie not found";
 
@@ -97,27 +100,19 @@ class MovieDetailsController extends Controller
      */
     public function destroy(MovieDetails $movieDetails,$id)
     {
-        $existingMovie = MovieDetails::find($id);
-        if($existingMovie){
-            $existingMovie->delete();
+        $this->movieDetails = $this->movieDetails::find($id);
+        if($this->movieDetails){
+            $this->movieDetails->delete();
             return "Movie deleted successfully";
         }
         return "Movie not found";
     }
 
     public function getAllMovies(){
-        return MovieDetails::orderBy("created_at","desc")->get();
+        return $this->movieDetails->getAllMovies();
     }
 
     public function getSearchMovie($str){
-        return ReleaseMovies::select('movie_details.*')
-            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
-            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
-            ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
-            ->where("movie_details.title" ,'LIKE', "%{$str}%")
-            ->orWhere('cities.city_name', 'LIKE', "%{$str}%")
-            ->orWhere('theaters.theater_name', 'LIKE', "%{$str}%")
-            ->distinct()
-            ->get();
+        return $this->movieDetails->getSearchMovie($str);
     }
 }

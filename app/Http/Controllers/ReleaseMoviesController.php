@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReleaseMovies;
+use App\Repositories\ReleaseMovieRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -10,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ReleaseMoviesController extends Controller
 {
+
+    private $releaseRepo;
+    public function __construct(ReleaseMovieRepository $releaseMovieRepository)
+    {
+        $this->releaseRepo = $releaseMovieRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -38,13 +45,7 @@ class ReleaseMoviesController extends Controller
      */
     public function store(Request $request)
     {
-        $newRelease = new ReleaseMovies();
-        $newRelease->city_id = $request->city_id;
-        $newRelease->theater_id = $request->theater_id;
-        $newRelease->movie_id = $request->movie_id;
-        $newRelease->runtime = implode('|', $request->runtime);
-        $newRelease->save();
-        return $newRelease;
+        return $this->releaseRepo->save($request);
     }
 
     /**
@@ -55,12 +56,7 @@ class ReleaseMoviesController extends Controller
      */
     public function show(ReleaseMovies $releaseMovies,$id)
     {
-        return ReleaseMovies::select('cities.city_name','theaters.theater_name','movie_details.*','release_movies.runtime')
-            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
-            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
-            ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
-            ->where("movie_details.id","=",$id)
-            ->get();
+        return $this->releaseRepo->show($id);
     }
 
     /**
@@ -71,7 +67,7 @@ class ReleaseMoviesController extends Controller
      */
     public function edit(ReleaseMovies $releaseMovies,$id)
     {
-           return $releaseMovies::find($id);
+        return $this->releaseRepo->getReleaseMovieById($id);
     }
 
     /**
@@ -83,16 +79,7 @@ class ReleaseMoviesController extends Controller
      */
     public function update(Request $request, ReleaseMovies $releaseMovies,$id)
     {
-        $existingRelease = ReleaseMovies::find($id);
-        if($existingRelease){
-            $existingRelease->city_id = $request->city_id;
-            $existingRelease->theater_id = $request->theater_id;
-            $existingRelease->movie_id = $request->movie_id;
-            $existingRelease->runtime = implode('|', $request->runtime);
-            $existingRelease->save();
-            return $existingRelease;
-        }
-        return "Release movie not found";
+        return $this->releaseRepo->update($request,$id);
     }
 
     /**
@@ -103,45 +90,18 @@ class ReleaseMoviesController extends Controller
      */
     public function destroy(ReleaseMovies $releaseMovies,$id)
     {
-        $existingRelease = ReleaseMovies::find($id);
-        if($existingRelease){
-            $existingRelease->delete();
-            return "Release movie successfully deleted";
-        }
-        return "Release movie not found";
+        return $this->releaseRepo->delete($id);
     }
 
     public function getAllAssignMovies(){
-        return ReleaseMovies::select('cities.city_name','theaters.theater_name','movie_details.*','movie_details.id as movie_id','release_movies.runtime','release_movies.id')
-            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
-            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
-            ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
-            ->where("movie_details.release_year","<=",Carbon::now())
-            ->orderBy('movie_details.release_year')
-            ->orderBy('cities.city_name')
-            ->get();
+        return $this->releaseRepo->getAllAssignMovies();
     }
 
     public function getMoviesForHome(){
-        return ReleaseMovies::select('movie_details.*','release_movies.movie_id')
-            ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
-            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
-            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
-            ->where("movie_details.release_year","<=",Carbon::now())
-            ->orderBy('movie_details.release_year')
-            ->orderBy('cities.city_name')
-            ->distinct()
-            ->get();
+        return $this->releaseRepo->getMoviesForHome();
     }
 
     public function getAllShowByCityAndTheaterIds($cid,$tid,$mid){
-        $res =  ReleaseMovies::select("runtime")
-            ->where("city_id",$cid)
-            ->where("theater_id",$tid)
-            ->where("movie_id",$mid)
-            ->get();
-        if (count($res) == 0)
-            return 0;
-        return $res;
+        return $this->releaseRepo->getAllShowByCityAndTheaterIds($cid,$tid,$mid);
     }
 }

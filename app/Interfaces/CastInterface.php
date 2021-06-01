@@ -3,18 +3,16 @@
 
 namespace App\Interfaces;
 
-use App\Models\Cast;
-
 interface CastInterface
 {
-    public function getAllCastData();
+    public function save($data);
 
-    public function insertCastData($data);
+    public function update($data,$cast_id);
 
-    public function updateCastData($data,$cast_id);
-
-    public function deleteCastData($cast_id);
+    public function delete($cast_id);
 
     public function getCastDataById($cast_id);
+
+    public function getAllCastData();
 
 }

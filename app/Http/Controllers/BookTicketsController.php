@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BookTickets;
 use App\Mail\BookTicketMail;
 use App\Models\User;
+use App\Repositories\BookTicketsRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Mail;
 
 class BookTicketsController extends Controller
 {
+
+    private $bookedRepo;
+    public function __construct(BookTicketsRepository $bookTicketsRepository)
+    {
+        $this->bookedRepo = $bookTicketsRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -44,17 +51,7 @@ class BookTicketsController extends Controller
      */
     public function store(Request $request,User $user)
     {
-        $bookTicket = new BookTickets();
-        $bookTicket->user_id = Auth::user()->id;
-        $bookTicket->city_id = $request->city_id;
-        $bookTicket->theater_id = $request->theater_id;
-        $bookTicket->movie_id = $request->movie_id;
-        $bookTicket->show = $request->show;
-        $bookTicket->show_time_date = $request->show_time_date;
-        $bookTicket->seats = implode('|', $request->seats);
-        $bookTicket->save();
-        Mail::to($request->user()->email)->send(new BookTicketMail($bookTicket->id));
-        return $bookTicket;
+        return $this->bookedRepo->save($request);
     }
 
     /**
@@ -99,51 +96,23 @@ class BookTicketsController extends Controller
      */
     public function destroy(BookTickets $bookTickets,$id)
     {
-        $existingTicket =  BookTickets::find($id);
-        if($existingTicket)
-        {
-            $existingTicket->delete();
-            return $existingTicket;
-        }
-        return "Book Ticket Not Found";
-
+        return $this->bookedRepo->delete($id);
     }
+
     public function getAllBookedTicketsByUserId(){
-        return BookTickets::select('users.name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
-            ->join("users","users.id","book_tickets.user_id")
-            ->join("cities","cities.id","book_tickets.city_id")
-            ->join("theaters","theaters.id","book_tickets.theater_id")
-            ->join("movie_details","movie_details.id","book_tickets.movie_id")
-            ->where("book_tickets.user_id",Auth::user()->id)
-            ->orderBy("book_tickets.show_time_date","desc")
-            ->get();
+        return $this->bookedRepo->getAllBookedTicketsByUserId();
     }
 
     public function getAllUserBookedTickets(){
-        return BookTickets::select('users.name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
-            ->join("users","users.id","book_tickets.user_id")
-            ->join("cities","cities.id","book_tickets.city_id")
-            ->join("theaters","theaters.id","book_tickets.theater_id")
-            ->join("movie_details","movie_details.id","book_tickets.movie_id")
-            ->orderBy("book_tickets.created_at","desc")
-            ->get();
+        return $this->bookedRepo->getAllUserBookedTickets();
     }
 
     public function getAllBookedSeats(Request $request){
-
         if($request->time == ''){
             $date = date("Y-m-d", strtotime(Carbon::now()));
         }else{
             $date = $request->time;
         }
-        return BookTickets::select('book_tickets.seats','book_tickets.city_id','book_tickets.theater_id','book_tickets.movie_id')
-            ->where("book_tickets.city_id",$request->city_id)
-            ->where("book_tickets.theater_id",$request->theater_id)
-            ->where("book_tickets.movie_id",$request->movie_id)
-            ->where("book_tickets.show",'LIKE',"%{$request->show}%")
-            ->where("book_tickets.show_time_date",$date)
-            ->get();
+        return $this->bookedRepo->getAllBookedSeats($request,$date);
     }
-
-
 }

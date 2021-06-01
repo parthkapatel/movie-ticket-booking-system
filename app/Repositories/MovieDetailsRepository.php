@@ -17,41 +17,59 @@ class MovieDetailsRepository implements MovieDetailsInterface
         $this->movieDetails = $movieDetails;
     }
 
-    public function all()
-    {
-        return $this->movieDetails::all();
-    }
-
     public function save($data)
     {
-       /* $this->movieDetails->title = $data["title"];
-        $this->->user_id = $user_id;
-        $this->blog->description = $data["description"];
-        $this->blog->status = $data["status"];
-        if ($this->blog->save()) {
-            return $this->blog;
-        } else {
-            return false;
-        }*/
+        $this->movieDetails->title = $data->title;
+        $this->movieDetails->overview = $data->overview;
+        $this->movieDetails->release_year = $data->release_year;
+        $this->movieDetails->save();
+        return $this->movieDetails;
     }
 
-    public function getPaginate()
+
+    public function update($data, $movie_id)
     {
-        //return $this->user::join('blogs', 'blogs.user_id', '=', 'users.id')->where("status", "!=", "draft")->orderBy("blogs.created_at", "desc")->paginate(5);
+        $this->movieDetails = MovieDetails::find($movie_id);
+        if($this->movieDetails){
+            $this->movieDetails->title = $data->title;
+            $this->movieDetails->overview = $data->overview;
+            $this->movieDetails->release_year = $data->release_year;
+            $this->movieDetails->save();
+            return $this->movieDetails;
+        }
+        return "Movie not found";
+    }
+
+    public function delete($movie_id)
+    {
+        $this->movieDetails = MovieDetails::find($movie_id);
+        if($this->movieDetails){
+            $this->movieDetails->delete();
+            return "Movie deleted successfully";
+        }
+        return "Movie not found";
     }
 
     public function getMovieById($movie_id)
     {
-        // TODO: Implement getMovieById() method.
+        return MovieDetails::find($movie_id);
     }
 
-    public function updateMovie($data, $movie_id)
+    public function getAllMovies()
     {
-        // TODO: Implement updateMovie() method.
+        return MovieDetails::orderBy("created_at","desc")->get();
     }
 
-    public function deleteMovie($movie_id)
+    public function getSearchMovie($str)
     {
-        return $this->movieDetails::where('id', $movie_id)->delete();
+        return MovieDetails::select('movie_details.*')
+            ->join('release_movies', 'release_movies.movie_id', '=', 'movie_details.id')
+            ->join('cities', 'release_movies.city_id', '=', 'cities.id')
+            ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
+            ->where("movie_details.title" ,'LIKE', "%{$str}%")
+            ->orWhere('cities.city_name', 'LIKE', "%{$str}%")
+            ->orWhere('theaters.theater_name', 'LIKE', "%{$str}%")
+            ->distinct()
+            ->get();
     }
 }

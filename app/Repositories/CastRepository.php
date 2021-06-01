@@ -22,7 +22,7 @@ class CastRepository implements CastInterface
         return $this->cast::orderBy("name")->get();
     }
 
-    public function insertCastData($data)
+    public function save($data)
     {
         $this->cast->name = $data->name;
         $this->cast->bio = $data->bio;
@@ -32,7 +32,7 @@ class CastRepository implements CastInterface
     }
 
 
-    public function updateCastData($data, $cast_id)
+    public function update($data, $cast_id)
     {
         $this->cast::find($cast_id);
         if($this->cast){
@@ -45,7 +45,7 @@ class CastRepository implements CastInterface
         return "Cast not found";
     }
 
-    public function deleteCastData($cast_id)
+    public function delete($cast_id)
     {
         $this->cast::find($cast_id);
         if($this->cast){

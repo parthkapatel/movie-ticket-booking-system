@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\ReleaseMovies;
 use App\Models\Theater;
+use App\Repositories\TheaterRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class TheaterController extends Controller
 {
+
+    private $theaterRepo;
+    public function __construct(TheaterRepository $theaterRepository)
+    {
+        $this->theaterRepo = $theaterRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,19 +40,11 @@ class TheaterController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function store(Request $request)
     {
-        $exisitingCity = Theater::where("theater_name", $request->theater_name)->first();
-        if ($exisitingCity) {
-            return json_encode(["status" => "error", "message" => "Theater already exists!"]);
-        } else {
-            $newTheater = new Theater();
-            $newTheater->theater_name = $request->theater_name;
-            $newTheater->save();
-            return json_encode(["status"=>"success","message"=>"Theater Successfully Added"]);
-        }
+        return $this->theaterRepo->save($request);
     }
 
     /**
@@ -67,7 +66,7 @@ class TheaterController extends Controller
      */
     public function edit(Theater $theater,$id)
     {
-        return Theater::find($id);
+        return $this->theaterRepo->getTheaterById($id);
     }
 
     /**
@@ -75,55 +74,29 @@ class TheaterController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Theater  $theater
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function update(Request $request, Theater $theater,$id)
     {
-        $childData = Theater::join("release_movies", "release_movies.theater_id", "theaters.id")->where("theaters.id", $id)->get()->count();
-        if ($childData > 0) {
-            return json_encode(["status"=>"error","message"=>"you can not update this data after assign movie"]);
-        } else {
-            $existingTheater = Theater::find($id);
-            if($existingTheater){
-                $existingTheater->theater_name = $request->theater_name;
-                $existingTheater->save();
-                return json_encode(["status"=>"success","message"=>"Theater Successfully Updated"]);
-            }
-            return json_encode(["status"=>"error","message"=>"Theater Not Found"]);
-        }
-
-
+        return $this->theaterRepo->update($request,$id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Theater  $theater
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function destroy(Theater $theater,$id)
     {
-        $childData = Theater::join("release_movies", "release_movies.theater_id", "theaters.id")->where("theaters.id", $id)->get()->count();
-        if ($childData > 0) {
-            return json_encode(["status"=>"error","message"=>"you can not delete this data after assign movie"]);
-        } else {
-            $existingTheater = Theater::find($id);
-            if($existingTheater){
-                $existingTheater->delete();
-                return json_encode(["status"=>"success","message"=>"Theater Successfully deleted"]);
-            }
-            return json_encode(["status"=>"error","message"=>"Theater Not Found"]);
-        }
+        return $this->theaterRepo->delete($id);
     }
 
     public function getAllTheaters(){
-        return Theater::orderBy("theater_name")->get();
+        return $this->theaterRepo->getAllTheaters();
     }
 
     public function getAllTheaterByCityId($id){
-        return ReleaseMovies::select("theaters.*")
-            ->join("theaters","release_movies.theater_id","theaters.id")
-            ->where("release_movies.city_id",$id)
-            ->get();
+        return $this->theaterRepo->getAllTheaterByCityId($id);
     }
 }

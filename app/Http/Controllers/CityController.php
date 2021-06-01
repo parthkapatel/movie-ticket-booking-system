@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
-use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\CityRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
 
+    private $cityRepo;
+    public function __construct(CityRepository $cityRepository)
+    {
+        $this->cityRepo = $cityRepository;
+    }
 
     /**
      * Display a listing of the resource.
      *
-     * @return City[]|Collection
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -38,15 +46,7 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $exisitingCity = City::where("city_name", $request->city_name)->first();
-        if ($exisitingCity) {
-            return json_encode(["status" => "error", "message" => "City already exists!"]);
-        } else {
-            $newCity = new City();
-            $newCity->city_name = $request->city_name;
-            $newCity->save();
-            return json_encode(["status"=>"success","message"=>"City Successfully Added"]);
-        }
+        return $this->cityRepo->save($request);
     }
 
     /**
@@ -68,7 +68,7 @@ class CityController extends Controller
      */
     public function edit(City $city, $id)
     {
-        return City::find($id);
+        return $this->cityRepo->getCityById($id);
     }
 
     /**
@@ -80,19 +80,7 @@ class CityController extends Controller
      */
     public function update(Request $request, City $city, $id)
     {
-        $childData = City::join("release_movies", "release_movies.city_id", "cities.id")->where("cities.id", $id)->get()->count();
-        if ($childData > 0) {
-            return json_encode(["status"=>"error","message"=>"you can not update this data after assign movie or theater"]);
-        } else {
-            $existingCity = City::find($id);
-            if ($existingCity) {
-                $existingCity->city_name = $request->city_name;
-                $existingCity->save();
-                return json_encode(["status"=>"success","message"=>"City Successfully Updated"]);
-            }
-            return json_encode(["status"=>"error","message"=>"City Not Found"]);
-        }
-
+       return $this->cityRepo->update($request,$id);
     }
 
     /**
@@ -103,21 +91,11 @@ class CityController extends Controller
      */
     public function destroy(City $city, $id)
     {
-        $childData = City::join("release_movies", "release_movies.city_id", "cities.id")->where("cities.id", $id)->get()->count();
-        if ($childData > 0) {
-            return json_encode(["status"=>"error","message"=>"you can not delete this data after assign movie or theater"]);
-        } else {
-            $existingCity = City::find($id);
-            if ($existingCity) {
-                $existingCity->delete();
-                return json_encode(["status"=>"success","message"=>"City Successfully deleted"]);
-            }
-            return json_encode(["status"=>"error","message"=>"City Not Found"]);
-        }
+        return $this->cityRepo->delete($id);
     }
 
     public function getAllCity()
     {
-        return City::orderBy("city_name")->get();
+        return $this->cityRepo->getAllCity();
     }
 }

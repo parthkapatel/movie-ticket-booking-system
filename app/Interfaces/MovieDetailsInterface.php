@@ -8,16 +8,16 @@ use Illuminate\Support\Collection;
 
 interface MovieDetailsInterface
 {
-    public function all();
 
     public function save($data);
 
-    public function getPaginate();
+    public function update($data,$movie_id);
+
+    public function delete($movie_id);
 
     public function getMovieById($movie_id);
 
-    public function updateMovie($data, $movie_id);
+    public function getAllMovies();
 
-    public function deleteMovie($movie_id);
-
+    public function getSearchMovie($str);
 }

@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\CastsMovies;
+use App\Repositories\CastMoviesRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CastsMoviesController extends Controller
 {
+
+    private $castMovieRepo;
+    public function __construct(CastMoviesRepository $castMoviesRepository)
+    {
+        $this->castMovieRepo = $castMoviesRepository;
+    }
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index()
     {
@@ -32,20 +39,11 @@ class CastsMoviesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function store(Request $request)
     {
-        $existsData = CastsMovies::where("cast_id",$request->cast_id)->where("movie_id", $request->movie_id)->get()->count();
-        if ($existsData > 0) {
-            return json_encode(["status"=>"error","message"=>"you can not reassign the same movie to cast"]);
-        } else {
-            $newCastMovie = new CastsMovies();
-            $newCastMovie->cast_id = $request->cast_id;
-            $newCastMovie->movie_id = $request->movie_id;
-            $newCastMovie->save();
-            return json_encode(["status"=>"success","message"=>"Movie Assign to Cast Successfully"]);
-        }
+        return $this->castMovieRepo->save($request);
     }
 
     /**
@@ -67,7 +65,7 @@ class CastsMoviesController extends Controller
      */
     public function edit(CastsMovies $castsMovies, $id)
     {
-        return CastsMovies::find($id);
+        return $this->castMovieRepo->getCastMovieById($id);
     }
 
     /**
@@ -75,63 +73,36 @@ class CastsMoviesController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\CastsMovies $castsMovies
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Http\Response|string
      */
     public function update(Request $request, CastsMovies $castsMovies, $id)
     {
-        $existsData = CastsMovies::where("cast_id",$request->cast_id)->where("movie_id", $request->movie_id)->get()->count();
-        if ($existsData > 0) {
-            return json_encode(["status"=>"error","message"=>"you try to assign movie that data is already exists"]);
-        } else {
-            $existingCastMovie = CastsMovies::find($id);
-            if ($existingCastMovie) {
-                $existingCastMovie->cast_id = $request->cast_id;
-                $existingCastMovie->movie_id = $request->movie_id;
-                $existingCastMovie->save();
-                return json_encode(["status"=>"success","message"=>"Movie reassign to cast successfully Updated"]);
-            }
-            return json_encode(["status"=>"error","message"=>"Data Not Found"]);
-        }
+        return $this->castMovieRepo->update($request,$id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\CastsMovies $castsMovies
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function destroy(CastsMovies $castsMovies, $id)
     {
-        $existingCastMovie = CastsMovies::find($id);
-        if ($existingCastMovie) {
-            $existingCastMovie->delete();
-            return "Cast Movie Successfully deleted";
-        }
-        return "Cast Movie not found";
+       return $this->castMovieRepo->delete($id);
     }
 
     public function getAllCastMovies()
     {
-        return CastsMovies::select("casts.name", "movie_details.title", "casts_movies.id")
-            ->join("movie_details", "movie_details.id", "casts_movies.movie_id")
-            ->join("casts", "casts.id", "casts_movies.cast_id")
-            ->orderBy("movie_details.title")
-            ->get();
+      return $this->castMovieRepo->getAllCastMovies();
     }
 
     public function getAllCastMoviesByMovieIds($id)
     {
-        return CastsMovies::select("casts.*")
-            ->join("casts","casts.id","casts_movies.cast_id")
-            ->where("movie_id",$id)
-            ->get();
+        return $this->castMovieRepo->getAllCastMoviesByMovieIds($id);
     }
 
     public function getAllCastMoviesByCastIds($id)
     {
-        return CastsMovies::select("movie_details.*")
-            ->join("movie_details","movie_details.id","casts_movies.movie_id")
-            ->where("casts_movies.cast_id",$id)
-            ->get();
+        return $this->castMovieRepo->getAllCastMoviesByCastIds($id);
     }
 }

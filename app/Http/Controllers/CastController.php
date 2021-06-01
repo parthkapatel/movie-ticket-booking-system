@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cast;
-use App\Models\MovieDetails;
 use App\Repositories\CastRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use phpDocumentor\Reflection\Types\Callable_;
-use PHPUnit\Util\Json;
-use function MongoDB\BSON\toJSON;
 
 class CastController extends Controller
 {
@@ -48,7 +44,7 @@ class CastController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->castRepo->insertCastData($request);
+        return $this->castRepo->save($request);
     }
 
     /**
@@ -83,7 +79,7 @@ class CastController extends Controller
      */
     public function update(Request $request, Cast $cast,$id)
     {
-        return $this->castRepo->updateCastData($request,$id);
+        return $this->castRepo->update($request,$id);
     }
 
     /**
@@ -94,7 +90,7 @@ class CastController extends Controller
      */
     public function destroy(Cast $cast,$id)
     {
-        return $this->castRepo->deleteCastData($id);
+        return $this->castRepo->delete($id);
     }
 
     public function getAllCasts(){

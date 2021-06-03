@@ -28,27 +28,31 @@
             </div>
             <div class="form-group">
                 <label>Select Time Slots</label>
-                <select v-model="runtime"  multiple class="form-control" >
+                <select v-model="runtime" multiple class="form-control">
                     <option v-for="(slot,index) in slots" :key="index" :value="slot">{{ slot }}</option>
                 </select>
             </div>
             <button class="btn btn-primary">{{ MovieButton }}</button>
         </form>
-        <list-assign-movies v-if="!show" :releaseMovies="releaseMovies" @updateMovie="onUpdateMovie"
-                     @deleteMovie="onDeleteMovie"></list-assign-movies>
+        <list-assign-movies v-if="!show || !isLoading" :releaseMovies="releaseMovies" @updateMovie="onUpdateMovie"
+                            @deleteMovie="onDeleteMovie"></list-assign-movies>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
 import listAssignMovies from "./listAssignMovies";
+import Loading from "../loading";
+
 export default {
     name: "assignTheaterForm",
-    components:{
-      listAssignMovies
+    components: {
+        listAssignMovies,
+        Loading
     },
     data: function () {
         return {
-            release_id:"",
+            release_id: "",
             city_id: "",
             theater_id: "",
             movie_id: "",
@@ -57,15 +61,16 @@ export default {
             movies: [],
             cities: [],
             theaters: [],
-            runtime:[],
-            releaseMovies:[],
-            slots:[
-                "12:00","3:00","6:00","9:00"
+            runtime: [],
+            releaseMovies: [],
+            slots: [
+                "12:00", "3:00", "6:00", "9:00"
             ],
             show: false,
             btnText: "Add Movie",
             btnTextColor: "btn btn-primary",
             MovieButton: "Add New Movies",
+            isLoading: false,
         }
     },
     methods: {
@@ -97,7 +102,7 @@ export default {
                         city_id: this.city_id,
                         theater_id: this.theater_id,
                         movie_id: this.movie_id,
-                        runtime:this.runtime,
+                        runtime: this.runtime,
                     };
                     axios.post('/assign/store', movies)
                         .then(response => {
@@ -122,7 +127,7 @@ export default {
                         city_id: this.city_id,
                         theater_id: this.theater_id,
                         movie_id: this.movie_id,
-                        runtime:this.runtime,
+                        runtime: this.runtime,
                     };
                     axios.put('/assign/' + this.release_id, movies)
                         .then(response => {
@@ -187,14 +192,17 @@ export default {
                 }).finally(() => {
                 setTimeout(() => this.error = "", 1000)
             });
-        },getReleaseMovies: function () {
-            axios.get('/assign/get')
+        },
+        getReleaseMovies: async function () {
+            this.isLoading = true;
+            await axios.get('/assign/get')
                 .then(response => {
                     this.releaseMovies = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
         getMovies: function () {
             axios.get('/movie/get')
@@ -204,7 +212,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-        }, getCities: function () {
+        },
+        getCities: function () {
             axios.get('/city/get')
                 .then(response => {
                     this.cities = response.data
@@ -212,7 +221,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-        }, getTheaters: function () {
+        },
+        getTheaters: function () {
             axios.get('/theater/get')
                 .then(response => {
                     this.theaters = response.data

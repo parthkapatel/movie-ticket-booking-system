@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div class="container">
-        <div class="card">
+    <div class="container" >
+        <div class="card" v-if="!isLoading">
             <div class="card-header">
                 <h3><b>{{ movie.title }}</b></h3>
             </div>
@@ -57,10 +57,12 @@
                 </div>
             </div>
         </div>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
+import Loading from "./loading";
 export default {
     name: "movieDetails",
     data: function () {
@@ -81,7 +83,11 @@ export default {
             cityBool: false,
             error: "",
             showToggle:false,
+            isLoading: false,
         }
+    },
+    components:{
+        Loading
     },
     updated() {
         if(this.shows.length === 0){
@@ -89,10 +95,10 @@ export default {
         }
     },
     methods: {
-        getMovie: function () {
-            axios.get('/movie/' + this.$route.params.id)
+        getMovie: async function () {
+            this.isLoading = true;
+            await axios.get('/movie/' + this.$route.params.id)
                 .then(response => {
-                    console.log(response);
                     this.movie.id = response.data.id;
                     this.movie.title = response.data.title;
                     this.movie.overview = response.data.overview;
@@ -102,9 +108,10 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
-        getCasts: function (id) {
-            axios.get('/castMovie/' + id)
+        getCasts: async function (id) {
+            await axios.get('/castMovie/' + id)
                 .then(response => {
                     this.casts = response.data
                 })
@@ -112,9 +119,9 @@ export default {
                     console.log(error);
                 })
         },
-        getTheaters: function () {
+        getTheaters: async function () {
             this.theater_id = false;
-            axios.get('/theater/getTheater/' + this.city_id)
+            await axios.get('/theater/getTheater/' + this.city_id)
                 .then(response => {
                     this.theaters = response.data
                     if (this.theaters.length > 0) {
@@ -130,17 +137,19 @@ export default {
                     console.log(error);
                 })
         },
-        getCities: function () {
-            axios.get('/city/get')
+        getCities: async function () {
+            this.isLoading = true;
+            await axios.get('/city/get')
                 .then(response => {
                     this.cities = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
-        getShows: function () {
-            axios.get('/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
+        getShows: async function () {
+            await axios.get('/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
                 .then(response => {
                     if (response.data === 0) {
                         this.error = "No Movie Release";
@@ -156,7 +165,7 @@ export default {
                     console.log(error);
                 })
         },
-        setStateValue:function (show) {
+        setStateValue: function (show) {
             const thisValue = this;
             const cities = this.cities.filter(function (elem) {
                 if (elem.id === thisValue.city_id) return elem;

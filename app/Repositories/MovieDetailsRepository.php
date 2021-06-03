@@ -29,7 +29,7 @@ class MovieDetailsRepository implements MovieDetailsInterface
 
     public function update($data, $movie_id)
     {
-        $this->movieDetails = MovieDetails::find($movie_id);
+        $this->movieDetails::find($movie_id);
         if($this->movieDetails){
             $this->movieDetails->title = $data->title;
             $this->movieDetails->overview = $data->overview;

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h4>Booked Tickets</h4>
-        <div class="my-3">
+        <div class="my-3" v-if="!isLoading">
             <div class="table-responsive table-striped text-center">
                 <table class="table">
                     <thead class="thead-dark">
@@ -31,23 +31,29 @@
                             <button @click.prevent="cancelBookedTicket(booked.id)" class="btn btn-danger" :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'disabled' : ''">Cancel</button>
                         </td>
                     </tr>
-                    <tr v-if="bookedTickets.length == 0">
+                    <tr v-if="bookedTickets.length === 0">
                         <td colspan="10">No Data Found</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
+import Loading from "../loading";
 export default {
     name: "displayAllUserBookTickets",
+    components: {
+        Loading
+    },
     data: function () {
         return {
             bookedTickets: [],
             classes:"bg-secondary",
+            isLoading: false,
         }
     },
     methods: {
@@ -61,14 +67,16 @@ export default {
                     console.log(error);
                 });
         },
-        getBookedTickets: function () {
-            axios.get('/bookTicket/getAll/')
+        getBookedTickets: async function () {
+            this.isLoading = true;
+            await axios.get('/bookTicket/getAll/')
                 .then(response => {
                     this.bookedTickets = response.data;
                 })
                 .catch(error => {
                     console.log(error);
                 });
+            this.isLoading = false;
         },
         formatDate: function (date) {
             var d = new Date(date),

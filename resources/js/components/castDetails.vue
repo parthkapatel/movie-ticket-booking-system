@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="card">
+        <div class="card" v-if="!isLoading">
             <div class="card-header">
                 <b>{{ cast.name }}</b>
             </div>
@@ -23,10 +23,12 @@
                 </div>
             </div>
         </div>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
+import Loading from "./loading";
 export default {
     name: "castDetails",
     data: function () {
@@ -39,11 +41,16 @@ export default {
             },
             movies:[],
             city: [],
+            isLoading: false,
         }
     },
+    components:{
+        Loading
+    },
     methods: {
-        getMovie: function () {
-            axios.get('/cast/' + this.$route.params.id)
+        getMovie: async function () {
+            this.isLoading = true;
+            await axios.get('/cast/' + this.$route.params.id)
                 .then(response => {
                     this.cast.id = response.data.id;
                     this.cast.name = response.data.name;
@@ -54,8 +61,10 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
         getCastMovies:function (id){
+            this.isLoading = true;
             axios.get('/castMovie/movie/'+id)
                 .then(response=>{
                     this.movies = response.data
@@ -63,17 +72,8 @@ export default {
                 .catch(error=>{
                     console.log(error);
                 })
+            this.isLoading = false;
         }
-        /*getMovieDetails:function () {
-            axios.get('/api/assign/'+this.$route.params.id+'/show')
-                .then(response=>{
-                    console.log(response);
-                    this.movies = response.data
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-        }*/
     },
     created() {
         this.getMovie();

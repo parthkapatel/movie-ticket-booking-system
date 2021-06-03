@@ -20,17 +20,21 @@
             </div>
             <button class="btn btn-primary">{{ castButton }}</button>
         </form>
-        <list-casts v-if="!show" :casts="casts" @updateCast="onUpdateCast" @deleteCast="onDeleteCast"></list-casts>
+        <list-casts v-if="!show || !isLoading" :casts="casts" @updateCast="onUpdateCast"
+                    @deleteCast="onDeleteCast"></list-casts>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
 import listCasts from "./listCasts";
+import Loading from '../loading';
 
 export default {
     name: "castForm",
     components: {
-        listCasts
+        listCasts,
+        Loading
     },
     data: function () {
         return {
@@ -44,21 +48,22 @@ export default {
             show: false,
             btnText: "Add Cast",
             btnTextColor: "btn btn-primary",
-            castButton:"Add New Casts",
+            castButton: "Add New Casts",
+            isLoading: false,
         }
     },
     methods: {
-        changeCastButton:function (){
+        changeCastButton: function () {
             this.castButton = "Update Casts";
-            if(this.cast_id === ""){
+            if (this.cast_id === "") {
                 this.castButton = "Add New Casts";
             }
         },
         revert: function () {
-            if(this.show === false){
+            if (this.show === false) {
                 this.btnText = "Close";
                 this.btnTextColor = "btn btn-danger";
-            }else{
+            } else {
                 this.cast_id = "";
                 this.name = "";
                 this.bio = "";
@@ -152,14 +157,17 @@ export default {
                 }).finally(() => {
                 setTimeout(() => this.error = "", 1000)
             });
-        }, getCasts: function () {
-            axios.get('/cast/get')
+        },
+        getCasts: async function () {
+            this.isLoading = true;
+            await axios.get('/cast/get')
                 .then(response => {
                     this.casts = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
     },
     created() {

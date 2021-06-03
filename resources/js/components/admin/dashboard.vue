@@ -1,57 +1,66 @@
 <template>
     <div class="container">
-        <div class="d-flex bd-highlight mb-3 justify-content-center flex-wrap">
-            <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Movies</h3>
-                    <h4>{{ totalMovies }}</h4>
-                </div>
-            </router-link>
-            <router-link to="/cast/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Casts</h3>
-                    <h4>{{ totalCasts }}</h4>
-                </div>
-            </router-link>
-            <router-link to="/theater/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Theaters</h3>
-                    <h4>{{ totalTheaters }}</h4>
-                </div>
-            </router-link>
-            <router-link to="/bookTicket/booked/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Booked Tickets</h3>
-                    <h4>{{ totalBookedTickets }}</h4>
-                </div>
-            </router-link>
+        <div v-if="!isLoading">
+            <div class="d-flex bd-highlight mb-3 justify-content-center flex-wrap">
+                <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Movies</h3>
+                        <h4>{{ totalMovies }}</h4>
+                    </div>
+                </router-link>
+                <router-link to="/cast/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Casts</h3>
+                        <h4>{{ totalCasts }}</h4>
+                    </div>
+                </router-link>
+                <router-link to="/theater/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Theaters</h3>
+                        <h4>{{ totalTheaters }}</h4>
+                    </div>
+                </router-link>
+                <router-link to="/bookTicket/booked/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Booked Tickets</h3>
+                        <h4>{{ totalBookedTickets }}</h4>
+                    </div>
+                </router-link>
+            </div>
+            <div class="d-flex bd-highlight mb-3 justify-content-center flex-wrap">
+                <router-link to="/city/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Cities</h3>
+                        <h4>{{ totalCities }}</h4>
+                    </div>
+                </router-link>
+                <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Released Movies</h3>
+                        <h4>{{ totalRelease }}</h4>
+                    </div>
+                </router-link>
+                <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
+                    <div>
+                        <h3>Total Upcoming Movie</h3>
+                        <h4>{{ totalUpComing }}</h4>
+                    </div>
+                </router-link>
+            </div>
         </div>
-        <div class="d-flex bd-highlight mb-3 justify-content-center flex-wrap">
-            <router-link to="/city/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Cities</h3>
-                    <h4>{{ totalCities }}</h4>
-                </div>
-            </router-link>
-            <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Released Movies</h3>
-                    <h4>{{ totalRelease }}</h4>
-                </div>
-            </router-link>
-            <router-link to="/movie/create/" class="links flex-fill border border-primary boxes p-2 m-2">
-                <div>
-                    <h3>Total Upcoming Movie</h3>
-                    <h4>{{ totalUpComing }}</h4>
-                </div>
-            </router-link>
-        </div>
+        <loading :loading="isLoading" />
     </div>
 </template>
 
 <script>
+import displayView from "../displayView";
+import Loading from "../loading";
+
 export default {
     name: "dashboard",
+    components: {
+        Loading
+    },
     data: function () {
         return {
             totalMovies: 0,
@@ -60,12 +69,14 @@ export default {
             totalCities: 0,
             totalRelease: 0,
             totalUpComing: 0,
-            totalBookedTickets:0,
+            totalBookedTickets: 0,
+            isLoading: false,
         }
     },
     methods: {
-        getTotalsForDashboard: function () {
-            axios.get('/total/dashboard/')
+        getTotalsForDashboard: async function () {
+            this.isLoading = true;
+            await axios.get('/total/dashboard/')
                 .then(response => {
                     this.totalCities = response["data"]["cities"];
                     this.totalTheaters = response["data"]["theaters"];
@@ -78,6 +89,7 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+            this.isLoading = false;
         }
     },
     created() {
@@ -91,10 +103,12 @@ export default {
     color: black;
     text-decoration: none;
 }
-h4{
-    margin:auto;
+
+h4 {
+    margin: auto;
     font-width: 300;
 }
+
 .boxes {
     width: 150px;
     border-radius: 10px;

@@ -12,7 +12,8 @@
             </div>
             <div class="form-group">
                 <label>Enter Movie Overview</label>
-                <textarea v-model="overview" rows="5" cols="10" class="form-control" placeholder="Enter Movie Overview"></textarea>
+                <textarea v-model="overview" rows="5" cols="10" class="form-control"
+                          placeholder="Enter Movie Overview"></textarea>
             </div>
             <div class="form-group">
                 <label>Select Release Year</label>
@@ -20,46 +21,51 @@
             </div>
             <button class="btn btn-primary">{{ MovieButton }}</button>
         </form>
-        <list-movies v-if="!show" :movies="movies" @updateMovie="onUpdateMovie" @deleteMovie="onDeleteMovie"></list-movies>
+        <list-movies v-if="!isLoading" :movies="movies" @updateMovie="onUpdateMovie"
+                     @deleteMovie="onDeleteMovie"></list-movies>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
 import listMovies from "./listMovies";
+import Loading from "../loading";
+
 export default {
     name: "movieForm",
     components: {
-        listMovies
+        listMovies,
+        Loading
     },
     data: function () {
         return {
             movie_id: "",
             title: "",
-            overview:"",
-            release_year:"",
-            runtime:[],
+            overview: "",
+            release_year: "",
+            runtime: [],
             error: "",
             alert: "alert alert-success",
             movies: [],
-            casts:[],
             show: false,
             btnText: "Add Movie",
             btnTextColor: "btn btn-primary",
-            MovieButton:"Add New Movies",
+            MovieButton: "Add New Movies",
+            isLoading: false,
         }
     },
     methods: {
-        changeMovieButton:function (){
+        changeMovieButton: function () {
             this.MovieButton = "Update Movies";
-            if(this.movie_id === ""){
+            if (this.movie_id === "") {
                 this.MovieButton = "Add New Movies";
             }
         },
         revert: function () {
-            if(this.show === false){
+            if (this.show === false) {
                 this.btnText = "Close";
                 this.btnTextColor = "btn btn-danger";
-            }else{
+            } else {
                 this.movie_id = "";
                 this.title = "";
                 this.overview = "";
@@ -71,12 +77,12 @@ export default {
             this.show = !this.show;
         },
         addMovie: function (e) {
-            if (this.title && this.overview && this.release_year ) {
+            if (this.title && this.overview && this.release_year) {
                 if (this.movie_id === "") {
                     const movies = {
                         title: this.title,
-                        overview:this.overview,
-                        release_year:this.release_year,
+                        overview: this.overview,
+                        release_year: this.release_year,
                     };
                     axios.post('/movie/store', movies)
                         .then(response => {
@@ -98,8 +104,8 @@ export default {
                 } else {
                     const Movie = {
                         title: this.title,
-                        overview:this.overview,
-                        release_year:this.release_year,
+                        overview: this.overview,
+                        release_year: this.release_year,
                     };
                     axios.put('/movie/' + this.movie_id, Movie)
                         .then(response => {
@@ -154,7 +160,9 @@ export default {
                 }).finally(() => {
                 setTimeout(() => this.error = "", 1000)
             });
-        }, getMovies: function () {
+        },
+        getMovies: function () {
+            this.isLoading = true;
             axios.get('/movie/get')
                 .then(response => {
                     this.movies = response.data
@@ -162,18 +170,10 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-        },getCasts: function () {
-            axios.get('/cast/get')
-                .then(response => {
-                    this.casts = response.data
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+            this.isLoading = false;
         },
     },
     created() {
-        this.getCasts();
         this.getMovies();
     }
 }

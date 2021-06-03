@@ -19,7 +19,7 @@ class MovieDetailsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Collection|MovieDetails[]
+     * @return MovieDetails[]|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|Collection
      */
     public function index()
     {
@@ -75,37 +75,23 @@ class MovieDetailsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\MovieDetails  $movieDetails
-     * @return \Illuminate\Http\Response
+     * @return MovieDetails|\Illuminate\Http\Response|string
      */
     public function update(Request $request, MovieDetails $movieDetails,$id)
     {
 
-        $this->movieDetails = $this->movieDetails::find($id);
-        if($this->movieDetails){
-            $this->movieDetails->title = $request->title;
-            $this->movieDetails->overview = $request->overview;
-            $this->movieDetails->release_year = $request->release_year;
-            $this->movieDetails->save();
-            return $this->movieDetails;
-        }
-        return "Movie not found";
-
+        return $this->movieDetails->update($request,$id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\MovieDetails  $movieDetails
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function destroy(MovieDetails $movieDetails,$id)
     {
-        $this->movieDetails = $this->movieDetails::find($id);
-        if($this->movieDetails){
-            $this->movieDetails->delete();
-            return "Movie deleted successfully";
-        }
-        return "Movie not found";
+        return $this->movieDetails->delete($id);
     }
 
     public function getAllMovies(){

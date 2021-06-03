@@ -119,5 +119,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="vue" level="application" />
     <orderEntry type="library" name="vue-router" level="application" />
+    <orderEntry type="library" name="@saeris" level="application" />
   </component>
 </module>

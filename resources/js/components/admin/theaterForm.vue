@@ -11,16 +11,19 @@
             </div>
             <button class="btn btn-primary">{{ (theater_id === "") ? 'Add New Theater': 'Update Theater' }}</button>
         </form>
-        <list-theaters :theaters="theaters" @updateTheater="onUpdateTheater" @deleteTheater="onDeleteTheater"></list-theaters>
+        <list-theaters v-if="!isLoading" :theaters="theaters" @updateTheater="onUpdateTheater" @deleteTheater="onDeleteTheater"></list-theaters>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
+import Loading from "../loading";
 import listTheaters from "./listTheaters";
 export default {
     name: "theaterForm",
     components:{
-        listTheaters
+        listTheaters,
+        Loading
     },
     data: function () {
         return {
@@ -29,6 +32,7 @@ export default {
             error: "",
             alert: "alert alert-success",
             theaters: [],
+            isLoading:false,
         }
     },
     methods: {
@@ -86,14 +90,16 @@ export default {
             e.preventDefault();
 
         },
-        getTheaters: function () {
-            axios.get('/theater/get')
+        getTheaters: async function () {
+            this.isLoading = true;
+            await axios.get('/theater/get')
                 .then(response => {
                     this.theaters = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
         onUpdateTheater:function (theater){
             this.theater_id = theater.id;

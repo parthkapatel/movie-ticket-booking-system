@@ -20,17 +20,20 @@
             </div>
             <button class="btn btn-primary">{{ (release_id === "" ? 'Assign New Cast' : 'Update Cast') }}</button>
         </form>
-        <list-assign-cast-movies v-if="!show" :castMovies="castMovies" @updateMovie="onUpdateMovie"
+        <list-assign-cast-movies v-if="!show ||  !isLoading" :castMovies="castMovies" @updateMovie="onUpdateMovie"
                             @deleteMovie="onDeleteMovie"></list-assign-cast-movies>
+        <loading :loading="isLoading"/>
     </div>
 </template>
 
 <script>
 import listAssignCastMovies from "./listAssignCastMovies";
+import Loading from "../loading";
 export default {
     name: "assignCastMovieForm",
     components:{
-        listAssignCastMovies
+        listAssignCastMovies,
+        Loading
     },
     data: function () {
         return {
@@ -46,6 +49,7 @@ export default {
                 "12:00","3:00","6:00","9:00"
             ],
             show: false,
+            isLoading: false,
         }
     },
     methods: {
@@ -150,7 +154,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-        }, getCasts: function () {
+        },
+        getCasts: function () {
             axios.get('/cast/get')
                 .then(response => {
                     this.casts = response.data
@@ -159,14 +164,16 @@ export default {
                     console.log(error);
                 })
         },
-        getCastMovies: function () {
-            axios.get('/castMovie/get')
+        getCastMovies: async function () {
+            this.isLoading = true;
+            await axios.get('/castMovie/get')
                 .then(response => {
                     this.castMovies = response.data
                 })
                 .catch(error => {
                     console.log(error);
                 })
+            this.isLoading = false;
         },
     },
     created() {

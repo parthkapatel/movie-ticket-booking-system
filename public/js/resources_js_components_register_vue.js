@@ -240,7 +240,7 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    return _vm.register($event)
+                    return _vm.register.apply(null, arguments)
                   }
                 }
               },

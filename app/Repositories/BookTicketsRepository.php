@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Interfaces\BookTicketsInterface;
 use App\Mail\BookTicketMail;
+use App\Mail\CancelTicketMail;
 use App\Models\BookTickets;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -40,13 +41,11 @@ class BookTicketsRepository implements BookTicketsInterface
 
     public function delete($booked_id)
     {
-        $existingTicket =  $this->bookTicket::find($booked_id);
-        if($existingTicket)
-        {
-            $existingTicket->delete();
-            return $existingTicket;
+        if($this->bookTicket::destroy($booked_id)){
+            Mail::to(Auth::user()->email)->send(new CancelTicketMail($booked_id));
+            return "Booked Tickets Successfully deleted";
         }
-        return "Book Ticket Not Found";
+        return "Booked Tickets Not Found";
     }
 
     public function getAllBookedTicketsByUserId()

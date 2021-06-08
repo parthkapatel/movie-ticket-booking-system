@@ -15,4 +15,6 @@ interface CityInterface
     public function getAllCity();
 
     public function getCityById($city_id);
+
+    public function getCityByMovieId($movie_id);
 }

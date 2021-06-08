@@ -6,7 +6,7 @@
                 class="movie"
             />
         </div>
-        <div class="text-center" v-if="movies.length == 0">
+        <div class="text-center" v-if="movies.length === 0">
             <h5 class="m-5">No Data Found</h5>
         </div>
     </div>

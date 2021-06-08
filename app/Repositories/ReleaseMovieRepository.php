@@ -44,9 +44,7 @@ class ReleaseMovieRepository implements ReleaseMovieInterface
 
     public function delete($releaseMovie_id)
     {
-        $this->releaseMovieRepo = $this->releaseMovieRepo::find($releaseMovie_id);
-        if($this->releaseMovieRepo){
-            $this->releaseMovieRepo->delete();
+        if($this->releaseMovieRepo::destroy($releaseMovie_id)){
             return "Release movie successfully deleted";
         }
         return "Release movie not found";
@@ -59,7 +57,7 @@ class ReleaseMovieRepository implements ReleaseMovieInterface
 
     public function getAllAssignMovies()
     {
-        return $this->releaseMovieRepo::select('cities.city_name','theaters.theater_name','movie_details.*','movie_details.id as movie_id','release_movies.runtime','release_movies.id')
+        return $this->releaseMovieRepo::select('cities.city_name','theaters.theater_name','movie_details.*','movie_details.id as movie_id','release_movies.runtime','release_movies.status','release_movies.id')
             ->join('cities', 'release_movies.city_id', '=', 'cities.id')
             ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
             ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
@@ -76,6 +74,7 @@ class ReleaseMovieRepository implements ReleaseMovieInterface
             ->join('cities', 'release_movies.city_id', '=', 'cities.id')
             ->join('theaters', 'release_movies.theater_id', '=', 'theaters.id')
             ->where("movie_details.release_year","<=",Carbon::now())
+            ->where("release_movies.status","=","release")
             ->orderBy('movie_details.release_year')
             ->orderBy('cities.city_name')
             ->distinct()
@@ -102,5 +101,16 @@ class ReleaseMovieRepository implements ReleaseMovieInterface
             ->join('movie_details', 'release_movies.movie_id', '=', 'movie_details.id')
             ->where("movie_details.id","=",$id)
             ->get();
+    }
+
+    public function updateStatus($data)
+    {
+        $this->releaseMovieRepo = $this->releaseMovieRepo::find($data->id);
+        if($this->releaseMovieRepo){
+            $this->releaseMovieRepo->status = $data->status;
+            $this->releaseMovieRepo->save();
+            return json_encode(["status"=>"success","message"=>"Movie Status Updated"]);
+        }
+        return json_encode(["status"=>"error","message"=>"Release movie not found"]);
     }
 }

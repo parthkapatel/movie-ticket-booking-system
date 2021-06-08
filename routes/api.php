@@ -101,6 +101,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get("/city", [CityController::class, "create"]);
     Route::prefix("/city")->group(function () {
         Route::get("/get", [CityController::class, "getAllCity"]);
+        Route::get("/getCity/{id}", [CityController::class, "getCityByMovieId"]);
         Route::post("/store", [CityController::class, 'store']);
         Route::get("/{id}", [CityController::class, 'edit']);
         Route::put("/{id}", [CityController::class, 'update']);
@@ -127,12 +128,11 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::post("/store", [MovieDetailsController::class, 'store']);
         Route::get("/{id}", [MovieDetailsController::class, 'edit']);
         Route::get("/show", [MovieDetailsController::class, 'show']);
-        Route::put("/{id}", [MovieDetailsController::class, 'update']);
+        Route::post("/{id}", [MovieDetailsController::class, 'update']);
         Route::delete("/{id}", [MovieDetailsController::class, 'destroy']);
     });
 
 
-    Route::get("/getAssignMovies", [ReleaseMoviesController::class, "index"]);
     Route::get("/assign/movies", [ReleaseMoviesController::class, "create"]);
     Route::prefix("/assign")->group(function () {
         Route::get("/get", [ReleaseMoviesController::class, 'getAllAssignMovies']);
@@ -140,16 +140,14 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::post("/store", [ReleaseMoviesController::class, 'store']);
         Route::get("/{id}", [ReleaseMoviesController::class, 'edit']);
         Route::get("/{id}/show", [ReleaseMoviesController::class, 'show']);
+        Route::post("/updateStatus", [ReleaseMoviesController::class, 'updateStatus']);
         Route::get("/movieShow/{cid}/{tid}/{mid}", [ReleaseMoviesController::class, 'getAllShowByCityAndTheaterIds']);
         Route::put("/{id}", [ReleaseMoviesController::class, 'update']);
         Route::delete("/{id}", [ReleaseMoviesController::class, 'destroy']);
     });
 
 
-    /*Route::get("/getCasts", [CastController::class, "index"]);*/
-    /*Route::get("/casts", [CastController::class, "create"]);*/
     Route::prefix("/cast")->group(function () {
-       /* Route::post("/getIds", [CastController::class, 'getCastsByIds']);*/
         Route::get("/get", [CastController::class, 'getAllCasts']);
         Route::post("/store", [CastController::class, 'store']);
         Route::get("/{id}", [CastController::class, 'getCastDataById']);

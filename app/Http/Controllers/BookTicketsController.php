@@ -92,7 +92,7 @@ class BookTicketsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\BookTickets  $bookTickets
-     * @return Response
+     * @return string
      */
     public function destroy(BookTickets $bookTickets,$id)
     {

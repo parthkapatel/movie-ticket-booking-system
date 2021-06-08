@@ -2,7 +2,7 @@
 
 @section("content")
     <div class="container">
-        <h2 class="text-success">Your {{ $data->title }} Movie ticket is booked successfully</h2>
+        <h2 class="text-danger">Your {{ $data->title }} Movie tickets are canceled.</h2>
         <div class="table-responsive">
             <table class="table table-dark table-bordered">
                 <thead class="text-dark bg-light">

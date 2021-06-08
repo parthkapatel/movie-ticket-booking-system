@@ -68,4 +68,14 @@ class CityRepository implements CityInterface
     {
         return  $this->city::find($city_id);
     }
+
+    public function getCityByMovieId($movie_id)
+    {
+        return $this->city::select("cities.*")
+            ->join("release_movies","release_movies.city_id","cities.id")
+            ->where("release_movies.movie_id",$movie_id)
+            ->where("release_movies.status","=","release")
+            ->distinct()
+            ->get();
+    }
 }

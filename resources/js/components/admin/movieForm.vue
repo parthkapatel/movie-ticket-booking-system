@@ -4,7 +4,7 @@
         <div :class="alert" class="w-50" role="alert" v-if="error">
             {{ error }}
         </div>
-        <form class="mt-3" id="addMovie" @submit="addMovie" v-if="show">
+        <form class="mt-3" id="addMovie" enctype="multipart/form-data" @submit="addMovie" v-if="show">
             <div class="form-group">
                 <label>Enter Movie Title </label>
                 <input v-model="movie_id" type="hidden">
@@ -18,6 +18,10 @@
             <div class="form-group">
                 <label>Select Release Year</label>
                 <input v-model="release_year" type="date" class="form-control" placeholder="Select Release Year">
+            </div>
+            <div class="form-group">
+                <label>Select Movie Image</label>
+                <input  type="file" v-on:change="onChange" accept=".jpeg" class="form-control" placeholder="Select Movie Image">
             </div>
             <button class="btn btn-primary">{{ MovieButton }}</button>
         </form>
@@ -44,6 +48,7 @@ export default {
             overview: "",
             release_year: "",
             runtime: [],
+            movie_image: "",
             error: "",
             alert: "alert alert-success",
             movies: [],
@@ -55,6 +60,9 @@ export default {
         }
     },
     methods: {
+        onChange(e) {
+            this.movie_image = e.target.files[0];
+        },
         changeMovieButton: function () {
             this.MovieButton = "Update Movies";
             if (this.movie_id === "") {
@@ -77,16 +85,27 @@ export default {
             this.show = !this.show;
         },
         addMovie: function (e) {
+
+
             if (this.title && this.overview && this.release_year) {
+
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                e.preventDefault();
+
+
+
                 if (this.movie_id === "") {
-                    const movies = {
-                        title: this.title,
-                        overview: this.overview,
-                        release_year: this.release_year,
-                    };
-                    axios.post('/movie/store', movies)
+                    let data = new FormData();
+                    data.append('title', this.title);
+                    data.append('overview', this.overview);
+                    data.append('release_year', this.release_year);
+                    data.append('movie_image', this.movie_image);
+                    axios.post('/movie/store', data, config)
                         .then(response => {
-                            console.log(response);
                             this.movie_id = "";
                             this.title = "";
                             this.overview = "";
@@ -102,12 +121,12 @@ export default {
                         setTimeout(() => this.error = "", 1000)
                     });
                 } else {
-                    const Movie = {
-                        title: this.title,
-                        overview: this.overview,
-                        release_year: this.release_year,
-                    };
-                    axios.put('/movie/' + this.movie_id, Movie)
+                    let data = new FormData();
+                    data.append('title', this.title);
+                    data.append('overview', this.overview);
+                    data.append('release_year', this.release_year);
+                    data.append('movie_image', this.movie_image);
+                    axios.post('/movie/' + this.movie_id,  data, config)
                         .then(response => {
                             this.movie_id = "";
                             this.title = "";

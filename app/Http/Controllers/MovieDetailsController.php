@@ -40,11 +40,23 @@ class MovieDetailsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return MovieDetails
+     * @return string
      */
     public function store(Request $request)
     {
-        return $this->movieDetails->save($request);
+        $request->validate([
+            'movie_image' => 'required'
+        ]);
+
+        if($request->file()) {
+            $file_name = time().'_'.$request->movie_image->getClientOriginalName();
+            $file_upload = $request->file('movie_image')->move('assets/img/movie', $file_name);
+            $file_path = "/assets/img/movie/" . $file_name;
+            return $this->movieDetails->save($request,$file_path);
+        }else{
+            return "please select image";
+        }
+
 
     }
 
@@ -79,8 +91,18 @@ class MovieDetailsController extends Controller
      */
     public function update(Request $request, MovieDetails $movieDetails,$id)
     {
+        $request->validate([
+            'movie_image' => 'required'
+        ]);
 
-        return $this->movieDetails->update($request,$id);
+        if($request->file()) {
+            $file_name = time().'_'.$request->movie_image->getClientOriginalName();
+            $file_upload = $request->file('movie_image')->move('assets/img/movie', $file_name);
+            $file_path = "/assets/img/movie/" . $file_name;
+            return $this->movieDetails->update($id,$request,$file_path);
+        }else{
+            return "please select image";
+        }
     }
 
     /**

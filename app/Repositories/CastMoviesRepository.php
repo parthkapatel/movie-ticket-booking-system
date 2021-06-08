@@ -45,11 +45,9 @@ class CastMoviesRepository implements CastMoviesInterface
         }
     }
 
-    public function delete($castMovie_id)
+    public function delete($castMovie_id): string
     {
-        $existingCastMovie = $this->castMovieRepo::find($castMovie_id);
-        if ($existingCastMovie) {
-            $existingCastMovie->delete();
+        if($this->castMovieRepo::destroy($castMovie_id)){
             return "Cast Movie Successfully deleted";
         }
         return "Cast Movie not found";

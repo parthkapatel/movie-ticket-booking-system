@@ -11,12 +11,14 @@
             <div class="card-footer">
                 <h5 class="card-text">Cast Movies : </h5>
                 <div class="container">
-                    <div class="d-flex bd-highlight flex-wrap">
-                        <div class="card border-dark m-3 flex-fill" v-for="(movie,index) in movies" :key="index">
+                    <div class="bd-highlight row p-2">
+                        <div class="card border-dark m-1 p-0 col-md-6 col-sm-12 col-lg-4" v-for="(movie,index) in movies" :key="index">
+                            <img class="card-img-top" width="150px" height="150px" :src="movie.image_path"
+                                 :alt="movie.title">
                             <div class="card-body">
                                 <h5 class="card-title">{{ movie.title }}</h5>
-                                <p>{{ movie.overview }}</p>
-                                <router-link :to="'/user/movie/'+movie.id" class="btn btn-primary">Read More</router-link>
+                                <router-link :to="'/user/movie/'+movie.id" class="btn btn-primary">Read More
+                                </router-link>
                             </div>
                         </div>
                     </div>
@@ -29,6 +31,7 @@
 
 <script>
 import Loading from "./loading";
+
 export default {
     name: "castDetails",
     data: function () {
@@ -39,12 +42,12 @@ export default {
                 bio: "",
                 dob: "",
             },
-            movies:[],
+            movies: [],
             city: [],
             isLoading: false,
         }
     },
-    components:{
+    components: {
         Loading
     },
     methods: {
@@ -63,13 +66,13 @@ export default {
                 })
             this.isLoading = false;
         },
-        getCastMovies:function (id){
+        getCastMovies: function (id) {
             this.isLoading = true;
-            axios.get('/castMovie/movie/'+id)
-                .then(response=>{
+            axios.get('/castMovie/movie/' + id)
+                .then(response => {
                     this.movies = response.data
                 })
-                .catch(error=>{
+                .catch(error => {
                     console.log(error);
                 })
             this.isLoading = false;

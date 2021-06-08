@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 
 use App\Interfaces\TheaterInterface;
-use App\Models\ReleaseMovies;
 use App\Models\Theater;
 
 class TheaterRepository implements TheaterInterface
@@ -51,9 +50,7 @@ class TheaterRepository implements TheaterInterface
         if ($childData > 0) {
             return json_encode(["status"=>"error","message"=>"you can not delete this data after assign movie"]);
         } else {
-            $this->theaterRepo =  $this->theaterRepo::find($theater_id);
-            if( $this->theaterRepo){
-                $this->theaterRepo->delete();
+            if($this->theaterRepo::destroy($theater_id)){
                 return json_encode(["status"=>"success","message"=>"Theater Successfully deleted"]);
             }
             return json_encode(["status"=>"error","message"=>"Theater Not Found"]);
@@ -75,6 +72,8 @@ class TheaterRepository implements TheaterInterface
         return $this->theaterRepo::select("theaters.*")
             ->join("release_movies","release_movies.theater_id","theaters.id")
             ->where("release_movies.city_id",$theater_id)
+            ->where("release_movies.status","=","release")
+            ->distinct()
             ->get();
     }
 }

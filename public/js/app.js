@@ -3064,7 +3064,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var movieid = {
         id: movie.id
       };
-      axios["delete"]('/movie/' + movie.id, movieid).then(function (response) {
+      axios["delete"]('/assign/' + movie.id, movieid).then(function (response) {
         _this2.alert = "alert alert-success";
         _this2.error = "Movie Deleted Successfully";
 
@@ -3083,18 +3083,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, 1000);
       });
     },
-    getReleaseMovies: function () {
-      var _getReleaseMovies = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+    updateStatus: function () {
+      var _updateStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id, value) {
         var _this3 = this;
 
+        var data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                this.isLoading = true;
+                data = {
+                  id: id,
+                  status: value
+                };
                 _context.next = 3;
+                return axios.post('assign/updateStatus/', data).then(function (response) {
+                  //response = JSON.parse(response);
+                  if (response.data.status === "success") {
+                    _this3.alert = "alert alert-success";
+                    _this3.error = response.data.message;
+
+                    _this3.getReleaseMovies();
+                  } else {
+                    _this3.alert = "alert alert-danger";
+                    _this3.error = response.data.message;
+                  }
+                })["catch"](function (error) {
+                  console.log(error);
+                })["finally"](function () {
+                  setTimeout(function () {
+                    return _this3.error = "";
+                  }, 1000);
+                });
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function updateStatus(_x, _x2) {
+        return _updateStatus.apply(this, arguments);
+      }
+
+      return updateStatus;
+    }(),
+    getReleaseMovies: function () {
+      var _getReleaseMovies = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var _this4 = this;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                this.isLoading = true;
+                _context2.next = 3;
                 return axios.get('/assign/get').then(function (response) {
-                  _this3.releaseMovies = response.data;
+                  _this4.releaseMovies = response.data;
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -3104,10 +3151,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function getReleaseMovies() {
@@ -3117,28 +3164,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return getReleaseMovies;
     }(),
     getMovies: function getMovies() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/movie/get').then(function (response) {
-        _this4.movies = response.data;
+        _this5.movies = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     getCities: function getCities() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get('/city/get').then(function (response) {
-        _this5.cities = response.data;
+        _this6.cities = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     getTheaters: function getTheaters() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get('/theater/get').then(function (response) {
-        _this6.theaters = response.data;
+        _this7.theaters = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3963,6 +4010,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "listAssignMovies",
   props: ['releaseMovies'],
@@ -3972,6 +4028,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteMovie: function deleteMovie(release) {
       this.$emit('deleteMovie', release);
+    },
+    updateStatus: function updateStatus(id, status) {
+      this.$emit('updateStatus', id, status);
     }
   }
 });
@@ -4135,6 +4194,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "listMovies",
   props: ['movies'],
@@ -4250,6 +4311,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4265,6 +4330,7 @@ __webpack_require__.r(__webpack_exports__);
       overview: "",
       release_year: "",
       runtime: [],
+      movie_image: "",
       error: "",
       alert: "alert alert-success",
       movies: [],
@@ -4276,6 +4342,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    onChange: function onChange(e) {
+      this.movie_image = e.target.files[0];
+    },
     changeMovieButton: function changeMovieButton() {
       this.MovieButton = "Update Movies";
 
@@ -4303,14 +4372,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.title && this.overview && this.release_year) {
+        var config = {
+          headers: {
+            'content-type': 'multipart/form-data'
+          }
+        };
+        e.preventDefault();
+
         if (this.movie_id === "") {
-          var movies = {
-            title: this.title,
-            overview: this.overview,
-            release_year: this.release_year
-          };
-          axios.post('/movie/store', movies).then(function (response) {
-            console.log(response);
+          var data = new FormData();
+          data.append('title', this.title);
+          data.append('overview', this.overview);
+          data.append('release_year', this.release_year);
+          data.append('movie_image', this.movie_image);
+          axios.post('/movie/store', data, config).then(function (response) {
             _this.movie_id = "";
             _this.title = "";
             _this.overview = "";
@@ -4329,12 +4404,17 @@ __webpack_require__.r(__webpack_exports__);
             }, 1000);
           });
         } else {
-          var Movie = {
-            title: this.title,
-            overview: this.overview,
-            release_year: this.release_year
-          };
-          axios.put('/movie/' + this.movie_id, Movie).then(function (response) {
+          var _data = new FormData();
+
+          _data.append('title', this.title);
+
+          _data.append('overview', this.overview);
+
+          _data.append('release_year', this.release_year);
+
+          _data.append('movie_image', this.movie_image);
+
+          axios.post('/movie/' + this.movie_id, _data, config).then(function (response) {
             _this.movie_id = "";
             _this.title = "";
             _this.overview = "";
@@ -4791,6 +4871,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "castDetails",
@@ -5024,7 +5106,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
 //
 //
 //
@@ -5602,6 +5683,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "movieDetails",
@@ -5611,7 +5695,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: "",
         title: "",
         overview: "",
-        release_year: ""
+        release_year: "",
+        image_path: ""
       },
       casts: [],
       city: [],
@@ -5621,6 +5706,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       city_id: "",
       theater_id: "",
       cityBool: false,
+      cityData: false,
       error: "",
       showToggle: false,
       isLoading: false
@@ -5650,8 +5736,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.movie.title = response.data.title;
                   _this.movie.overview = response.data.overview;
                   _this.movie.release_year = response.data.release_year;
+                  _this.movie.image_path = response.data.image_path;
 
                   _this.getCasts(response.data.id);
+
+                  _this.getCities(response.data.id);
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -5710,8 +5799,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
+                this.shows = [];
                 this.theater_id = false;
-                _context3.next = 3;
+                _context3.next = 4;
                 return axios.get('/theater/getTheater/' + this.city_id).then(function (response) {
                   _this3.theaters = response.data;
 
@@ -5727,7 +5817,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   console.log(error);
                 });
 
-              case 3:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -5742,7 +5832,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return getTheaters;
     }(),
     getCities: function () {
-      var _getCities = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var _getCities = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4($id) {
         var _this4 = this;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
@@ -5751,8 +5841,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 this.isLoading = true;
                 _context4.next = 3;
-                return axios.get('/city/get').then(function (response) {
+                return axios.get('/city/getCity/' + $id).then(function (response) {
                   _this4.cities = response.data;
+
+                  if (_this4.cities.length > 0) {
+                    _this4.cityData = true;
+                  } else if (_this4.cities.length === 0) {
+                    _this4.error = "Booking Close";
+                  }
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -5768,7 +5864,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4, this);
       }));
 
-      function getCities() {
+      function getCities(_x2) {
         return _getCities.apply(this, arguments);
       }
 
@@ -5831,7 +5927,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   created: function created() {
     this.getMovie();
-    this.getCities();
     this.getTheaters();
   }
 });
@@ -42872,7 +42967,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml& */ "./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml&");
+/* harmony import */ var _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./movieDetails.vue?vue&type=template&id=fccf8886&scoped=true& */ "./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&");
 /* harmony import */ var _movieDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./movieDetails.vue?vue&type=script&lang=js& */ "./resources/js/components/movieDetails.vue?vue&type=script&lang=js&");
 /* harmony import */ var _movieDetails_vue_vue_type_style_index_0_id_fccf8886_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./movieDetails.vue?vue&type=style&index=0&id=fccf8886&scoped=true&lang=css& */ "./resources/js/components/movieDetails.vue?vue&type=style&index=0&id=fccf8886&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
@@ -42886,8 +42981,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
   _movieDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__.render,
-  _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   "fccf8886",
@@ -43710,19 +43805,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml&":
-/*!*****************************************************************************************************************************************!*\
-  !*** ./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml& ***!
-  \*****************************************************************************************************************************************/
+/***/ "./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true& ***!
+  \*********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true_xmlns_http_3A_2F_2Fwww_w3_org_2F1999_2Fhtml___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_movieDetails_vue_vue_type_template_id_fccf8886_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./movieDetails.vue?vue&type=template&id=fccf8886&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&");
 
 
 /***/ }),
@@ -44246,7 +44341,8 @@ var render = function() {
             attrs: { releaseMovies: _vm.releaseMovies },
             on: {
               updateMovie: _vm.onUpdateMovie,
-              deleteMovie: _vm.onDeleteMovie
+              deleteMovie: _vm.onDeleteMovie,
+              updateStatus: _vm.updateStatus
             }
           })
         : _vm._e(),
@@ -45028,6 +45124,56 @@ var render = function() {
                     },
                     [_vm._v("Delete")]
                   )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: release.status,
+                          expression: "release.status"
+                        }
+                      ],
+                      staticClass: "btn btn-dark",
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              release,
+                              "status",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function($event) {
+                            return _vm.updateStatus(release.id, release.status)
+                          }
+                        ]
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "release" } }, [
+                        _vm._v("Release")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "unrelease" } }, [
+                        _vm._v("UnRelease")
+                      ])
+                    ]
+                  )
                 ])
               ])
             }),
@@ -45064,7 +45210,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Created_at")]),
       _vm._v(" "),
-      _c("th", { attrs: { scope: "col", colspan: "2" } }, [_vm._v("Action")])
+      _c("th", { attrs: { scope: "col", colspan: "3" } }, [_vm._v("Action")])
     ])
   }
 ]
@@ -45323,6 +45469,16 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(movie.release_year))]),
                     _vm._v(" "),
+                    _c("td", [
+                      _c("img", {
+                        attrs: {
+                          src: movie.image_path,
+                          width: "100px",
+                          height: "100px"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(movie.created_at))]),
                     _vm._v(" "),
                     _c("td", [
@@ -45386,6 +45542,8 @@ var staticRenderFns = [
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Movie Overview")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Movie Release year")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Movie Image")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Created_at")]),
       _vm._v(" "),
@@ -45539,7 +45697,7 @@ var render = function() {
             "form",
             {
               staticClass: "mt-3",
-              attrs: { id: "addMovie" },
+              attrs: { id: "addMovie", enctype: "multipart/form-data" },
               on: { submit: _vm.addMovie }
             },
             [
@@ -45643,6 +45801,20 @@ var render = function() {
                       _vm.release_year = $event.target.value
                     }
                   }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Select Movie Image")]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "file",
+                    accept: ".jpeg",
+                    placeholder: "Select Movie Image"
+                  },
+                  on: { change: _vm.onChange }
                 })
               ]),
               _vm._v(" "),
@@ -46205,15 +46377,26 @@ var render = function() {
               _c("div", { staticClass: "container" }, [
                 _c(
                   "div",
-                  { staticClass: "d-flex bd-highlight flex-wrap" },
+                  { staticClass: "bd-highlight row p-2" },
                   _vm._l(_vm.movies, function(movie, index) {
                     return _c(
                       "div",
                       {
                         key: index,
-                        staticClass: "card border-dark m-3 flex-fill"
+                        staticClass:
+                          "card border-dark m-1 p-0 col-md-6 col-sm-12 col-lg-4"
                       },
                       [
+                        _c("img", {
+                          staticClass: "card-img-top",
+                          attrs: {
+                            width: "150px",
+                            height: "150px",
+                            src: movie.image_path,
+                            alt: movie.title
+                          }
+                        }),
+                        _vm._v(" "),
                         _c(
                           "div",
                           { staticClass: "card-body" },
@@ -46222,15 +46405,17 @@ var render = function() {
                               _vm._v(_vm._s(movie.title))
                             ]),
                             _vm._v(" "),
-                            _c("p", [_vm._v(_vm._s(movie.overview))]),
-                            _vm._v(" "),
                             _c(
                               "router-link",
                               {
                                 staticClass: "btn btn-primary",
                                 attrs: { to: "/user/movie/" + movie.id }
                               },
-                              [_vm._v("Read More")]
+                              [
+                                _vm._v(
+                                  "Read More\n                            "
+                                )
+                              ]
                             )
                           ],
                           1
@@ -46434,18 +46619,20 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "m-2" }, [
     _c("div", { staticClass: "card" }, [
+      _c("img", {
+        staticClass: "card-img-top",
+        attrs: {
+          width: "500px",
+          height: "500px",
+          src: _vm.movie.image_path,
+          alt: _vm.movie.title
+        }
+      }),
+      _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c("h5", { staticClass: "card-title" }, [
           _vm._v("Title : "),
           _c("b", [_vm._v(_vm._s(_vm.movie.title))])
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "card-text" }, [
-          _vm._v("Overview: " + _vm._s(_vm.movie.overview))
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "card-text" }, [
-          _vm._v("Release Year: " + _vm._s(_vm.movie.release_year))
         ])
       ]),
       _vm._v(" "),
@@ -46659,7 +46846,7 @@ var render = function() {
           : _vm._e()
       }),
       _vm._v(" "),
-      _vm.movies.length == 0
+      _vm.movies.length === 0
         ? _c("div", { staticClass: "text-center" }, [
             _c("h5", { staticClass: "m-5" }, [_vm._v("No Data Found")])
           ])
@@ -46812,10 +46999,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&xmlns=http%3A%2F%2Fwww.w3.org%2F1999%2Fhtml& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/movieDetails.vue?vue&type=template&id=fccf8886&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -46838,20 +47025,30 @@ var render = function() {
               _c("h3", [_c("b", [_vm._v(_vm._s(_vm.movie.title))])])
             ]),
             _vm._v(" "),
+            _c("img", {
+              staticClass: "card-img-top",
+              attrs: {
+                width: "500px",
+                height: "350px",
+                src: _vm.movie.image_path,
+                alt: _vm.movie.title
+              }
+            }),
+            _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("p", { staticClass: "card-text" }, [
-                _vm._v("Movie Overview : " + _vm._s(_vm.movie.overview))
+                _c("b", [_vm._v("Movie Release Year :")]),
+                _vm._v(" " + _vm._s(_vm.movie.release_year))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "card-text" }, [
-                _vm._v("Movie Release Year : " + _vm._s(_vm.movie.release_year))
+                _c("b", [_vm._v("Movie Overview :")]),
+                _vm._v(" " + _vm._s(_vm.movie.overview))
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-footer" }, [
-              _c("h5", { staticClass: "card-text" }, [
-                _vm._v("Cast Member : ")
-              ]),
+              _vm._m(0),
               _vm._v(" "),
               _c("div", { staticClass: "container" }, [
                 _c(
@@ -46898,72 +47095,20 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "container" }, [
-              _c("h5", [_vm._v("Book Tickets")]),
-              _vm._v(" "),
-              _c(
-                "form",
-                {
-                  staticClass: "mt-3 form-inline",
-                  attrs: { id: "addCastMovie" }
-                },
-                [
-                  _c("div", { staticClass: "form-group mb-2" }, [
-                    _c("label", { staticClass: "mx-2" }, [
-                      _vm._v("Select City : ")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.city_id,
-                            expression: "city_id"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.city_id = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            _vm.getTheaters
-                          ]
-                        }
-                      },
-                      _vm._l(_vm.cities, function(city, index) {
-                        return _c(
-                          "option",
-                          { key: index, domProps: { value: city.id } },
-                          [
-                            _vm._v(
-                              _vm._s(city.city_name) +
-                                "\n                        "
-                            )
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  ]),
+            _vm.cityData
+              ? _c("div", { staticClass: "container" }, [
+                  _vm._m(1),
                   _vm._v(" "),
-                  _vm.cityBool
-                    ? _c("div", { staticClass: "form-group mx-2 mb-2" }, [
+                  _c(
+                    "form",
+                    {
+                      staticClass: "mt-3 form-inline",
+                      attrs: { id: "addCastMovie" }
+                    },
+                    [
+                      _c("div", { staticClass: "form-group mb-2" }, [
                         _c("label", { staticClass: "mx-2" }, [
-                          _vm._v("Select Theater : ")
+                          _vm._v("Select City : ")
                         ]),
                         _vm._v(" "),
                         _c(
@@ -46973,8 +47118,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.theater_id,
-                                expression: "theater_id"
+                                value: _vm.city_id,
+                                expression: "city_id"
                               }
                             ],
                             staticClass: "form-control",
@@ -46990,22 +47135,21 @@ var render = function() {
                                         "_value" in o ? o._value : o.value
                                       return val
                                     })
-                                  _vm.theater_id = $event.target.multiple
+                                  _vm.city_id = $event.target.multiple
                                     ? $$selectedVal
                                     : $$selectedVal[0]
                                 },
-                                _vm.getShows
+                                _vm.getTheaters
                               ]
                             }
                           },
-                          _vm._l(_vm.theaters, function(theater, index) {
+                          _vm._l(_vm.cities, function(city, index) {
                             return _c(
                               "option",
-                              { key: index, domProps: { value: theater.id } },
+                              { key: index, domProps: { value: city.id } },
                               [
                                 _vm._v(
-                                  "\n                            " +
-                                    _vm._s(theater.theater_name) +
+                                  _vm._s(city.city_name) +
                                     "\n                        "
                                 )
                               ]
@@ -47013,75 +47157,126 @@ var render = function() {
                           }),
                           0
                         )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.error
-                    ? _c(
-                        "span",
-                        { staticClass: "alert alert-danger mx-2 mb-2" },
-                        [_vm._v(_vm._s(_vm.error))]
-                      )
-                    : _vm._e()
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.showToggle,
-                      expression: "showToggle"
-                    }
-                  ],
-                  staticClass: "container"
-                },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "d-flex bd-highlight justify-content-center flex-wrap"
-                    },
-                    _vm._l(_vm.shows, function(show, index) {
-                      return _c(
-                        "router-link",
-                        {
-                          key: index,
-                          staticClass: "links flex-fill",
-                          attrs: { to: "/bookTicket" }
-                        },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass: " border p-2 m-2 text-center",
-                              staticStyle: { "border-radius": "5px" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.setStateValue(show)
+                      ]),
+                      _vm._v(" "),
+                      _vm.cityBool
+                        ? _c("div", { staticClass: "form-group mx-2 mb-2" }, [
+                            _c("label", { staticClass: "mx-2" }, [
+                              _vm._v("Select Theater : ")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.theater_id,
+                                    expression: "theater_id"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.theater_id = $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    _vm.getShows
+                                  ]
                                 }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(show) +
-                                  "\n                        "
-                              )
-                            ]
+                              },
+                              _vm._l(_vm.theaters, function(theater, index) {
+                                return _c(
+                                  "option",
+                                  {
+                                    key: index,
+                                    domProps: { value: theater.id }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(theater.theater_name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.error
+                        ? _c(
+                            "span",
+                            { staticClass: "alert alert-danger mx-2 mb-2" },
+                            [_vm._v(_vm._s(_vm.error))]
                           )
-                        ]
-                      )
-                    }),
-                    1
-                  )
-                ]
-              )
-            ])
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm.showToggle
+                    ? _c("div", { staticClass: "container" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "d-flex bd-highlight justify-content-center flex-wrap"
+                          },
+                          _vm._l(_vm.shows, function(show, index) {
+                            return _c(
+                              "router-link",
+                              {
+                                key: index,
+                                staticClass: "links flex-fill",
+                                attrs: { to: "/bookTicket" }
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: " border p-2 m-2 text-center",
+                                    staticStyle: { "border-radius": "5px" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.setStateValue(show)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(show) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          }),
+                          1
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              : _c("span", { staticClass: "alert alert-danger mx-2 mb-2" }, [
+                  _vm._v(_vm._s(_vm.error))
+                ])
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -47090,7 +47285,22 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", { staticClass: "card-text" }, [
+      _c("b", [_vm._v("Cast Member :")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", [_c("b", [_vm._v("Book Tickets")])])
+  }
+]
 render._withStripped = true
 
 

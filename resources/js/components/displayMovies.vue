@@ -1,10 +1,9 @@
 <template>
     <div class="m-2">
         <div class="card" >
+            <img class="card-img-top" width="500px" height="500px" :src="movie.image_path" :alt="movie.title">
             <div class="card-body">
                 <h5 class="card-title">Title : <b>{{ movie.title }}</b></h5>
-                <p class="card-text">Overview: {{ movie.overview }}</p>
-                <p class="card-text">Release Year: {{ movie.release_year }}</p>
             </div>
             <div class="card-footer">
                 <router-link :to="'/user/movie/'+movie.id" class="card-link btn btn-primary m-0 p-2">Book Tickets</router-link>

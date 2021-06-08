@@ -1,15 +1,16 @@
-<template xmlns="http://www.w3.org/1999/html">
-    <div class="container" >
+<template>
+    <div class="container">
         <div class="card" v-if="!isLoading">
             <div class="card-header">
                 <h3><b>{{ movie.title }}</b></h3>
             </div>
+            <img class="card-img-top" width="500px" height="350px" :src="movie.image_path" :alt="movie.title">
             <div class="card-body">
-                <p class="card-text">Movie Overview : {{ movie.overview }}</p>
-                <p class="card-text">Movie Release Year : {{ movie.release_year }}</p>
+                <p class="card-text"><b>Movie Release Year :</b> {{ movie.release_year }}</p>
+                <p class="card-text"><b>Movie Overview :</b> {{ movie.overview }}</p>
             </div>
             <div class="card-footer">
-                <h5 class="card-text">Cast Member : </h5>
+                <h5 class="card-text"><b>Cast Member :</b></h5>
                 <div class="container">
                     <div class="d-flex bd-highlight flex-wrap">
                         <div class="card border-dark m-3 flex-fill" v-for="(cast,index) in casts" :key="index">
@@ -23,8 +24,8 @@
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <h5>Book Tickets</h5>
+            <div class="container" v-if="cityData">
+                <h5><b>Book Tickets</b></h5>
                 <form class="mt-3 form-inline" id="addCastMovie">
                     <div class="form-group mb-2">
                         <label class="mx-2">Select City : </label>
@@ -45,17 +46,19 @@
                     </div>
                     <span class="alert alert-danger mx-2 mb-2" v-if="error">{{ error }}</span>
                 </form>
-                <div class="container" v-show="showToggle">
+                <div class="container" v-if="showToggle">
                     <div class="d-flex bd-highlight justify-content-center flex-wrap">
-                        <router-link  v-for="(show,index) in shows" :key="index" to="/bookTicket"
+                        <router-link v-for="(show,index) in shows" :key="index" to="/bookTicket"
                                      class="links flex-fill">
-                            <div @click="setStateValue(show)" class=" border p-2 m-2 text-center" style="border-radius: 5px;">
+                            <div @click="setStateValue(show)" class=" border p-2 m-2 text-center"
+                                 style="border-radius: 5px;">
                                 {{ show }}
                             </div>
                         </router-link>
                     </div>
                 </div>
             </div>
+            <span class="alert alert-danger mx-2 mb-2" v-else>{{ error }}</span>
         </div>
         <loading :loading="isLoading"/>
     </div>
@@ -63,6 +66,7 @@
 
 <script>
 import Loading from "./loading";
+
 export default {
     name: "movieDetails",
     data: function () {
@@ -72,6 +76,7 @@ export default {
                 title: "",
                 overview: "",
                 release_year: "",
+                image_path: "",
             },
             casts: [],
             city: [],
@@ -81,16 +86,17 @@ export default {
             city_id: "",
             theater_id: "",
             cityBool: false,
+            cityData: false,
             error: "",
-            showToggle:false,
+            showToggle: false,
             isLoading: false,
         }
     },
-    components:{
+    components: {
         Loading
     },
     updated() {
-        if(this.shows.length === 0){
+        if (this.shows.length === 0) {
             this.showToggle = false;
         }
     },
@@ -103,7 +109,9 @@ export default {
                     this.movie.title = response.data.title;
                     this.movie.overview = response.data.overview;
                     this.movie.release_year = response.data.release_year;
+                    this.movie.image_path = response.data.image_path;
                     this.getCasts(response.data.id);
+                    this.getCities(response.data.id);
                 })
                 .catch(error => {
                     console.log(error);
@@ -120,6 +128,7 @@ export default {
                 })
         },
         getTheaters: async function () {
+            this.shows = [];
             this.theater_id = false;
             await axios.get('/theater/getTheater/' + this.city_id)
                 .then(response => {
@@ -137,11 +146,16 @@ export default {
                     console.log(error);
                 })
         },
-        getCities: async function () {
+        getCities: async function ($id) {
             this.isLoading = true;
-            await axios.get('/city/get')
+            await axios.get('/city/getCity/' + $id)
                 .then(response => {
                     this.cities = response.data
+                    if (this.cities.length > 0) {
+                        this.cityData = true
+                    } else if (this.cities.length === 0) {
+                        this.error = "Booking Close"
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -149,13 +163,12 @@ export default {
             this.isLoading = false;
         },
         getShows: async function () {
-            await axios.get('/assign/movieShow/' + this.city_id + '/' + this.theater_id+ '/' + this.movie.id)
+            await axios.get('/assign/movieShow/' + this.city_id + '/' + this.theater_id + '/' + this.movie.id)
                 .then(response => {
                     if (response.data === 0) {
                         this.error = "No Movie Release";
                         this.showToggle = false;
-                    }
-                    else{
+                    } else {
                         this.shows = response.data[0].runtime.split("|");
                         this.error = "";
                         this.showToggle = true;
@@ -175,18 +188,17 @@ export default {
             });
             const city = cities[0];
             const theater = theaters[0];
-            sessionStorage.setItem("city_id",city.id);
-            sessionStorage.setItem("city_name",city.city_name);
-            sessionStorage.setItem("theater_id",theater.id);
-            sessionStorage.setItem("theater_name",theater.theater_name);
-            sessionStorage.setItem("movie_id",this.movie.id);
-            sessionStorage.setItem("movie_name",this.movie.title);
-            sessionStorage.setItem("show",show);
+            sessionStorage.setItem("city_id", city.id);
+            sessionStorage.setItem("city_name", city.city_name);
+            sessionStorage.setItem("theater_id", theater.id);
+            sessionStorage.setItem("theater_name", theater.theater_name);
+            sessionStorage.setItem("movie_id", this.movie.id);
+            sessionStorage.setItem("movie_name", this.movie.title);
+            sessionStorage.setItem("show", show);
         }
     },
     created() {
         this.getMovie();
-        this.getCities();
         this.getTheaters();
     }
 }

@@ -18,6 +18,7 @@ class CreateMovieDetailsTable extends Migration
             $table->string("title");
             $table->text("overview");
             $table->date("release_year");
+            $table->text("image_path");
             $table->timestamps();
         });
     }

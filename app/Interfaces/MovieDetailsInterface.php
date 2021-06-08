@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
 interface MovieDetailsInterface
 {
 
-    public function save($data);
+    public function save($data,$file_path);
 
-    public function update($data,$movie_id);
+    public function update($movie_id,$data,$file_path);
 
     public function delete($movie_id);
 

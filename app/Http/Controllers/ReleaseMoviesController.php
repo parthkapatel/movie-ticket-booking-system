@@ -86,7 +86,7 @@ class ReleaseMoviesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\ReleaseMovies  $releaseMovies
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function destroy(ReleaseMovies $releaseMovies,$id)
     {
@@ -103,5 +103,9 @@ class ReleaseMoviesController extends Controller
 
     public function getAllShowByCityAndTheaterIds($cid,$tid,$mid){
         return $this->releaseRepo->getAllShowByCityAndTheaterIds($cid,$tid,$mid);
+    }
+
+    public function updateStatus(Request $request){
+        return $this->releaseRepo->updateStatus($request);
     }
 }

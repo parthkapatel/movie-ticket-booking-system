@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class BookTicketMail extends Mailable implements ShouldQueue
+class CancelTicketMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,7 @@ class BookTicketMail extends Mailable implements ShouldQueue
         $this->ticket_id = $ticket_id;
     }
 
-    public function build(): BookTicketMail
+    public function build(): CancelTicketMail
     {
         $data =  BookTickets::select('users.name as name','cities.city_name','theaters.theater_name','movie_details.title','book_tickets.show','book_tickets.seats','book_tickets.created_at','book_tickets.id',"book_tickets.show_time_date")
             ->join("users","users.id","book_tickets.user_id")
@@ -34,8 +34,8 @@ class BookTicketMail extends Mailable implements ShouldQueue
             ->get();
         $data = $data[0];
         return $this->from('parth9427@gmail.com')
-            ->subject("Movie Ticket Booked")
-            ->view('mails.bookedTicket')->with([
+            ->subject("Movie Ticket Canceled")
+            ->view('mails.cancelTicket')->with([
                 "data"=>$data
             ]);
     }

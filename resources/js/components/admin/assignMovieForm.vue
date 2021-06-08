@@ -35,7 +35,7 @@
             <button class="btn btn-primary">{{ MovieButton }}</button>
         </form>
         <list-assign-movies v-if="!show || !isLoading" :releaseMovies="releaseMovies" @updateMovie="onUpdateMovie"
-                            @deleteMovie="onDeleteMovie"></list-assign-movies>
+                            @deleteMovie="onDeleteMovie" @updateStatus="updateStatus"></list-assign-movies>
         <loading :loading="isLoading"/>
     </div>
 </template>
@@ -178,7 +178,7 @@ export default {
         },
         onDeleteMovie: function (movie) {
             const movieid = {id: movie.id};
-            axios.delete('/movie/' + movie.id, movieid)
+            axios.delete('/assign/' + movie.id, movieid)
                 .then(response => {
                     this.alert = "alert alert-success";
                     this.error = "Movie Deleted Successfully";
@@ -192,6 +192,30 @@ export default {
                 }).finally(() => {
                 setTimeout(() => this.error = "", 1000)
             });
+        },
+        updateStatus: async function (id, value) {
+            const data = {
+                id: id,
+                status: value,
+            };
+            await axios.post('assign/updateStatus/',data)
+                .then(response => {
+                    //response = JSON.parse(response);
+                    if (response.data.status === "success"){
+                        this.alert = "alert alert-success";
+                        this.error = response.data.message;
+                        this.getReleaseMovies();
+                    }else{
+                        this.alert = "alert alert-danger";
+                        this.error = response.data.message;
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                }).finally(() => {
+                    setTimeout(() => this.error = "", 1000)
+                });
         },
         getReleaseMovies: async function () {
             this.isLoading = true;

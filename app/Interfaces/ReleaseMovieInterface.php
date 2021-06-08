@@ -22,4 +22,6 @@ interface ReleaseMovieInterface
 
     public function getAllShowByCityAndTheaterIds($city_id,$theater_id,$movie_id);
 
+    public function updateStatus($data);
+
 }

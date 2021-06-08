@@ -189,7 +189,7 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    return _vm.login($event)
+                    return _vm.login.apply(null, arguments)
                   }
                 }
               },

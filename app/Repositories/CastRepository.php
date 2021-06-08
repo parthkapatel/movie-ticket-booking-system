@@ -47,9 +47,7 @@ class CastRepository implements CastInterface
 
     public function delete($cast_id)
     {
-        $this->cast::find($cast_id);
-        if($this->cast){
-            $this->cast->delete();
+        if($this->cast::destroy($cast_id)){
             return "Cast Successfully deleted";
         }
         return "Cast not found";

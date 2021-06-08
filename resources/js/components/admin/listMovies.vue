@@ -7,6 +7,7 @@
                 <th scope="col">Movie Title</th>
                 <th scope="col">Movie Overview</th>
                 <th scope="col">Movie Release year</th>
+                <th scope="col">Movie Image</th>
                 <th scope="col">Created_at</th>
                 <th scope="col" colspan="2">Action</th>
                 </thead>
@@ -16,6 +17,7 @@
                     <td>{{ movie.title }}</td>
                     <td>{{ movie.overview }}</td>
                     <td>{{ movie.release_year }}</td>
+                    <td><img :src="movie.image_path" width="100px" height="100px"></td>
                     <td>{{ movie.created_at }}</td>
                     <td><button class="btn btn-primary" @click="updateMovie(movie)">Edit</button></td>
                     <td><button @click.prevent="deleteMovie(movie)" class="btn btn-danger">Delete</button></td>

@@ -98,4 +98,9 @@ class CityController extends Controller
     {
         return $this->cityRepo->getAllCity();
     }
+
+    public function getCityByMovieId($movie_id)
+    {
+        return $this->cityRepo->getCityByMovieId($movie_id);
+    }
 }

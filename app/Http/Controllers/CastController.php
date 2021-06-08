@@ -19,7 +19,7 @@ class CastController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|Response
      */
     public function index()
     {
@@ -40,11 +40,23 @@ class CastController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return Cast
      */
     public function store(Request $request)
     {
-        return $this->castRepo->save($request);
+        $request->validate([
+            'cast_image' => 'required'
+        ]);
+
+        if($request->file()) {
+            $file_name = time().'_'.$request->cast_image->getClientOriginalName();
+            $file_upload = $request->file('cast_image')->move('assets/img/cast', $file_name);
+            $file_path = "/assets/img/cast/" . $file_name;
+            return $this->castRepo->save($request,$file_path);
+        }else{
+            return "please select image";
+        }
+
     }
 
     /**
@@ -75,11 +87,23 @@ class CastController extends Controller
      * @param Request $request
      * @param Cast $cast
      * @param $id
-     * @return Response
+     * @return Cast|Response|string
      */
     public function update(Request $request, Cast $cast,$id)
     {
-        return $this->castRepo->update($request,$id);
+        $request->validate([
+            'cast_image' => 'required'
+        ]);
+
+        if($request->file()) {
+            $file_name = time().'_'.$request->cast_image->getClientOriginalName();
+            $file_upload = $request->file('cast_image')->move('assets/img/cast', $file_name);
+            $file_path = "/assets/img/cast/" . $file_name;
+            return $this->castRepo->update($request,$id,$file_path);
+        }else{
+            return "please select image";
+        }
+
     }
 
     /**

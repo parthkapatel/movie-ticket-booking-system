@@ -12,16 +12,19 @@
             <div class="card-footer">
                 <h5 class="card-text"><b>Cast Member :</b></h5>
                 <div class="container">
-                    <div class="d-flex bd-highlight flex-wrap">
-                        <div class="card border-dark m-3 flex-fill" v-for="(cast,index) in casts" :key="index">
+                    <div class="d-flex flex-wrap bd-highlight justify-content-around">
+                        <div style="width:200px;height:auto;" class="card border-dark m-1"  v-for="(cast,index) in casts" :key="index">
+                            <img :src="cast.image_path" class="card-img-top img-thumbnail" :alt="cast.name">
                             <div class="card-body">
-                                <h5 class="card-title">{{ cast.name }}</h5>
-                                <p>{{ cast.bio }}</p>
+                                <h5 class="card-title text-wrap">{{ cast.name }}</h5>
+                            </div>
+                            <div class="card-footer">
                                 <router-link :to="'/user/cast/'+cast.id" class="btn btn-primary">Visit Profile
                                 </router-link>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="container" v-if="cityData">

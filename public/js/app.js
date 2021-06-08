@@ -3250,6 +3250,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3271,10 +3275,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       btnText: "Add Cast",
       btnTextColor: "btn btn-primary",
       castButton: "Add New Casts",
-      isLoading: false
+      isLoading: false,
+      cast_image: ""
     };
   },
   methods: {
+    onChange: function onChange(e) {
+      this.cast_image = e.target.files[0];
+    },
     changeCastButton: function changeCastButton() {
       this.castButton = "Update Casts";
 
@@ -3302,13 +3310,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       if (this.name && this.bio && this.date_of_birth) {
+        var config = {
+          headers: {
+            'content-type': 'multipart/form-data'
+          }
+        };
+        e.preventDefault();
+
         if (this.cast_id === "") {
-          var cast = {
-            name: this.name,
-            bio: this.bio,
-            date_of_birth: this.date_of_birth
-          };
-          axios.post('/cast/store', cast).then(function (response) {
+          var data = new FormData();
+          data.append('name', this.name);
+          data.append('bio', this.bio);
+          data.append('date_of_birth', this.date_of_birth);
+          data.append('cast_image', this.cast_image);
+          axios.post('/cast/store', data, config).then(function (response) {
             _this.cast_id = "";
             _this.name = "";
             _this.bio = "";
@@ -3327,12 +3342,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }, 1000);
           });
         } else {
-          var _cast = {
-            name: this.name,
-            bio: this.bio,
-            date_of_birth: this.date_of_birth
-          };
-          axios.put('/cast/' + this.cast_id, _cast).then(function (response) {
+          var _data = new FormData();
+
+          _data.append('name', this.name);
+
+          _data.append('bio', this.bio);
+
+          _data.append('date_of_birth', this.date_of_birth);
+
+          _data.append('cast_image', this.cast_image);
+
+          axios.post('/cast/' + this.cast_id, _data, config).then(function (response) {
             _this.cast_id = "";
             _this.name = "";
             _this.bio = "";
@@ -4048,6 +4068,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
 //
 //
 //
@@ -4873,6 +4895,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "castDetails",
@@ -5620,6 +5643,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -44396,7 +44422,7 @@ var render = function() {
             "form",
             {
               staticClass: "mt-3",
-              attrs: { id: "addCast" },
+              attrs: { enctype: "multipart/form-data", id: "addCast" },
               on: { submit: _vm.addCast }
             },
             [
@@ -44500,6 +44526,20 @@ var render = function() {
                       _vm.bio = $event.target.value
                     }
                   }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Select Cast Image")]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "file",
+                    accept: ".jpeg,.jpg",
+                    placeholder: "Select Cast Image"
+                  },
+                  on: { change: _vm.onChange }
                 })
               ]),
               _vm._v(" "),
@@ -45255,6 +45295,17 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(cast.date_of_birth))]),
                     _vm._v(" "),
+                    _c("td", [
+                      _c("img", {
+                        staticClass: "border rounded",
+                        attrs: {
+                          src: cast.image_path,
+                          width: "100px",
+                          height: "100px"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(cast.created_at))]),
                     _vm._v(" "),
                     _c("td", [
@@ -45318,6 +45369,8 @@ var staticRenderFns = [
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Cast Bio")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Cast BOD")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Cast Image")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Created_at")]),
       _vm._v(" "),
@@ -45471,6 +45524,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [
                       _c("img", {
+                        staticClass: "border rounded",
                         attrs: {
                           src: movie.image_path,
                           width: "100px",
@@ -45811,7 +45865,7 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: {
                     type: "file",
-                    accept: ".jpeg",
+                    accept: ".jpeg,.jpg",
                     placeholder: "Select Movie Image"
                   },
                   on: { change: _vm.onChange }
@@ -46377,34 +46431,46 @@ var render = function() {
               _c("div", { staticClass: "container" }, [
                 _c(
                   "div",
-                  { staticClass: "bd-highlight row p-2" },
+                  {
+                    staticClass: "bd-highlight row p-2",
+                    staticStyle: {
+                      "overflow-x": "auto",
+                      "overflow-y": "hidden",
+                      "white-space": "nowrap"
+                    }
+                  },
                   _vm._l(_vm.movies, function(movie, index) {
                     return _c(
                       "div",
                       {
                         key: index,
-                        staticClass:
-                          "card border-dark m-1 p-0 col-md-6 col-sm-12 col-lg-4"
+                        staticClass: "card border-dark m-1 p-0",
+                        staticStyle: {
+                          display: "inline-block",
+                          width: "200px",
+                          height: "auto"
+                        }
                       },
                       [
                         _c("img", {
                           staticClass: "card-img-top",
                           attrs: {
-                            width: "150px",
-                            height: "150px",
                             src: movie.image_path,
+                            height: "200px",
                             alt: movie.title
                           }
                         }),
                         _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h5", { staticClass: "card-title text-wrap" }, [
+                            _vm._v(_vm._s(movie.title))
+                          ])
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "card-body" },
+                          { staticClass: "card-footer" },
                           [
-                            _c("h5", { staticClass: "card-title" }, [
-                              _vm._v(_vm._s(movie.title))
-                            ]),
-                            _vm._v(" "),
                             _c(
                               "router-link",
                               {
@@ -46621,12 +46687,8 @@ var render = function() {
     _c("div", { staticClass: "card" }, [
       _c("img", {
         staticClass: "card-img-top",
-        attrs: {
-          width: "500px",
-          height: "500px",
-          src: _vm.movie.image_path,
-          alt: _vm.movie.title
-        }
+        staticStyle: { width: "auto", height: "450px" },
+        attrs: { src: _vm.movie.image_path, alt: _vm.movie.title }
       }),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -46638,12 +46700,12 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "card-footer" },
+        { staticClass: "card-footer " },
         [
           _c(
             "router-link",
             {
-              staticClass: "card-link btn btn-primary m-0 p-2",
+              staticClass: "float-right card-link btn btn-primary m-0 p-2",
               attrs: { to: "/user/movie/" + _vm.movie.id }
             },
             [_vm._v("Book Tickets")]
@@ -47053,25 +47115,34 @@ var render = function() {
               _c("div", { staticClass: "container" }, [
                 _c(
                   "div",
-                  { staticClass: "d-flex bd-highlight flex-wrap" },
+                  {
+                    staticClass:
+                      "d-flex flex-wrap bd-highlight justify-content-around"
+                  },
                   _vm._l(_vm.casts, function(cast, index) {
                     return _c(
                       "div",
                       {
                         key: index,
-                        staticClass: "card border-dark m-3 flex-fill"
+                        staticClass: "card border-dark m-1",
+                        staticStyle: { width: "200px", height: "auto" }
                       },
                       [
+                        _c("img", {
+                          staticClass: "card-img-top img-thumbnail",
+                          attrs: { src: cast.image_path, alt: cast.name }
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h5", { staticClass: "card-title text-wrap" }, [
+                            _vm._v(_vm._s(cast.name))
+                          ])
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "card-body" },
+                          { staticClass: "card-footer" },
                           [
-                            _c("h5", { staticClass: "card-title" }, [
-                              _vm._v(_vm._s(cast.name))
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v(_vm._s(cast.bio))]),
-                            _vm._v(" "),
                             _c(
                               "router-link",
                               {

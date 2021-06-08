@@ -18,6 +18,7 @@ class CreateCastsTable extends Migration
             $table->string("name");
             $table->text("bio");
             $table->date("date_of_birth");
+            $table->text("image_path");
             $table->timestamps();
         });
     }

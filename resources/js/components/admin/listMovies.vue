@@ -17,7 +17,7 @@
                     <td>{{ movie.title }}</td>
                     <td>{{ movie.overview }}</td>
                     <td>{{ movie.release_year }}</td>
-                    <td><img :src="movie.image_path" width="100px" height="100px"></td>
+                    <td><img class="border rounded":src="movie.image_path" width="100px" height="100px"></td>
                     <td>{{ movie.created_at }}</td>
                     <td><button class="btn btn-primary" @click="updateMovie(movie)">Edit</button></td>
                     <td><button @click.prevent="deleteMovie(movie)" class="btn btn-danger">Delete</button></td>

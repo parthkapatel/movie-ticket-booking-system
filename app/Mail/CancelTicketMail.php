@@ -30,7 +30,7 @@ class CancelTicketMail extends Mailable implements ShouldQueue
             ->join("cities","cities.id","book_tickets.city_id")
             ->join("theaters","theaters.id","book_tickets.theater_id")
             ->join("movie_details","movie_details.id","book_tickets.movie_id")
-            ->where("book_tickets.id",$this->ticket_id)
+            ->where("book_tickets.id",$this->ticket_id[0]->id)
             ->get();
         $data = $data[0];
         return $this->from('parth9427@gmail.com')

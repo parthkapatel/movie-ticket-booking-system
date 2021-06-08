@@ -11,12 +11,13 @@
             <div class="card-footer">
                 <h5 class="card-text">Cast Movies : </h5>
                 <div class="container">
-                    <div class="bd-highlight row p-2">
-                        <div class="card border-dark m-1 p-0 col-md-6 col-sm-12 col-lg-4" v-for="(movie,index) in movies" :key="index">
-                            <img class="card-img-top" width="150px" height="150px" :src="movie.image_path"
-                                 :alt="movie.title">
+                    <div style="overflow-x: auto;overflow-y: hidden;white-space: nowrap;" class="bd-highlight row p-2">
+                        <div style="display: inline-block;width:200px;height:auto;" class="card border-dark m-1 p-0"  v-for="(movie,index) in movies" :key="index">
+                            <img :src="movie.image_path" height="200px" class="card-img-top" :alt="movie.title">
                             <div class="card-body">
-                                <h5 class="card-title">{{ movie.title }}</h5>
+                                <h5 class="card-title text-wrap">{{ movie.title }}</h5>
+                            </div>
+                            <div class="card-footer">
                                 <router-link :to="'/user/movie/'+movie.id" class="btn btn-primary">Read More
                                 </router-link>
                             </div>

@@ -22,24 +22,26 @@ class CastRepository implements CastInterface
         return $this->cast::orderBy("name")->get();
     }
 
-    public function save($data)
+    public function save($data,$file_path)
     {
         $this->cast->name = $data->name;
         $this->cast->bio = $data->bio;
         $this->cast->date_of_birth = $data->date_of_birth;
+        $this->cast->image_path = $file_path;
         $this->cast->save();
         return $this->cast;
     }
 
 
-    public function update($data, $cast_id)
+    public function update($data, $cast_id,$file_path)
     {
-        $this->cast::find($cast_id);
-        if($this->cast){
-            $this->cast->name = $data->name;
-            $this->cast->bio = $data->bio;
-            $this->cast->date_of_birth = $data->date_of_birth;
-            $this->cast->save();
+        $existsData = $this->cast::find($cast_id);
+        if($existsData){
+            $existsData->name = $data->name;
+            $existsData->bio = $data->bio;
+            $existsData->date_of_birth = $data->date_of_birth;
+            $existsData->image_path = $file_path;
+            $existsData->save();
             return $this->cast;
         }
         return "Cast not found";

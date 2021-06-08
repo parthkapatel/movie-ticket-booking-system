@@ -7,6 +7,7 @@
                 <th scope="col">Cast Name</th>
                 <th scope="col">Cast Bio</th>
                 <th scope="col">Cast BOD</th>
+                <th scope="col">Cast Image</th>
                 <th scope="col">Created_at</th>
                 <th scope="col" colspan="2">Action</th>
                 </thead>
@@ -16,6 +17,7 @@
                     <td>{{ cast.name }}</td>
                     <td>{{ cast.bio }}</td>
                     <td>{{ cast.date_of_birth }}</td>
+                    <td><img class="border rounded" :src="cast.image_path" width="100px" height="100px"></td>
                     <td>{{ cast.created_at }}</td>
                     <td><button class="btn btn-primary" @click="updateCast(cast)">Edit</button></td>
                     <td><button @click.prevent="deleteCast(cast)" class="btn btn-danger">Delete</button></td>

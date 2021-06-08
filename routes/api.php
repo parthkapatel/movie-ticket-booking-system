@@ -151,7 +151,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/get", [CastController::class, 'getAllCasts']);
         Route::post("/store", [CastController::class, 'store']);
         Route::get("/{id}", [CastController::class, 'getCastDataById']);
-        Route::put("/{id}", [CastController::class, 'update']);
+        Route::post("/{id}", [CastController::class, 'update']);
         Route::delete("/{id}", [CastController::class, 'destroy']);
     });
 

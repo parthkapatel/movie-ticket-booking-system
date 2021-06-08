@@ -4,7 +4,7 @@
         <div :class="alert" class="w-50" role="alert" v-if="error">
             {{ error }}
         </div>
-        <form class="mt-3" id="addCast" @submit="addCast" v-if="show">
+        <form class="mt-3" enctype="multipart/form-data" id="addCast" @submit="addCast" v-if="show">
             <div class="form-group">
                 <label>Enter Cast Name</label>
                 <input v-model="cast_id" type="hidden">
@@ -17,6 +17,10 @@
             <div class="form-group ">
                 <label>Enter Cast Bio</label>
                 <textarea v-model="bio" rows="5" cols="10" class="form-control" placeholder="Enter Cast Bio"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Select Cast Image</label>
+                <input  type="file" v-on:change="onChange" accept=".jpeg,.jpg" class="form-control" placeholder="Select Cast Image">
             </div>
             <button class="btn btn-primary">{{ castButton }}</button>
         </form>
@@ -50,9 +54,13 @@ export default {
             btnTextColor: "btn btn-primary",
             castButton: "Add New Casts",
             isLoading: false,
+            cast_image:"",
         }
     },
     methods: {
+        onChange(e) {
+            this.cast_image = e.target.files[0];
+        },
         changeCastButton: function () {
             this.castButton = "Update Casts";
             if (this.cast_id === "") {
@@ -76,13 +84,20 @@ export default {
         },
         addCast: function (e) {
             if (this.name && this.bio && this.date_of_birth) {
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                e.preventDefault();
+
                 if (this.cast_id === "") {
-                    const cast = {
-                        name: this.name,
-                        bio: this.bio,
-                        date_of_birth: this.date_of_birth
-                    };
-                    axios.post('/cast/store', cast)
+                    let data = new FormData();
+                    data.append('name', this.name);
+                    data.append('bio', this.bio);
+                    data.append('date_of_birth', this.date_of_birth);
+                    data.append('cast_image', this.cast_image);
+                    axios.post('/cast/store', data,config)
                         .then(response => {
                             this.cast_id = "";
                             this.name = "";
@@ -99,12 +114,12 @@ export default {
                         setTimeout(() => this.error = "", 1000)
                     });
                 } else {
-                    const cast = {
-                        name: this.name,
-                        bio: this.bio,
-                        date_of_birth: this.date_of_birth
-                    };
-                    axios.put('/cast/' + this.cast_id, cast)
+                    let data = new FormData();
+                    data.append('name', this.name);
+                    data.append('bio', this.bio);
+                    data.append('date_of_birth', this.date_of_birth);
+                    data.append('cast_image', this.cast_image);
+                    axios.post('/cast/' + this.cast_id, data,config)
                         .then(response => {
                             this.cast_id = "";
                             this.name = "";

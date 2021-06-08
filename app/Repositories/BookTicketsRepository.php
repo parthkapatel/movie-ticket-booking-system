@@ -41,8 +41,9 @@ class BookTicketsRepository implements BookTicketsInterface
 
     public function delete($booked_id)
     {
+        $data = $this->bookTicket::find($booked_id)->get();
         if($this->bookTicket::destroy($booked_id)){
-            Mail::to(Auth::user()->email)->send(new CancelTicketMail($booked_id));
+            Mail::to(Auth::user()->email)->send(new CancelTicketMail($data));
             return "Booked Tickets Successfully deleted";
         }
         return "Booked Tickets Not Found";

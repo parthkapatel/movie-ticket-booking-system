@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label>Select Movie Image</label>
-                <input  type="file" v-on:change="onChange" accept=".jpeg" class="form-control" placeholder="Select Movie Image">
+                <input  type="file" v-on:change="onChange" accept=".jpeg,.jpg" class="form-control" placeholder="Select Movie Image">
             </div>
             <button class="btn btn-primary">{{ MovieButton }}</button>
         </form>

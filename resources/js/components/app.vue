@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg" style="background-color: #F2AA4CFF;">
             <a class="navbar-brand" href="/">Movie Booking</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -82,7 +82,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="container py-5">
+        <div class="container py-5 bodyColor">
             <router-view/>
         </div>
         <footer-section />
@@ -119,5 +119,7 @@ export default {
 </script>
 
 <style scoped>
-
+.navbar-toggler{
+    background-color: #101820ff;
+}
 </style>

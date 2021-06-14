@@ -25,6 +25,7 @@ class User extends Authenticatable
         'is_admin',
     ];
 
+    protected $primaryKey = 'id';
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -49,4 +50,5 @@ class User extends Authenticatable
     {
         return $this->is_admin ? true : $this->id; // this looks for an admin column in your users table
     }
+
 }

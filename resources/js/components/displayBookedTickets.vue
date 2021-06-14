@@ -18,7 +18,7 @@
                     </thead>
                     <tbody>
                     <tr v-if="bookedTickets.length > 0" v-for="(booked,index) in bookedTickets" :key="index"
-                        :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'bg-secondary' : ''">
+                        :class="formatDate(booked.show_time_date) < formatDate(new Date()) ? 'bg-secondary text-dark' : ''" style="color:#ADEFD1FF; ">
                         <td>{{ ++index }}</td>
                         <td>{{ booked.name }}</td>
                         <td>{{ booked.city_name }}</td>
@@ -105,5 +105,7 @@ export default {
 </script>
 
 <style scoped>
-
+h4{
+    color: #ADEFD1FF;
+}
 </style>

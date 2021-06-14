@@ -1,12 +1,14 @@
 <template>
-    <div class="container">
+    <div class="md:container md:mx-auto">
         <div>
             <div class="text-right m-2">
                 <input type="text" v-model="str" @keyup="searchMovie" class="form-control"
                        placeholder="Search here..(city,theater,title)">
             </div>
             <loading :loading="isLoading"/>
+
             <display-view :movies="movies" v-if="!isLoading"/>
+
         </div>
     </div>
 </template>
@@ -42,10 +44,10 @@ export default {
                     console.log(error);
                 });
         },
-        searchMovie: async function() {
+        searchMovie: async function () {
             this.isLoading = true;
             if (this.str === "") {
-                 await this.getReleaseMovies();
+                await this.getReleaseMovies();
             } else {
                 await axios.get('/search/' + this.str)
                     .then(response => {

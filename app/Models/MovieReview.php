@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MovieDetails extends Model
+class MovieReview extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'overview',
-        'release_year',
-    ];
+    protected $fillable = [ 'review'];
 
     protected $primaryKey = 'id';
+
+    public function movieReview()
+    {
+        return $this->hasMany(MovieReview::class,"movie_id");
+    }
 
 
 
 }
-

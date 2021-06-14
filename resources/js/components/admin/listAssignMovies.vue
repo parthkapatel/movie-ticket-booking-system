@@ -59,5 +59,7 @@ export default {
 </script>
 
 <style scoped>
-
+.table{
+    color: #ADEFD1FF;
+}
 </style>

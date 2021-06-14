@@ -16,9 +16,14 @@
     <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css">
     <script src="{{ asset("/js/jquery.js") }}" type="text/javascript"></script>
     <script src="{{ asset("/js/style.js") }}" type="text/javascript"></script>
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
 <div id="app">
+
+
 </div>
 </body>
 <script src="{{ mix('js/app.js') }}"></script>

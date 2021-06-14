@@ -29,11 +29,11 @@ export default new Vuex.Store({
             return axios
                 .post('/login', credentials)
                 .then(({ data }) => {
+                    console.log(data);
                     if(data.status === "error"){
                         return data;
                     }else{
                         commit('setUserData', data);
-                        console.log(data);
                         if(this.state.user.user.is_admin == 1){
                             location.href= "/admin/home";
                         }else if(this.state.user.user.is_admin == 0){
@@ -55,6 +55,7 @@ export default new Vuex.Store({
     getters : {
         isLogged: state => !!state.user,
         userName: state => state.user.user.name,
+        userId: state => state.user.user.id,
         isAdmin: state => state.user.user.is_admin,
     }
 })

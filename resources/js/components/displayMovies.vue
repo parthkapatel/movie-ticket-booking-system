@@ -1,16 +1,18 @@
 <template>
-    <div class="m-2">
-        <div class="card">
-            <img class="card-img-top" style="width:auto;height:450px;" :src="movie.image_path" :alt="movie.title">
-            <div class="card-body">
-                <h5 class="card-title">Title : <b>{{ movie.title }}</b></h5>
+    <div class="my-2 max-w-lg  bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="container p-0 m-0">
+            <div class="md:flex-shrink-0">
+                <img class="h-48 w-full object-cover md:h-100 md:w-100" :src="movie.image_path" :alt="movie.title">
             </div>
-            <div class="card-footer ">
-                <router-link :to="'/user/movie/'+movie.id" class="float-right card-link btn btn-primary m-0 p-2">Book Tickets</router-link>
+            <div class="p-2 flex">
+                <div class="flex-auto uppercase tracking-wide text-lg text-indigo-500 font-semibold ">{{ movie.title }}</div>
+                <router-link :to="'/user/movie/'+movie.id"
+                             class="card-link  font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700 m-2 p-2">
+                    Book
+                </router-link>
             </div>
         </div>
     </div>
-
 </template>
 
 <script>

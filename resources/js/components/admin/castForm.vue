@@ -192,5 +192,7 @@ export default {
 </script>
 
 <style scoped>
-
+.container{
+    color: #ADEFD1FF;
+}
 </style>

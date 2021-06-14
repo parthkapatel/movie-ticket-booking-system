@@ -120,5 +120,6 @@
     <orderEntry type="library" name="vue" level="application" />
     <orderEntry type="library" name="vue-router" level="application" />
     <orderEntry type="library" name="@saeris" level="application" />
+    <orderEntry type="library" name="vue-star-rating" level="application" />
   </component>
 </module>

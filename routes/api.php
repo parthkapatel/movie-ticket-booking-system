@@ -6,6 +6,7 @@ use App\Http\Controllers\CastsMoviesController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MovieDetailsController;
+use App\Http\Controllers\PostReviewController;
 use App\Http\Controllers\ReleaseMoviesController;
 use App\Http\Controllers\TheaterController;
 use App\Models\User;
@@ -182,6 +183,10 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::delete("/{id}", [BookTicketsController::class, 'destroy']);
     });
 
+    Route::prefix("/review")->group(function () {
+        Route::post("/postReview", [PostReviewController::class, 'store']);
+        Route::get("/getAllReviewByMovieId/{id}", [PostReviewController::class, 'getAllReviewByMovieId']);
+    });
 
 });
 

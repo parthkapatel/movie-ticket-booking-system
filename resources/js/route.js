@@ -14,7 +14,6 @@ import movieDetails from "./components/movieDetails";
 import assignCastMovieForm from "./components/admin/assignCastMovieForm";
 import castDetails from "./components/castDetails";
 import displaySeat from "./components/displaySeat";
-import convert from "lodash/fp/convert";
 import confirmBookSeats from "./components/confirmBookSeats";
 import displayBookedTickets from "./components/displayBookedTickets";
 import displayAllUserBookTickets from "./components/admin/displayAllUserBookTickets";

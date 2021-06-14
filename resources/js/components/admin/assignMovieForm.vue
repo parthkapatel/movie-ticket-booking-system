@@ -32,7 +32,7 @@
                     <option v-for="(slot,index) in slots" :key="index" :value="slot">{{ slot }}</option>
                 </select>
             </div>
-            <button class="btn btn-primary">{{ MovieButton }}</button>
+            <button class="btn btn-primary">{{ (this.movie_id === "") ? 'Add New Movies' : 'Update Movie' }}</button>
         </form>
         <list-assign-movies v-if="!show || !isLoading" :releaseMovies="releaseMovies" @updateMovie="onUpdateMovie"
                             @deleteMovie="onDeleteMovie" @updateStatus="updateStatus"></list-assign-movies>
@@ -74,12 +74,6 @@ export default {
         }
     },
     methods: {
-        changeMovieButton: function () {
-            this.MovieButton = "Update Movies";
-            if (this.movie_id === "") {
-                this.MovieButton = "Add New Movies";
-            }
-        },
         revert: function () {
             if (this.show === false) {
                 this.btnText = "Close";
@@ -92,7 +86,6 @@ export default {
                 this.btnText = "Add Movie";
                 this.btnTextColor = "btn btn-primary";
             }
-            this.changeMovieButton();
             this.show = !this.show;
         },
         addMovie: function (e) {
@@ -115,7 +108,7 @@ export default {
                             this.getReleaseMovies();
                             this.city_id = 0;
                             this.theater_id = 0;
-                            this.movie_id = 0;
+                            this.movie_id = '';
                         })
                         .catch(error => {
                             console.log(error);
@@ -137,11 +130,10 @@ export default {
                             this.getMovies();
                             this.getTheaters();
                             this.getReleaseMovies();
-                            this.changeMovieButton();
                             this.revert();
                             this.city_id = 0;
                             this.theater_id = 0;
-                            this.movie_id = 0;
+                            this.movie_id = '';
                         })
                         .catch(error => {
                             console.log(error);
@@ -173,7 +165,6 @@ export default {
             this.city_id = release.city_id;
             this.theater_id = release.theater_id;
             this.movie_id = release.movie_id;
-            this.changeMovieButton();
             this.revert();
         },
         onDeleteMovie: function (movie) {
@@ -205,11 +196,11 @@ export default {
                         this.alert = "alert alert-success";
                         this.error = response.data.message;
                         this.getReleaseMovies();
+
                     }else{
                         this.alert = "alert alert-danger";
                         this.error = response.data.message;
                     }
-
                 })
                 .catch(error => {
                     console.log(error);
@@ -266,5 +257,7 @@ export default {
 </script>
 
 <style scoped>
-
+.container{
+    color: #ADEFD1FF;
+}
 </style>

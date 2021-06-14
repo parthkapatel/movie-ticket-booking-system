@@ -75,3 +75,17 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.container{
+    color: #ADEFD1FF;
+}
+.card{
+    background-color: #00203FFF;
+}
+.btn{
+    background-color: #F2AA4CFF;
+    border-color: #F2AA4CFF;
+    color:#101820ff;
+}
+</style>
